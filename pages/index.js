@@ -1601,6 +1601,24 @@ body.light .sidebar-divider{background:rgba(180,90,40,.1);}
 .chd-profile-row{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;}
 .chd-field{display:flex;flex-direction:column;gap:6px;flex:1;min-width:160px;}
 .chd-field input,.chd-field select{background:var(--card2);border:1px solid var(--border);border-radius:10px;padding:10px 14px;font-family:'Poppins',sans-serif;font-size:12px;color:var(--text);}
+.chd-big-btn{background:#fff;border:1px solid var(--border);border-radius:10px;box-shadow:var(--shadow-sm);padding:15px 20px;display:flex;align-items:center;justify-content:space-between;gap:10px;flex:1;min-width:220px;cursor:pointer;}
+.chd-big-btn-left{display:flex;align-items:center;gap:10px;text-align:left;}
+.chd-big-btn-icon{background:var(--text);border-radius:10px;padding:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:20px;}
+
+/* ══════════════════════ SIDEBAR — Figma icon rail ══════════════════════ */
+.chd-sidebar{background:#fff;width:84px;flex-shrink:0;display:flex;flex-direction:column;align-items:center;padding:40px 10px 20px;position:sticky;top:0;height:100vh;overflow-y:auto;z-index:5;border-right:2px solid #fff;box-shadow:var(--shadow-sm);}
+.chd-sb-logo{width:64px;height:64px;display:flex;align-items:center;justify-content:center;margin-bottom:20px;flex-shrink:0;background:var(--text);border-radius:14px;color:#fff;font-family:'Moderustic',sans-serif;font-weight:700;font-size:15px;}
+.chd-sb-group{display:flex;flex-direction:column;gap:10px;align-items:center;width:100%;margin-bottom:18px;}
+.chd-sb-grouplabel{font-family:'Prompt',sans-serif;font-weight:700;font-size:10px;text-transform:uppercase;color:var(--text);opacity:.6;}
+.chd-sb-item{position:relative;display:flex;align-items:center;justify-content:center;width:100%;padding:15px 10px;border-radius:10px;cursor:pointer;color:var(--text);border-bottom:1px solid rgba(222,220,220,.5);background:none;border-left:none;border-right:none;border-top:none;}
+.chd-sb-item.active{background:#fff;box-shadow:var(--shadow-sm);}
+.chd-sb-item.active::after{content:"";position:absolute;right:-10px;top:50%;transform:translateY(-50%);width:3px;height:29px;background:var(--text);border-radius:10px 0 0 10px;}
+.chd-sb-tip{position:absolute;left:44px;top:50%;transform:translateY(-50%);background:var(--card2);padding:6px 10px;border-radius:5px;font-family:'Prompt',sans-serif;font-weight:700;font-size:10px;text-transform:uppercase;color:var(--text);white-space:nowrap;opacity:0;pointer-events:none;transition:opacity .15s ease;z-index:20;box-shadow:var(--shadow-sm);}
+.chd-sb-item:hover .chd-sb-tip{opacity:1;}
+.chd-sb-badge{position:absolute;top:6px;right:14px;background:var(--red);color:#fff;font-size:9px;font-weight:800;min-width:14px;height:14px;border-radius:20px;display:flex;align-items:center;justify-content:center;padding:0 3px;}
+.chd-sb-dot{position:absolute;top:8px;right:16px;width:7px;height:7px;border-radius:50%;background:var(--amber);}
+.chd-sb-bottom{margin-top:auto;display:flex;flex-direction:column;gap:8px;align-items:center;width:100%;padding-top:14px;}
+.chd-sb-logout{width:100%;background:var(--red);color:#fff;border:1px solid var(--red);border-radius:10px;box-shadow:var(--shadow-sm);padding:12px 10px;display:flex;align-items:center;justify-content:center;cursor:pointer;position:relative;}
 `;
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -4848,111 +4866,69 @@ function PostLivePage({ onSaveCase, onUpdateCase, onUpdateDraft, onFormActive, o
   return (
     <div>
       {/* Page Hero — title + Time In card */}
-      <div className="page-hero">
+      <div className="chd-page-head">
         <div>
-          <div className="page-title" style={{fontSize:22,marginBottom:4}}>Post-Live Amends</div>
-          <div style={{color:"var(--muted)",fontSize:13,fontFamily:"'Poppins',sans-serif"}}>
-            {timedIn ? "Session active — choose your amend type below." : "Clock in to begin your session."}
-          </div>
+          <p className="chd-h4">Post-Live Amends</p>
+          <p className="chd-p-muted">{timedIn ? "Session active — choose your amend type below." : "Clock in to begin your session."}</p>
         </div>
         {/* TIME IN / OUT card */}
-       <div className="timeinout-card">
+       <div className="chd-datetime-card" style={{minWidth:0}}>
           {timedIn ? (
             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 16, width: "100%" }}>
-              
-              {/* LEFT: all text inline */}
               <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-                <span style={{ fontSize: 10, color: "var(--muted)", fontWeight: 700 }}>Session Active</span>
-                
-                <span style={{ fontSize: 11, color: "var(--muted)" }}>Since:</span>
-                <span style={{ fontSize: 13, fontWeight: 700 }}>
+                <span className="chd-label" style={{opacity:.6}}>Session Active</span>
+                <span className="chd-p-muted">Since:</span>
+                <span className="chd-p" style={{fontWeight:700}}>
                   {globalTimeIn ? new Date(globalTimeIn).toLocaleTimeString("en-US",{hour:"2-digit",minute:"2-digit"}) : ""}
                 </span>
-
-                <span style={{ fontSize: 28, fontWeight: 800, color: "var(--green)", letterSpacing:"-1px", fontFamily:"'Plus Jakarta Sans',sans-serif" }}>
-                  {fmtElapsed(elapsed)}
-                </span>
+                <span className="chd-h4" style={{color:"var(--green)"}}>{fmtElapsed(elapsed)}</span>
               </div>
-
-              {/* RIGHT: button */}
-              <button className="btn btn-danger timeout-btn" style={{ fontSize: 12, padding: "9px 16px" }} onClick={()=>onTimeOut&&onTimeOut()}>
-                <Icon name="stop" size={12} style={{ marginRight: 5 }} />
-                Time Out
+              <button className="chd-btn-primary" style={{background:"var(--red)",borderColor:"var(--red)"}} onClick={()=>onTimeOut&&onTimeOut()}>
+                <Icon name="stop" size={12} style={{ marginRight: 5 }} />Time Out
               </button>
-
             </div>
           ) : (
-            <div
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "space-between",
-                  width: "100%",
-                  gap: "10px"
-                }}
-              >
-                <span
-                  style={{
-                    fontSize: 12,
-                    color: "var(--muted)",
-                    lineHeight: 1
-                  }}
-                >
-                  Start your session
-                </span>
-
-                <button
-                  className="btn btn-save timein-btn"
-                  onClick={() => onTimeIn && onTimeIn()}
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: "6px"
-                  }}
-                >
-                  <Icon name="play" size={14} />
-                  Clock In
-                </button>
-              </div>
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", width: "100%", gap: "10px" }}>
+              <span className="chd-p-muted">Start your session</span>
+              <button className="chd-btn-primary" onClick={() => onTimeIn && onTimeIn()} style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+                <Icon name="play" size={14} />Clock In
+              </button>
+            </div>
           )}
         </div>
-
       </div>
+      <div className="chd-divider"/>
 
       {/* Amend type chooser */}
-      <div style={{display:"flex",gap:14,marginBottom:formTabs.length?8:28,flexWrap:"wrap"}}>
-        {deleteDraftConfirm&&(<div className="modal-bg"><div className="modal">
-          <div style={{marginBottom:14,fontSize:36}}>📦</div>
-          <h3>Archive Suspended Case?</h3>
-          <p style={{color:"var(--muted)",fontSize:13,marginBottom:20,lineHeight:1.6}}>This case will be moved to the <strong style={{color:"var(--text)"}}>Archive</strong> page. You can view it there anytime — nothing is permanently deleted.</p>
-          <div className="modal-btns">
-            <button className="btn btn-ghost" onClick={()=>setDeleteDraftConfirm(null)}>Keep Suspended</button>
-            <button className="btn btn-primary" style={{background:"var(--amber)",borderColor:"var(--amber)"}} onClick={()=>{onArchiveDraft&&onArchiveDraft(deleteDraftConfirm.id,deleteDraftConfirm.mode);setDeleteDraftConfirm(null);}}>📦 Move to Archive</button>
+      <div style={{display:"flex",gap:10,marginBottom:formTabs.length?8:20,flexWrap:"wrap"}}>
+        {deleteDraftConfirm&&(<div className="chd-modal-bg"><div className="chd-modal-card">
+          <p className="chd-h6">Archive Suspended Case?</p>
+          <p className="chd-p-muted">This case will be moved to the Archive page. You can view it there anytime — nothing is permanently deleted.</p>
+          <div style={{display:"flex",gap:10,justifyContent:"center",marginTop:14}}>
+            <button className="chd-btn-secondary" onClick={()=>setDeleteDraftConfirm(null)}>Keep Suspended</button>
+            <button className="chd-btn-primary" style={{background:"var(--amber)",borderColor:"var(--amber)"}} onClick={()=>{onArchiveDraft&&onArchiveDraft(deleteDraftConfirm.id,deleteDraftConfirm.mode);setDeleteDraftConfirm(null);}}>Move to Archive</button>
           </div>
         </div></div>)}
-        <button className="pl-type-btn" disabled={amendTypesDisabled||prolongedActive} onClick={()=>enterMode("siteComment")} style={{opacity:(amendTypesDisabled||prolongedActive)?.4:1,flex:1,minWidth:220}}>
-          <div className="pl-type-icon"><Icon name="sitecomment" size={26} color="var(--accent)"/></div>
-          <div style={{flex:1}}>
-            <div className="pl-type-title">Site Comment</div>
-            <div className="pl-type-sub">Step-by-step · live timer</div>
+        <button className="chd-big-btn" disabled={amendTypesDisabled||prolongedActive} onClick={()=>enterMode("siteComment")} style={{opacity:(amendTypesDisabled||prolongedActive)?.4:1}}>
+          <div className="chd-big-btn-left">
+            <div className="chd-big-btn-icon"><Icon name="sitecomment" size={22} color="#fff"/></div>
+            <div><p className="chd-h6">Site Comment</p><p className="chd-p">Multiple Site Comment</p></div>
           </div>
-          <Icon name="back" size={14} color="var(--muted)" style={{transform:"rotate(180deg)",opacity:.5}}/>
+          <Icon name="back" size={16} color="var(--muted)" style={{transform:"rotate(180deg)"}}/>
         </button>
-        <button className="pl-type-btn" disabled={amendTypesDisabled||prolongedActive} onClick={()=>enterMode("inbound")} style={{opacity:(amendTypesDisabled||prolongedActive)?.4:1,flex:1,minWidth:220}}>
-          <div className="pl-type-icon" style={{background:"rgba(124,58,237,.1)",borderColor:"rgba(124,58,237,.25)"}}><Icon name="inbound" size={26} color="#7c3aed"/></div>
-          <div style={{flex:1}}>
-            <div className="pl-type-title" style={{color:"#7c3aed"}}>Inbound Email</div>
-            <div className="pl-type-sub">Assumption-based format</div>
+        <button className="chd-big-btn" disabled={amendTypesDisabled||prolongedActive} onClick={()=>enterMode("inbound")} style={{opacity:(amendTypesDisabled||prolongedActive)?.4:1}}>
+          <div className="chd-big-btn-left">
+            <div className="chd-big-btn-icon"><Icon name="inbound" size={22} color="#fff"/></div>
+            <div><p className="chd-h6">Inbound Email</p><p className="chd-p">Assumption Based Format</p></div>
           </div>
-          <Icon name="back" size={14} color="var(--muted)" style={{transform:"rotate(180deg)",opacity:.5}}/>
+          <Icon name="back" size={16} color="var(--muted)" style={{transform:"rotate(180deg)"}}/>
         </button>
-        <button className="pl-type-btn" disabled={amendTypesDisabled||prolongedActive} onClick={()=>{setBundleForm({type:"site",caseNum:""});setBundleModal(true);}} style={{opacity:(amendTypesDisabled||prolongedActive)?.4:1,flex:1,minWidth:220,borderColor:"rgba(16,185,129,.3)"}}>
-          <div className="pl-type-icon" style={{background:"rgba(16,185,129,.12)",borderColor:"rgba(16,185,129,.25)"}}><span style={{fontSize:22}}>🔗</span></div>
-          <div style={{flex:1}}>
-            <div className="pl-type-title">Bundle</div>
-            <div className="pl-type-sub">Link cases together</div>
+        <button className="chd-big-btn" disabled={amendTypesDisabled||prolongedActive} onClick={()=>{setBundleForm({type:"site",caseNum:""});setBundleModal(true);}} style={{opacity:(amendTypesDisabled||prolongedActive)?.4:1}}>
+          <div className="chd-big-btn-left">
+            <div className="chd-big-btn-icon">🔗</div>
+            <div><p className="chd-h6">Bundle</p><p className="chd-p">Linked with existing Case</p></div>
           </div>
-          <Icon name="back" size={14} color="var(--muted)" style={{transform:"rotate(180deg)",opacity:.5}}/>
+          <Icon name="back" size={16} color="var(--muted)" style={{transform:"rotate(180deg)"}}/>
         </button>
       </div>
 
@@ -5360,55 +5336,25 @@ function PostLivePage({ onSaveCase, onUpdateCase, onUpdateDraft, onFormActive, o
 
       {dbDrafts&&dbDrafts.length>0&&(
         <div style={{marginBottom:22}}>
-          <div className="section-title">Suspended Cases</div>
+          <p className="chd-h6" style={{marginBottom:10}}>Suspended Case</p>
+          <div style={{display:"flex",flexDirection:"column",gap:10}}>
           {dbDrafts.map((d,i)=>(
-            <div key={d._id||i} className="draft-row">
-              <div className="draft-dot"/>
-              <div className="saved-info">
-                <div className="saved-case">Case #{d.caseNum||"—"} — {d.accountNum||"—"}</div>
-                <div className="saved-meta">{d.amendType||"No amend type"} · {d.draftAt}</div>
-                {(d.customerName||d.customerEmail||d.businessName)&&(
-                  <div style={{display:"flex",flexWrap:"wrap",gap:4,marginTop:4}}>
-                    {d.customerName&&<span style={{fontSize:10,padding:"1px 7px",background:"var(--card2)",border:"1px solid var(--border)",borderRadius:20,color:"var(--muted)",fontFamily:"'Poppins',sans-serif"}}>👤 {d.customerName}</span>}
-                    {d.customerEmail&&<span style={{fontSize:10,padding:"1px 7px",background:"var(--card2)",border:"1px solid var(--border)",borderRadius:20,color:"var(--muted)",fontFamily:"'Poppins',sans-serif"}}>✉️ {d.customerEmail}</span>}
-                    {d.businessName&&<span style={{fontSize:10,padding:"1px 7px",background:"var(--card2)",border:"1px solid var(--border)",borderRadius:20,color:"var(--muted)",fontFamily:"'Poppins',sans-serif"}}>🏢 {d.businessName}{d.businessSuffix?' '+d.businessSuffix:''}</span>}
-                  </div>
-                )}
+            <div key={d._id||i} className="chd-case-card" style={{cursor:"default"}}>
+              <div>
+                <div className="chd-title-row">
+                  <p className="chd-h6">{d.caseNum||"—"} - {d.accountNum||"—"}</p>
+                  <span className="chd-badge" style={{background:d._mode==="siteComment"?"var(--site-comment,#4760ff)":"var(--inbound,#8a38f5)"}}>{d._mode==="siteComment"?"Site Comment":"Inbound Email"} - {(d._caseComplexity||"minor").charAt(0).toUpperCase()+(d._caseComplexity||"minor").slice(1)}</span>
+                  {(()=>{const b=d._bundledWith;if(!b)return null;const nums=(Array.isArray(b)?b:[b]).filter(Boolean);if(!nums.length)return null;return <span className="chd-badge" style={{background:"var(--amber)"}}>w/ #{nums.join(", #")}</span>;})()}
+                </div>
+                <p className="chd-p-muted">{d.amendType||"No amend type"} · {d.draftAt}</p>
               </div>
-              <span className="draft-badge">{d._mode==="siteComment"?"Site Comment":"Inbound Email"}</span>
-              {(()=>{const b=d._bundledWith;if(!b)return null;const nums=(Array.isArray(b)?b:[b]).filter(Boolean);if(!nums.length)return null;const isMulti=nums.length>1;const col=isMulti?"#f59e0b":"#10b981";const bg=isMulti?"rgba(245,158,11,.14)":"rgba(16,185,129,.14)";const bdr=isMulti?"1px solid rgba(245,158,11,.35)":"1px solid rgba(16,185,129,.35)";return <span style={{fontSize:10,padding:"2px 8px",borderRadius:20,background:bg,border:bdr,color:col,fontWeight:700,flexShrink:0,fontFamily:"'Poppins',sans-serif"}}>🔗 w/ #{nums.join(", #")}</span>;})()}
-              <button className="draft-resume" disabled={!timedIn||breakActive||isMinimised} onClick={()=>enterMode(d._mode, true, d._id)} style={{opacity:(!timedIn||breakActive||isMinimised)?.45:1,cursor:(!timedIn||breakActive||isMinimised)?"not-allowed":"pointer"}}><Icon name="play" size={11} style={{marginRight:4}}/> Continue</button>
-              <button
-                className="entry-del"
-                title="Archive"
-                disabled={!timedIn||breakActive||isMinimised}
-                onClick={() => setDeleteDraftConfirm({ id: d._id, mode: d._mode })}
-                style={{
-                  marginLeft: 4,
-                  borderRadius: "6px",
-                  backgroundColor: "var(--amber)",
-                  padding: "10px 10px",
-                  border: "rgba(245,158,11,.4) 1px solid",
-                  cursor: (!timedIn||breakActive||isMinimised)?"not-allowed":"pointer",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  transition: "all 0.2s ease",
-                  opacity: (!timedIn||breakActive||isMinimised)?0.45:1,
-                  fontSize: "clamp(12px, 1vw, 14px)"
-                }}
-                onMouseEnter={(e) => {
-                  if(!(!timedIn||breakActive||isMinimised)) e.currentTarget.style.boxShadow = "0 0 8px 2px rgba(245,158,11,0.3)";
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.boxShadow = "none";
-                }}
-              >
-                <Icon name="archive" size={13} color="#fff" />
-              </button>
-            
+              <div className="chd-row-actions">
+                <button className="chd-btn-primary" disabled={!timedIn||breakActive||isMinimised} onClick={()=>enterMode(d._mode, true, d._id)} style={{opacity:(!timedIn||breakActive||isMinimised)?.45:1,cursor:(!timedIn||breakActive||isMinimised)?"not-allowed":"pointer"}}>Continue</button>
+                <button className="chd-btn-secondary" disabled={!timedIn||breakActive||isMinimised} onClick={() => setDeleteDraftConfirm({ id: d._id, mode: d._mode })} style={{opacity:(!timedIn||breakActive||isMinimised)?.45:1,cursor:(!timedIn||breakActive||isMinimised)?"not-allowed":"pointer",borderColor:"var(--amber)",color:"var(--amber)"}}>Archive case</button>
+              </div>
             </div>
           ))}
+          </div>
         </div>
       )}
 
@@ -8368,18 +8314,17 @@ function App() {
   }
 
   const coreNav=[
-    {id:"dashboard",label:"Dashboard",icon:"dashboard"},
     {group:"Work"},
-    {id:"build",label:"Build",icon:"casebox"},
-    {id:"prelive",label:"Pre-Live Amends",icon:"prelive"},
+    {id:"dashboard",label:"Dashboard",icon:"dashboard"},
     {id:"postlive",label:"Post-Live Amends",icon:"postlive"},
     {id:"history",label:"Case History",icon:"history"},
-    {id:"sessions",label:"Session Log",icon:"history"},
+    {id:"sessions",label:"Session Logs",icon:"history"},
     {id:"archives",label:"Archived Cases",icon:"archive"},
     {group:"Tools"},
-    {id:"announcements",label:"Announcements",icon:"announce"},
+    {id:"announcements",label:"Updates & Announcement",icon:"announce"},
     {id:"links",label:"Quick Links",icon:"links"},
     {id:"filenames",label:"File Name Generator",icon:"draft"},
+    {id:"profile",label:"Profile & Settings",icon:"user"},
   ];
 
   const initials=(user.name||user.email||"U").split(" ").map(w=>w&&w[0]).filter(Boolean).join("").slice(0,2).toUpperCase();
@@ -8389,142 +8334,100 @@ function App() {
       <style>{CSS}</style>
       <div className={cls("shell",sidebarIsCollapsed&&"sidebar-collapsed")}>
         <div className="sidebar-wrap" onMouseEnter={()=>setSidebarHoverOpen(true)} onMouseLeave={()=>setSidebarHoverOpen(false)}>
-        <aside ref={sidebarElRef} className={cls("sidebar",sidebarIsCollapsed&&"collapsed")}>
-          <div className="logo">
-            <div className="logo-icon">
-              <svg width="26" height="26" viewBox="0 0 26 26" fill="none">
-                <rect width="26" height="26" fill="var(--accent)"/>
-                <rect x="5" y="8" width="10" height="2" fill="white"/>
-                <rect x="5" y="12" width="16" height="2" fill="white" opacity=".7"/>
-                <rect x="5" y="16" width="7" height="2" fill="white" opacity=".45"/>
-              </svg>
+        <aside ref={sidebarElRef} className="chd-sidebar">
+          <div className="chd-sb-logo">CH</div>
+
+          {(() => {
+            const groups=[]; let current=null;
+            coreNav.forEach(item=>{
+              if(item.group){ current={label:item.group, items:[]}; groups.push(current); }
+              else current.items.push(item);
+            });
+            return groups.map((g,gi)=>(
+              <div className="chd-sb-group" key={gi}>
+                {g.items.map(n=>{
+                  const isRestricted = ["build","prelive"].includes(n.id);
+                  const isDisabled = isRestricted && formActive && page !== n.id;
+                  return (
+                    <button key={n.id} className={cls("chd-sb-item", page===n.id && "active")}
+                      onClick={()=> !isDisabled && handleNav(n.id)} disabled={isDisabled}
+                      style={{opacity:isDisabled?0.4:1,cursor:isDisabled?"not-allowed":"pointer"}}>
+                      <Icon name={n.icon} size={22} color={page===n.id?"var(--text)":"var(--muted)"}/>
+                      {n.id==="history"&&allCases.length>0&&<span className="chd-sb-badge">{allCases.length}</span>}
+                      {n.id==="announcements"&&announcements.length>0&&<span className="chd-sb-badge">{announcements.length}</span>}
+                      {n.id==="archives"&&archivedDrafts.length>0&&<span className="chd-sb-badge">{archivedDrafts.length}</span>}
+                      {n.id==="postlive"&&formActive&&page!=="postlive"&&<span className="chd-sb-dot"/>}
+                      <span className="chd-sb-tip">{n.label}</span>
+                    </button>
+                  );
+                })}
+              </div>
+            ));
+          })()}
+
+          {links.length>0&&(
+            <div className="chd-sb-group">
+              <p className="chd-sb-grouplabel">Links</p>
+              {links.map((l,i)=>{
+                const ref=sidebarDragRef;
+                return(
+                  <a key={l.id} href={l.url} target="_blank" rel="noopener noreferrer" className="chd-sb-item"
+                    draggable
+                    onDragStart={()=>{ref.current=i;}}
+                    onDragOver={e=>e.preventDefault()}
+                    onDrop={()=>{
+                      const from=ref.current;
+                      if(from==null||from===i)return;
+                      const arr=[...links];const[m]=arr.splice(from,1);arr.splice(i,0,m);
+                      setLinks(arr);ref.current=null;
+                    }}
+                    onDragEnd={()=>{ref.current=null;}}
+                    style={{cursor:"grab"}}>
+                    <span style={{fontSize:18}}>{l.icon}</span>
+                    <span className="chd-sb-tip">{l.title}</span>
+                  </a>
+                );
+              })}
             </div>
-            <div className="logo-text">Case<span>Hub</span></div>
-          </div>
+          )}
 
-          {coreNav.map((n,i)=>{
-  const isRestricted = ["build","prelive"].includes(n.id);
-  const isDisabled = isRestricted && formActive && page !== n.id;
-
-  return n.group
-    ? <div key={i} className="nav-group">{n.group}</div>
-    : <button
-        key={n.id}
-        className={cls("nav-item", page===n.id && "active")}
-        onClick={()=> !isDisabled && handleNav(n.id)}
-        disabled={isDisabled}
-        style={{
-          opacity: isDisabled ? 0.4 : 1,
-          cursor: isDisabled ? "not-allowed" : "pointer"
-        }}
-      >
-        <span className="nav-icon-wrap">
-          <Icon name={n.icon} size={15} color={page===n.id?"var(--accent)":"var(--muted)"}/>
-          {n.id==="history"&&allCases.length>0&&<span className="nav-badge-dot">{allCases.length}</span>}
-          {n.id==="announcements"&&announcements.length>0&&<span className="nav-badge-dot">{announcements.length}</span>}
-          {n.id==="archives"&&archivedDrafts.length>0&&<span className="nav-badge-dot">{archivedDrafts.length}</span>}
-          {n.id==="postlive"&&formActive&&page!=="postlive"&&<span className="nav-active-dot"/>}
-        </span>
-
-        <span className="nav-text nav-label">{n.label}</span>
-
-        {/* In-progress indicator */}
-        {n.id==="postlive"&&formActive&&page!=="postlive"&&(
-          <span className="nav-inprogress nav-label" title="Form in progress">
-            <Icon name="inprogress" size={11} color="var(--accent)"/>
-          </span>
-        )}
-
-        {/* 🔒 Lock indicator when disabled */}
-        {isDisabled && (
-          <span
-            style={{
-              fontSize: 10,
-              marginLeft: "auto",
-              opacity: 0.7
-            }}
-          >
-           
-          </span>
-        )}
-      </button>
-})}
-
-          {links.length>0&&(<>
-            <div className="nav-group">Custom Links</div>
-            {links.map((l,i)=>{
-              const ref=sidebarDragRef;
-              return(<div key={l.id} draggable
-                onDragStart={()=>{ref.current=i;}}
-                onDragOver={e=>e.preventDefault()}
-                onDrop={()=>{
-                  const from=ref.current;
-                  if(from==null||from===i)return;
-                  const arr=[...links];const[m]=arr.splice(from,1);arr.splice(i,0,m);
-                  setLinks(arr);ref.current=null;
-                }}
-                onDragEnd={()=>{ref.current=null;}}
-                style={{cursor:"grab"}}>
-                <a href={l.url} target="_blank" rel="noopener noreferrer" className={cls("nav-custom-link")} onClick={e=>e.stopPropagation()}>{l.icon} {l.title}</a>
-              </div>);
-            })}
-          </>)}
-
-          <div className="sidebar-divider" style={{height:1,background:"var(--border)",margin:"12px 0 10px"}}/>
-          {/* Break Timers */}
-          <div className="nav-group">Breaks</div>
-          <div className="break-btns">
-            {[{label:"15 min",shortLabel:"15m",icon:"coffee",mins:15},{label:"30 min",shortLabel:"30m",icon:"meditate",mins:30},{label:"Lunch",shortLabel:"1h",icon:"lunch",mins:60}].map(({label,shortLabel,icon,mins})=>{
+          <div className="chd-sb-bottom">
+            {[{label:"15 min",icon:"coffee",mins:15},{label:"30 min",icon:"meditate",mins:30},{label:"Lunch (1hr)",icon:"lunch",mins:60}].map(({label,icon,mins})=>{
               const isActiveBreak = breakTimer&&breakTimer.mins===mins;
               const isOtherBreak = breakTimer&&breakTimer.mins!==mins;
               const disabledByForm = formInFields && !isActiveBreak;
               const disabled = isOtherBreak || disabledByForm;
               return (
-              <button key={mins} className={cls("break-btn",isActiveBreak&&"active")} disabled={disabled} style={{opacity:disabled?.35:1,cursor:disabled?"not-allowed":"pointer",position:"relative"}}
-                onClick={()=>isActiveBreak?setCancelBreakConfirm(true):setBreakPending({label,mins})}>
-                <Icon name={icon} size={14} color={isActiveBreak?"var(--accent)":"var(--muted)"}/>
-                <span className="nav-text" style={{flex:1}}>{label}</span>
-                <span className="break-collapsed-label" style={{display:"none",fontSize:9,fontWeight:800,fontFamily:"monospace",color:isActiveBreak?"var(--accent)":"var(--muted)"}}>{shortLabel}</span>
-                {isActiveBreak&&<Icon name="play" size={9} color="var(--accent)"/>}
-                {disabledByForm&&!isActiveBreak&&<span style={{fontSize:8,position:"absolute",right:6,top:"50%",transform:"translateY(-50%)",color:"var(--muted)",opacity:.7}}>🔒</span>}
+                <button key={mins} className={cls("chd-sb-item",isActiveBreak&&"active")} disabled={disabled}
+                  style={{opacity:disabled?.35:1,cursor:disabled?"not-allowed":"pointer"}}
+                  onClick={()=>isActiveBreak?setCancelBreakConfirm(true):setBreakPending({label,mins})}>
+                  <Icon name={icon} size={20} color={isActiveBreak?"var(--text)":"var(--muted)"}/>
+                  <span className="chd-sb-tip">{label}{isActiveBreak?" (active)":""}</span>
+                </button>
+              );
+            })}
+            {timedIn&&!breakTimer&&(
+              <button className="chd-sb-item" style={{opacity:formInFields?.35:1,cursor:formInFields?"not-allowed":"pointer"}} disabled={!!formInFields} onClick={()=>!formInFields&&setOpenHourPending(true)}>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--muted)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                <span className="chd-sb-tip">Open Hour/Meeting</span>
               </button>
-            );})}
-          {timedIn&&!breakTimer&&(
-            <button className="break-btn" style={{borderColor:"rgba(124,58,237,.4)",color:"var(--accent2)",opacity:formInFields?.35:1,cursor:formInFields?"not-allowed":"pointer"}} disabled={!!formInFields} onClick={()=>!formInFields&&setOpenHourPending(true)}>
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-              <span style={{flex:1}}>Open Hour/Meeting</span>
-              {formInFields&&<span style={{fontSize:8,marginLeft:"auto",color:"var(--muted)",opacity:.7}}>🔒</span>}
+            )}
+            <button className="chd-sb-item" onClick={()=>setLightMode(l=>!l)}>
+              <span style={{fontSize:18}}>{lightMode?"🌙":"☀️"}</span>
+              <span className="chd-sb-tip">{lightMode?"Dark Mode":"Light Mode"}</span>
             </button>
-          )}
-          </div>
-          {/* Break start confirmation — rendered at root level to avoid sidebar clipping */}
-          <div className="sidebar-divider" style={{height:1,background:"var(--border)",margin:"4px 0 10px"}}/>
-          <div className="sidebar-profile" onClick={()=>handleNav("profile")}>
-            <div className="profile-avatar" style={{overflow:"hidden",padding:0,display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0}}>
-              {user.avatarUrl?<img src={user.avatarUrl} alt="" style={{width:"100%",height:"100%",objectFit:"cover",borderRadius:"50%"}}/>:<span style={{display:"flex",alignItems:"center",justifyContent:"center",width:"100%",height:"100%"}}>{initials}</span>}
-            </div>
-            <div className="profile-text"><div className="profile-name">{user.name}</div><div className="profile-role">{user.role||"User"}</div></div>
-          </div>
-          <button className="sidebar-logout-btn" onClick={()=>logout()} style={{display:"flex",alignItems:"center",gap:8,width:"100%",background:"none",border:"1.5px solid rgba(244,63,94,.4)",padding:"10px 12px",borderRadius:8,cursor:"pointer",color:"var(--red)",fontSize:13,fontWeight:600,fontFamily:"'Poppins',sans-serif",transition:".18s",marginTop:0}} onMouseOver={e=>{e.currentTarget.style.background="rgba(244,63,94,.1)";e.currentTarget.style.borderColor="rgba(244,63,94,.7)";}} onMouseOut={e=>{e.currentTarget.style.background="none";e.currentTarget.style.borderColor="rgba(244,63,94,.4)";}}>
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" style={{flexShrink:0}}><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
-            <span className="nav-label">Sign Out</span>
-          </button>
-          <button className="theme-toggle" onClick={()=>setLightMode(l=>!l)}>
-            <span style={{flexShrink:0}}>{lightMode?"🌙":"☀️"}</span>
-            <span className="toggle-label" style={{flex:1,textAlign:"left"}}>{lightMode?"Dark Mode":"Light Mode"}</span>
-            <div className={cls("toggle-track",!lightMode&&"on")}><div className="toggle-thumb"/></div>
-          </button>
-
-          {/* ── DB Status ── */}
-          <div className={cls("db-status", dbStatus.status)} title={dbStatus.latency?`${dbStatus.latency}ms`:undefined} onClick={dbStatus.recheck} style={{cursor:"pointer"}}>
-            <div className={cls("db-dot", dbStatus.status)}/>
-            <div style={{flex:1,minWidth:0}}>
-              {dbStatus.status==="connected"&&<span>DB Connected{dbStatus.latency?` · ${dbStatus.latency}ms`:""}</span>}
-              {dbStatus.status==="connecting"&&<span>Connecting…</span>}
-              {dbStatus.status==="error"&&<span>DB Offline ⚠</span>}
-              {dbStatus.lastSaved&&<div style={{fontSize:9,opacity:.7,marginTop:1}}>Saved {dbStatus.lastSaved.toLocaleTimeString()}</div>}
-            </div>
-            {dbStatus.status==="error"&&<span style={{fontSize:9,opacity:.7}}>tap to retry</span>}
+            <button className="chd-sb-item" onClick={dbStatus.recheck} title={dbStatus.latency?`${dbStatus.latency}ms`:undefined}>
+              <div className={cls("db-dot", dbStatus.status)} style={{position:"static"}}/>
+              <span className="chd-sb-tip">
+                {dbStatus.status==="connected"&&`DB Connected${dbStatus.latency?` · ${dbStatus.latency}ms`:""}`}
+                {dbStatus.status==="connecting"&&"Connecting…"}
+                {dbStatus.status==="error"&&"DB Offline — tap to retry"}
+              </span>
+            </button>
+            <button className="chd-sb-logout" onClick={()=>logout()}>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+              <span className="chd-sb-tip">Log Out</span>
+            </button>
           </div>
         </aside>
         </div>
@@ -9261,20 +9164,21 @@ function FileNameGeneratorPage({ onFill=null, activeTabData=null }) {
   return (
     <FngCtx.Provider value={{copy,copied,copyAll,copiedAll,form,setItem,removeItem,addItem}}>
     <div>
-      <div style={{display:'flex',alignItems:'flex-start',justifyContent:'space-between',marginBottom:24,gap:16,flexWrap:'wrap'}}>
+      <div className="chd-page-head">
         <div>
-          <div className="page-title" style={{display:'flex',alignItems:'center',gap:10}}><span style={{fontSize:22}}>📁</span> File Name Generator</div>
-          <div className="page-sub">Unlimited inputs · Copy All per section · Import from Excel</div>
+          <p className="chd-h4">File Name Generator</p>
+          <p className="chd-p-muted">Unlimited inputs · Copy All per section · Import from Excel</p>
         </div>
         <div style={{display:'flex',gap:8,flexWrap:'wrap'}}>
-          <label style={{display:'inline-flex',alignItems:'center',gap:7,padding:'8px 14px',background:'linear-gradient(135deg,#10b981,#059669)',color:'#fff',borderRadius:8,fontSize:12,fontWeight:700,cursor:'pointer',boxShadow:'0 2px 10px rgba(16,185,129,.35)'}}>
-            📊 Import Excel<input type="file" accept=".xlsx,.xls,.csv" style={{display:'none'}} onChange={e=>{if(e.target.files[0])handleXlsx(e.target.files[0]);e.target.value='';}}/>
+          <label className="chd-btn-secondary" style={{display:'inline-flex',alignItems:'center',gap:7,cursor:'pointer'}}>
+            Import Excel<input type="file" accept=".xlsx,.xls,.csv" style={{display:'none'}} onChange={e=>{if(e.target.files[0])handleXlsx(e.target.files[0]);e.target.value='';}}/>
           </label>
-          <button onClick={()=>{setDraftFmt({...format});setEditingFormat(true);}} style={{padding:'8px 14px',background:'var(--btn-ghost-bg)',border:'1.5px solid var(--btn-ghost-border)',color:'var(--btn-ghost-text)',borderRadius:8,fontSize:12,fontWeight:700,cursor:'pointer'}}>✏️ Edit Format</button>
-          <button onClick={()=>{setForm(EMPTY);if(typeof window!=="undefined")localStorage.removeItem("ch_fng_form");}} style={{padding:'8px 14px',background:'var(--btn-cancel-bg)',border:'1.5px solid var(--btn-cancel-border)',color:'var(--btn-cancel-text)',borderRadius:8,fontSize:12,fontWeight:700,cursor:'pointer'}}>Clear All</button>
-          {onFill&&<button onClick={()=>onFill({bizFilename:form.bizFilename,bizAlt:form.bizAlt,accountNum:form.accountNum})} style={{padding:'8px 14px',background:'var(--accent)',border:'1.5px solid var(--accent)',color:'#fff',borderRadius:8,fontSize:12,fontWeight:700,cursor:'pointer'}}>⚡ Auto-fill Active Form</button>}
+          <button className="chd-btn-secondary" onClick={()=>{setDraftFmt({...format});setEditingFormat(true);}}>Edit Format</button>
+          <button className="chd-btn-secondary" style={{borderColor:"var(--red)",color:"var(--red)"}} onClick={()=>{setForm(EMPTY);if(typeof window!=="undefined")localStorage.removeItem("ch_fng_form");}}>Clear All</button>
+          {onFill&&<button className="chd-btn-primary" onClick={()=>onFill({bizFilename:form.bizFilename,bizAlt:form.bizAlt,accountNum:form.accountNum})}>Auto-fill Active Form</button>}
         </div>
       </div>
+      <div className="chd-divider"/>
 
       {editingFormat&&(
         <div className="modal-bg">
@@ -9303,8 +9207,8 @@ function FileNameGeneratorPage({ onFill=null, activeTabData=null }) {
         </div>
       )}
 
-      <div style={{background:'var(--glass-bg)',border:'1px solid var(--glass-border)',backdropFilter:'var(--glass-blur)',WebkitBackdropFilter:'var(--glass-blur)',padding:'20px 22px',marginBottom:20,borderRadius:12,boxShadow:'var(--glass-shadow)'}}>
-        <div style={{fontSize:13,fontWeight:700,marginBottom:14}}>🏢 Business Information</div>
+      <div style={{background:'#fff',border:'1px solid var(--border)',padding:'20px 22px',marginBottom:20,borderRadius:12,boxShadow:'var(--shadow-sm)'}}>
+        <p className="chd-h6" style={{marginBottom:14}}>Business Information</p>
         <div style={{display:'grid',gridTemplateColumns:'1fr 1fr 1fr',gap:12,marginBottom:18}}>
           <div className="field" style={{marginBottom:0}}>
             <label style={{display:"flex",alignItems:"center",gap:6}}>
@@ -9332,13 +9236,13 @@ function FileNameGeneratorPage({ onFill=null, activeTabData=null }) {
         </div>
       </div>
 
-      <div style={{display:'flex',gap:2,marginBottom:16,flexWrap:'wrap',borderBottom:'1px solid var(--border)',paddingBottom:0}}>
+      <div style={{display:'flex',gap:8,marginBottom:16,flexWrap:'wrap'}}>
         {tabs.map(t=>(
-          <button key={t.id} onClick={()=>setTab(t.id)} style={{padding:'8px 13px',fontSize:11,fontWeight:tab===t.id?700:500,border:'none',borderBottom:tab===t.id?'2px solid var(--accent)':'2px solid transparent',background:'none',color:tab===t.id?'var(--accent)':'var(--muted)',cursor:'pointer',fontFamily:"'Poppins',sans-serif",transition:'.15s',marginBottom:-1}}>{t.label}</button>
+          <button key={t.id} onClick={()=>setTab(t.id)} className={cls("chd-radio-pill",tab===t.id&&"active")}>{t.label}</button>
         ))}
       </div>
 
-      <div style={{background:'var(--glass-bg)',border:'1px solid var(--glass-border)',backdropFilter:'var(--glass-blur)',WebkitBackdropFilter:'var(--glass-blur)',padding:'20px 22px',borderRadius:12,boxShadow:'var(--glass-shadow)'}}>
+      <div style={{background:'#fff',border:'1px solid var(--border)',padding:'20px 22px',borderRadius:12,boxShadow:'var(--shadow-sm)'}}>
         {tab==='logo'&&(<>
           <FngSection title="Logo" vals={[applyFmt(format.logo)]} sk="logo"><CopyCell val={applyFmt(format.logo)} id="logo"/></FngSection>
           <FngSection title="Favicon" vals={[applyFmt(format.favicon)]} sk="favicon"><CopyCell val={applyFmt(format.favicon)} id="favicon"/></FngSection>
