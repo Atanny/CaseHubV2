@@ -1071,7 +1071,7 @@ export function AppProvider({ children }) {
     {id:"profile",label:"Profile & Settings",icon:"user"},
   ];
 
-  const initials=(user.name||user.email||"U").split(" ").map(w=>w&&w[0]).filter(Boolean).join("").slice(0,2).toUpperCase();
+  const initials=((user&&user.name)||(user&&user.email)||"U").split(" ").map(w=>w&&w[0]).filter(Boolean).join("").slice(0,2).toUpperCase();
   // ── Keep internal `page` state in sync with the actual URL route ──
   useEffect(() => {
     const routeToPage = {

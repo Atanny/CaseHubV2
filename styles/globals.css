@@ -1615,3 +1615,12 @@ body.light .sidebar-divider{background:rgba(180,90,40,.1);}
 .chd-pl-step-pill{flex:1;min-width:120px;border:1px solid var(--card2);border-radius:5px;padding:10px;display:flex;flex-direction:column;align-items:center;gap:5px;font-family:'Prompt',sans-serif;font-weight:700;font-size:10px;text-transform:uppercase;color:var(--text);opacity:.5;}
 .chd-pl-step-pill.done{border-color:var(--text);opacity:1;}
 .chd-pl-step-dot{width:16px;height:16px;border-radius:50%;border:2px solid var(--muted);}
+
+/* ══════════════════════ QUICK LINKS — Figma create panel + list ══════════════════════ */
+.chd-ql-create{background:var(--card2);border:1px solid #fff;border-radius:10px;box-shadow:var(--shadow-sm);padding:20px;display:flex;flex-direction:column;gap:10px;width:402px;flex-shrink:0;}
+.chd-ql-icon-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:10px;}
+.chd-ql-icon-btn{background:#fff;border:1px solid var(--border);border-radius:10px;box-shadow:0 1px 5px rgba(0,0,0,.1);aspect-ratio:1;display:flex;align-items:center;justify-content:center;font-size:16px;cursor:pointer;}
+.chd-ql-icon-btn.active{background:var(--text);border-color:var(--text);}
+.chd-ql-row{background:#fff;border:1px solid var(--card2);border-radius:10px;box-shadow:var(--shadow-sm);padding:14px 20px;display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;cursor:grab;transition:opacity .12s;}
+.chd-ql-row-icon{background:#fff;border:1px solid var(--border);border-radius:10px;width:44px;height:44px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;}
+@media (max-width:900px){.chd-ql-create{width:100%;}}
