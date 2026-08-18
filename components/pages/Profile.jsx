@@ -147,10 +147,15 @@ export default function ProfilePage({ user, setUser, onLogout, timerLimit, saveT
   const initials=(form.name||user.name).split(" ").map(w=>w[0]).join("").slice(0,2).toUpperCase();
 
   return (
-    <div>
-      <div className="page-header"><div className="page-title">Profile & Settings</div><div className="page-sub">Manage your account, requestors, and preferences</div></div>
-      {loading&&<div style={{textAlign:"center",padding:"40px 0",color:"var(--muted)"}}>Loading profile…</div>}
+    <div className="chd-dash">
+      <div className="chd-page-head">
+        <div><p className="chd-h4">Profile & Settings</p><p className="chd-p-muted">Manage your Profile</p></div>
+      </div>
+      <div className="chd-divider"/>
+      {loading&&<div className="chd-empty-box">Loading profile…</div>}
       {!loading&&<>
+      <div style={{display:"flex",gap:10,alignItems:"flex-start",width:"100%",flexWrap:"wrap"}}>
+      <div style={{display:"flex",flexDirection:"column",gap:10,flex:"1 1 380px",minWidth:320,maxWidth:420}}>
 
       {/* ── Info card ── */}
       <div className="profile-card">
@@ -239,6 +244,9 @@ export default function ProfilePage({ user, setUser, onLogout, timerLimit, saveT
         <button className="btn btn-primary" style={{marginTop:4}} onClick={saveProfile} disabled={saving}>{saving?"Saving...":"💾 Save Messages"}</button>
       </div>
 
+      </div>
+
+      <div style={{display:"flex",flexDirection:"column",gap:10,flex:"2 1 500px",minWidth:320}}>
       {/* ── Special Requestors card ── */}
       <div className="profile-card">
         <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:12}}>
@@ -413,6 +421,8 @@ export default function ProfilePage({ user, setUser, onLogout, timerLimit, saveT
         <h3 style={{fontSize:16,fontWeight:700,marginBottom:8,color:"var(--red)"}}>Danger Zone</h3>
         <p style={{color:"var(--muted)",fontSize:13,marginBottom:14}}>Signing out will end your current session.</p>
         <button className="btn btn-danger" onClick={onLogout}>Sign Out</button>
+      </div>
+      </div>
       </div>
       </>}
       <Toast msg={toast.msg} type={toast.type}/>
