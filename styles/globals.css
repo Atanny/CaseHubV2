@@ -1607,3 +1607,11 @@ body.light .sidebar-divider{background:rgba(180,90,40,.1);}
 .chd-sb-dot{position:absolute;top:8px;right:16px;width:7px;height:7px;border-radius:50%;background:var(--amber);}
 .chd-sb-bottom{margin-top:auto;display:flex;flex-direction:column;gap:8px;align-items:center;width:100%;padding-top:14px;}
 .chd-sb-logout{width:100%;background:var(--red);color:#fff;border:1px solid var(--red);border-radius:10px;box-shadow:var(--shadow-sm);padding:12px 10px;display:flex;align-items:center;justify-content:center;cursor:pointer;position:relative;}
+
+/* ══════════════════════ POST-LIVE WIZARD — Figma info summary + stepper ══════════════════════ */
+.chd-pl-summary{background:#fff;border:1px solid var(--card2);border-radius:10px;box-shadow:var(--shadow-sm);padding:20px;display:flex;flex-direction:column;gap:10px;width:280px;flex-shrink:0;align-self:flex-start;position:sticky;top:10px;}
+.chd-pl-summary-card{background:#fff;border:1px solid var(--card2);border-radius:5px;box-shadow:var(--shadow-sm);padding:10px;display:flex;align-items:flex-start;justify-content:space-between;gap:10px;cursor:pointer;text-align:left;font-family:'Poppins',sans-serif;}
+.chd-pl-stepper{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px;width:100%;}
+.chd-pl-step-pill{flex:1;min-width:120px;border:1px solid var(--card2);border-radius:5px;padding:10px;display:flex;flex-direction:column;align-items:center;gap:5px;font-family:'Prompt',sans-serif;font-weight:700;font-size:10px;text-transform:uppercase;color:var(--text);opacity:.5;}
+.chd-pl-step-pill.done{border-color:var(--text);opacity:1;}
+.chd-pl-step-dot{width:16px;height:16px;border-radius:50%;border:2px solid var(--muted);}

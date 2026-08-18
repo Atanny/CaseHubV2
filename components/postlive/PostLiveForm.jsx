@@ -349,13 +349,45 @@ export default function PostLiveForm({ mode, onSave, onBack, onCancelForm, onSav
 
   const stepProps = {openStep, setOpenStep};
 
+  // ── Figma-style progress stepper groups (visual only — reuses the real done-flags above) ──
+  const stepGroups = [
+    {label:"Case Info", done:step1Done},
+    {label:"Before SS/Additional Backup", done:step2Done&&form.backupImages?.length>0},
+    {label:"Notepad/Assumption", done:step3Done},
+    {label:"After SS/B&A Backup", done:step6Done&&step7NameDone},
+    {label:"Final Checklist", done:step7Done},
+  ];
+  const infoCards = [
+    {label:"Account Number", val:form.accountNum},
+    {label:"Case Number", val:form.caseNum},
+    {label:"Amend Type", val:form.amendType},
+    {label:"Customer Name", val:form.customerName},
+    {label:"Customer Email", val:form.customerEmail},
+    {label:"Business Name", val:form.businessName},
+  ].filter(c=>c.val);
+
   return (
     <div className="form-cols" style={containerStyle}>
-      <div className="form-right">
-        <StickyPanel startTimeRef={startTimeRef} form={form} isSC={isSC} buildEntriesText={buildEntriesText} buildEmailText={buildEmailText} onTimerEnd={onTimerEnd} onQaTimerEnd={onQaTimerEnd} specialRequestors={specialRequestors} timerLimitSecs={timerLimitSecs} qaTimerLimitSecs={qaTimerLimitSecs} greetingMessages={user?.greetingMessages} footerElapsed={footerElapsed} phase2Elapsed={phase2Elapsed}/>
+      <div className="chd-pl-summary">
+        <p className="chd-h6">Information Summary</p>
+        <p className="chd-p-muted">Click the card to copy the information</p>
+        {infoCards.map((c,i)=>(
+          <button key={i} className="chd-pl-summary-card" onClick={()=>copyToClipboard(c.val)}>
+            <div><p className="chd-label" style={{opacity:.6}}>{c.label}</p><p className="chd-p">{c.val}</p></div>
+            <Icon name="copy" size={14} color="var(--muted)"/>
+          </button>
+        ))}
       </div>
 
       <div className="form-left">
+        <div className="chd-pl-stepper">
+          {stepGroups.map((g,i)=>(
+            <div key={i} className={cls("chd-pl-step-pill", g.done&&"done")}>
+              {g.done ? <Icon name="check" size={16} color="var(--accent)"/> : <span className="chd-pl-step-dot"/>}
+              <span>{g.label}</span>
+            </div>
+          ))}
+        </div>
 
         <StepCard num={1} title="Case Information" done={step1Done} locked={false} {...stepProps}>
           <div className="field"><label>Case Number <span className="req">*</span></label><input className="inp" placeholder="e.g. 1234567" value={form.caseNum} onChange={e=>setF({caseNum:cleanSpaces(e.target.value)})}/></div>
@@ -783,6 +815,10 @@ export default function PostLiveForm({ mode, onSave, onBack, onCancelForm, onSav
             <button className="btn btn-ghost" style={{borderRadius:8}} onClick={()=>{setModal(null);setBreakConfirmData(null);}}>Cancel</button>
           </div>
         </div></div>)}
+      </div>
+
+      <div className="form-right">
+        <StickyPanel startTimeRef={startTimeRef} form={form} isSC={isSC} buildEntriesText={buildEntriesText} buildEmailText={buildEmailText} onTimerEnd={onTimerEnd} onQaTimerEnd={onQaTimerEnd} specialRequestors={specialRequestors} timerLimitSecs={timerLimitSecs} qaTimerLimitSecs={qaTimerLimitSecs} greetingMessages={user?.greetingMessages} footerElapsed={footerElapsed} phase2Elapsed={phase2Elapsed}/>
       </div>
 
       <TocPanel openStep={openStep} setOpenStep={setOpenStep} isSC={isSC} page="postlive"
