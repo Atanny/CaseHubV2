@@ -1,0 +1,55 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/*
+  Design fonts from Figma:
+  - Moderustic (headings, H4/H6) — not on Google Fonts; falls back to a similar
+    rounded/geometric sans until a licensed Moderustic font file is added to
+    /public/fonts and declared with @font-face below.
+  - Prompt (nav labels / badges / uppercase micro-copy) — Google Font.
+  - Poppins (body copy / buttons) — Google Font.
+*/
+@import url('https://fonts.googleapis.com/css2?family=Prompt:wght@400;600;700&family=Poppins:wght@400;500;600;700&display=swap');
+
+:root {
+  --font-moderustic: 'Poppins', sans-serif; /* placeholder until Moderustic font file is added */
+  --font-prompt: 'Prompt', sans-serif;
+  --font-poppins: 'Poppins', sans-serif;
+}
+
+/*
+  Drop the real Moderustic font files in /public/fonts and uncomment:
+
+  @font-face {
+    font-family: 'Moderustic';
+    src: url('/fonts/Moderustic-Bold.woff2') format('woff2');
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+  }
+
+  Then set --font-moderustic: 'Moderustic', sans-serif;
+*/
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  padding: 0;
+  margin: 0;
+  background: #e8dfca;
+  color: #40513b;
+  font-family: var(--font-poppins);
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  font-family: inherit;
+}
