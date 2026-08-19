@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import Icon from '../icons/Icon';
 import GreetingRow from './GreetingRow';
+import { CopyRow } from './CopyRow';
 import { copyToClipboard } from '../../lib/helpers';
 
 export default function StickyPanel({ startTimeRef, form, isSC, buildEntriesText, buildEmailText, onTimerEnd, onQaTimerEnd, specialRequestors, timerLimitSecs, qaTimerLimitSecs=600, greetingMessages, footerElapsed=0, phase2Elapsed=null }) {

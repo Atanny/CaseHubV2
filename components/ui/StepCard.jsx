@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { cls } from '../../lib/helpers';
 import Icon from '../icons/Icon';
 
