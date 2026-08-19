@@ -3,7 +3,7 @@ import { createPortal } from 'react-dom';
 import { useRouter } from 'next/router';
 import Icon from '../components/icons/Icon';
 import { cls, useDbStatus, copyToClipboard, fmtDT, fmtElapsed, checkGrammar } from '../lib/helpers';
-import { resetSessionDir } from '../lib/idb';
+import { resetSessionDir, uploadImageToStorage } from '../lib/idb';
 
 const AppCtx = createContext(null);
 

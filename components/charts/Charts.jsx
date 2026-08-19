@@ -1,3 +1,5 @@
+import { cls } from '../../lib/helpers';
+
 export function BarChart({ data, colorClass }) {
   const max = Math.max(...data.map(d=>d.val),1);
   return (

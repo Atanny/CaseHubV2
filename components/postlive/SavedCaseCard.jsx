@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import Icon from '../icons/Icon';
 import { cls } from '../../lib/helpers';
+import { getOrPickDir } from '../../lib/idb';
 
 export default function SavedCaseCard({ c, openId, setOpenId, idx=0, onEdit }) {
   const cardId = c._id || `local-${idx}`;

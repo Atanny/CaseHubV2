@@ -1,8 +1,8 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
 import { createPortal } from 'react-dom';
 import Icon from '../icons/Icon';
-import { cls, copyToClipboard, checkGrammar } from '../../lib/helpers';
-import { idbOpen, dataURLtoFile } from '../../lib/idb';
+import { cls, copyToClipboard, checkGrammar, fmtElapsed, cleanSpaces } from '../../lib/helpers';
+import { idbOpen, dataURLtoFile, idbClearImages } from '../../lib/idb';
 import StepCard from '../ui/StepCard';
 import CopyName from '../ui/CopyName';
 import ImageUpload from './ImageUpload';

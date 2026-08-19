@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { copyToClipboard } from '../../lib/helpers';
+import { copyToClipboard, cls } from '../../lib/helpers';
 
 export default function CopyName({ name, onCopy }) {
   const [c,setC] = useState(false);

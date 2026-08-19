@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
 import Icon from '../icons/Icon';
-import { idbOpen, dataURLtoFile, idbPutImage, idbGetImages, idbDeleteImage, idbClearImages, getOrPickDir, uploadImageToStorage, uploadPendingImages } from '../../lib/idb';
+import { idbOpen, dataURLtoFile, idbPutImage, idbGetImages, idbDeleteImage, idbClearImages, getOrPickDir, uploadImageToStorage, uploadPendingImages, resetSessionDir } from '../../lib/idb';
+import { cls } from '../../lib/helpers';
 
 export default function ImageUpload({ baseName, multiple, onImages, immediateUpload=false, initialImages=[], caseNum="", businessName="", storageKey="default", isActive=false }) {
   // Filter out dead blob URLs that may come from server-saved drafts

@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import Icon from '../icons/Icon';
+import { cls, checkGrammar } from '../../lib/helpers';
 
 export default function EntryCard({ entry, label, index, onChange, onDelete, showNumber, onDragHandlePointerDown, isDragging }) {
   const [checking,setChecking]=useState(null);

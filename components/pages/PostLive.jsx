@@ -1,7 +1,8 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
 import { createPortal } from 'react-dom';
 import Icon from '../icons/Icon';
-import { cls } from '../../lib/helpers';
+import { cls, fmtElapsed } from '../../lib/helpers';
+import { idbClearImages } from '../../lib/idb';
 import PostLiveForm from '../postlive/PostLiveForm';
 import SavedCaseCard from '../postlive/SavedCaseCard';
 import Toast, { useToast } from '../ui/Toast';

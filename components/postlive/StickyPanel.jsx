@@ -3,6 +3,7 @@ import Icon from '../icons/Icon';
 import GreetingRow from './GreetingRow';
 import { CopyRow } from './CopyRow';
 import { copyToClipboard } from '../../lib/helpers';
+import { resetSessionDir, getOrPickDir } from '../../lib/idb';
 
 export default function StickyPanel({ startTimeRef, form, isSC, buildEntriesText, buildEmailText, onTimerEnd, onQaTimerEnd, specialRequestors, timerLimitSecs, qaTimerLimitSecs=600, greetingMessages, footerElapsed=0, phase2Elapsed=null }) {
   const [elapsed,setElapsed]=useState(0);
