@@ -5,25 +5,25 @@ async function request(url, options) {
   return data;
 }
 
-export const casesService = {
+export const draftsService = {
   list(email) {
-    return request(`/api/cases?email=${encodeURIComponent(email)}`);
+    return request(`/api/drafts?email=${encodeURIComponent(email)}`);
   },
-  create(payload) {
-    return request('/api/cases', {
+  save({ userEmail, mode, draftData }) {
+    return request('/api/drafts', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload),
+      body: JSON.stringify({ userEmail, mode, draftData }),
     });
   },
-  update(id, patch) {
-    return request(`/api/cases/${id}`, {
+  update(id, draftData) {
+    return request(`/api/drafts/${id}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(patch),
+      body: JSON.stringify({ draftData }),
     });
   },
   remove(id) {
-    return request(`/api/cases/${id}`, { method: 'DELETE' });
+    return request(`/api/drafts/${id}`, { method: 'DELETE' });
   },
 };

@@ -1,0 +1,32 @@
+export const emptyEntry = () => ({ id: String(Date.now() + Math.random()), number: '', note: '', clarification: '' });
+
+export const emptyBase = () => ({
+  caseNum: '',
+  accountNum: '',
+  amendType: '',
+  inProgress: false,
+  inboundNum: '',
+  customerName: '',
+  customerEmail: '',
+  businessName: '',
+  businessSuffix: '',
+  _caseComplexity: 'minor',
+  entries: [emptyEntry()],
+  devices: { mobile: false, tablet: false, desktop: false },
+  checklist: {
+    backup: false,
+    caseComment: false,
+    combinedTracker: false,
+    qaChecklist: false,
+    completeJob: false,
+    closeSiteComment: false,
+    emailSales: false,
+    trackerChecklist: false,
+    completeStatus: false,
+  },
+  trackerChecklistLink: '',
+  images: [],
+  backupImages: [],
+  emailAddress: '',
+  emailType: 'clarification',
+});
