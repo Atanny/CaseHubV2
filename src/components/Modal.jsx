@@ -9,7 +9,7 @@ export default function Modal({ open, onClose, children, className = '' }) {
       onClick={onClose}
     >
       <div
-        className={cls('bg-white rounded-ch p-8 max-w-sm w-full text-center shadow-ch', className)}
+        className={cls('bg-white rounded-ch-lg p-8 max-w-sm w-full text-center shadow-ch', className)}
         onClick={(e) => e.stopPropagation()}
       >
         {children}

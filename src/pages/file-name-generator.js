@@ -1,361 +1,431 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import AppLayout from '../components/AppLayout';
 import PageHeader from '../components/PageHeader';
 import HeaderQuickActions from '../components/HeaderQuickActions';
 import Divider from '../components/Divider';
 import Button from '../components/Button';
 import Input from '../components/Input';
-import Pill from '../components/Pill';
 import Modal from '../components/Modal';
 import Toast, { useToast } from '../components/Toast';
-import { CopyCell, DynList, FngSection } from '../components/FngHelpers';
+import Icon from '../components/Icon';
 
-const san = (s) => (s || '').toLowerCase().replace(/[^a-z0-9\s-]/g, '').trim().replace(/\s+/g, '-');
+const san = (s) =>
+  (s || '')
+    .trim()
+    .replace(/[^a-zA-Z0-9\s-]/g, '')
+    .replace(/\s+/g, '-');
+
 const nn = (i) => String(i + 1).padStart(2, '0');
 
-const EMPTY_FORM = { bizFilename: '', bizAlt: '', accountNum: '', pages: [''], badges: [''], teamMembers: [''], menuNames: [''], pdfNames: [''] };
-
-const DEFAULT_FORMAT = {
-  logo: '{nob}-logo',
-  favicon: '{nob}-favicon',
-  blogLogo: '{nob}-blog-logo',
-  introWhy: '{nob}-intro-why-choose',
-  heroCust: '{nob}-hero-{page}',
-  heroSlider: '{nob}-hero-slider-{nn}',
-  galleryNon: '{nob}-gallery-{nn}',
-  gallerySpec: '{nob}-{page}-gallery-{nn}',
-  before: '{nob}-before-{nn}',
-  after: '{nob}-after-{nn}',
-  badge: '{nob}-badge-{badge}',
-  team: '{nob}-{member}',
-  menu: '{nob}-menu-{nn}',
-  menuNamed: '{nob}-menu-{menu}-{nn}',
-  pageContent: '{nob}-{page}-{nn}',
-  pdf: '{nob}-{pdf}-pdf',
-};
-
-const TABS = [
-  ['logo', 'Logo & Misc'],
+const NAME_TYPES = [
   ['hero', 'Hero'],
+  ['heroSlider', 'Hero Slider'],
   ['gallery', 'Gallery'],
-  ['beforeafter', 'Before/After'],
-  ['badges', 'Badges'],
-  ['team', 'Team'],
-  ['menu', 'Menu'],
-  ['content', 'Content Image'],
-  ['pdf', 'PDF'],
-  ['slider', 'Hero Slider'],
+  ['gallerySeparate', 'Gallery - Separate Page'],
+  ['content', 'Content'],
+  ['beforeAfter', 'Before/After'],
 ];
 
-const N = 20;
+const DEFAULT_FORMATS = {
+  hero: '{page}-Hero-{business}',
+  heroSlider: 'Hero-Slider-{page}-{nn}-{business}',
+  gallery: 'Gallery-{nn}-{business}',
+  gallerySeparate: '{page}-Gallery-{nn}-{business}',
+  content: '{page}-Content-{nn}-{business}',
+  before: '{item}-Before-{nn}',
+  after: '{item}-After-{nn}',
+};
 
-function loadJSON(key, fallback) {
-  if (typeof window === 'undefined') return fallback;
-  try {
-    const v = localStorage.getItem(key);
-    return v ? { ...fallback, ...JSON.parse(v) } : fallback;
-  } catch {
-    return fallback;
-  }
+function emptyEntry() {
+  return { id: String(Date.now() + Math.random()), pageName: '', images: [], before: null, after: null };
+}
+
+function fileEntry(file) {
+  return { id: String(Date.now() + Math.random()), file, url: URL.createObjectURL(file) };
+}
+
+/** Click / drag-drop / paste zone for one or more images. */
+function UploadZone({ multiple, onFiles }) {
+  const [drag, setDrag] = useState(false);
+  const inputId = `up-${Math.random().toString(36).slice(2)}`;
+
+  return (
+    <label
+      htmlFor={inputId}
+      onDragOver={(e) => {
+        e.preventDefault();
+        setDrag(true);
+      }}
+      onDragLeave={() => setDrag(false)}
+      onDrop={(e) => {
+        e.preventDefault();
+        setDrag(false);
+        if (e.dataTransfer.files.length) onFiles(Array.from(e.dataTransfer.files));
+      }}
+      onPaste={(e) => {
+        const items = Array.from(e.clipboardData?.items || []).filter((i) => i.kind === 'file');
+        if (items.length) onFiles(items.map((i) => i.getAsFile()).filter(Boolean));
+      }}
+      tabIndex={0}
+      className={`flex flex-col items-center justify-center gap-1.5 w-full h-[90px] border-2 border-dashed rounded-ch cursor-pointer transition-colors ${
+        drag ? 'border-ch-main bg-white' : 'border-ch-border bg-white'
+      }`}
+    >
+      <input
+        id={inputId}
+        type="file"
+        accept="image/*"
+        multiple={multiple}
+        className="hidden"
+        onChange={(e) => {
+          if (e.target.files.length) onFiles(Array.from(e.target.files));
+          e.target.value = '';
+        }}
+      />
+      <Icon name="edit" size={20} color="#40513B" />
+      <p className="font-body text-body text-ch-main opacity-70 text-center">Paste Or Upload Your Screenshot Here</p>
+    </label>
+  );
 }
 
 export default function FileNameGeneratorPage() {
-  const [form, setForm] = useState(() => loadJSON('ch_fng_form', EMPTY_FORM));
-  const [format, setFormat] = useState(() => loadJSON('ch_fng_format', DEFAULT_FORMAT));
-  const [draftFmt, setDraftFmt] = useState(DEFAULT_FORMAT);
+  const [caseInfo, setCaseInfo] = useState({ businessName: '', entityDesignation: '', accountNumber: '' });
+  const [nameType, setNameType] = useState('hero');
+  const [entries, setEntries] = useState([emptyEntry()]);
+  const [galleryImages, setGalleryImages] = useState([]); // flat, only for 'gallery' type
+  const [selected, setSelected] = useState({}); // { generatedName: true }
+  const [formats, setFormats] = useState(DEFAULT_FORMATS);
+  const [draftFormats, setDraftFormats] = useState(DEFAULT_FORMATS);
   const [editingFormat, setEditingFormat] = useState(false);
-  const [tab, setTab] = useState('logo');
-  const [copiedVal, setCopiedVal] = useState(null);
   const [toast, showToast] = useToast();
 
-  useEffect(() => {
-    if (typeof window === 'undefined') return;
-    localStorage.setItem('ch_fng_form', JSON.stringify(form));
-  }, [form]);
+  const business = san(caseInfo.businessName);
 
-  const nob = san(form.bizFilename);
-  const nobFull = san(form.bizAlt) || nob;
-
-  function applyFmt(tpl, vars = {}) {
-    if (!nob) return '';
-    const defaults = {
-      page: san(form.pages.filter(Boolean)[0] || ''),
-      badge: san(form.badges.filter(Boolean)[0] || ''),
-      member: san(form.teamMembers.filter(Boolean)[0] || ''),
-      menu: san(form.menuNames.filter(Boolean)[0] || ''),
-      pdf: san(form.pdfNames.filter(Boolean)[0] || ''),
-      nn: '01',
-    };
-    const resolved = { ...defaults, ...vars };
-    let s = tpl.replace(/{nob}/g, nob).replace(/{nobfull}/g, nobFull || nob);
-    Object.entries(resolved).forEach(([k, v]) => {
-      s = s.replace(new RegExp(`{${k}}`, 'g'), san(v) || k);
-    });
-    return s;
+  function updateEntry(id, patch) {
+    setEntries((list) => list.map((e) => (e.id === id ? { ...e, ...patch } : e)));
+  }
+  function addEntry() {
+    setEntries((list) => [...list, emptyEntry()]);
+  }
+  function removeEntry(id) {
+    setEntries((list) => (list.length > 1 ? list.filter((e) => e.id !== id) : list));
+  }
+  function addImages(entryId, files) {
+    setEntries((list) => list.map((e) => (e.id === entryId ? { ...e, images: [...e.images, ...files.map(fileEntry)] } : e)));
   }
 
-  function copy(val) {
-    if (!val) return;
-    navigator.clipboard?.writeText(val).then(() => {
-      setCopiedVal(val);
-      setTimeout(() => setCopiedVal(null), 1500);
-    });
-  }
-  function copyAll(vals) {
-    const t = vals.filter(Boolean).join('\n');
-    if (!t) return;
-    navigator.clipboard?.writeText(t).then(() => showToast('Copied all!'));
+  // ---- Build the list of generated cards { key, page, name, url } for the current name type ----
+  function buildCards() {
+    if (!business) return [];
+    const cards = [];
+
+    if (nameType === 'hero') {
+      entries.forEach((e) => {
+        if (!e.pageName || e.images.length === 0) return;
+        const page = san(e.pageName);
+        const img = e.images[0];
+        cards.push({ key: `${e.id}-cust`, page: e.pageName, name: `${formats.hero.replace('{page}', page).replace('{business}', business)}-Cust`, url: img.url, file: img.file });
+        cards.push({ key: `${e.id}-plain`, page: e.pageName, name: formats.hero.replace('{page}', page).replace('{business}', business), url: img.url, file: img.file });
+      });
+    } else if (nameType === 'heroSlider') {
+      entries.forEach((e) => {
+        if (!e.pageName) return;
+        const page = san(e.pageName);
+        e.images.forEach((img, i) => {
+          const name = formats.heroSlider.replace('{page}', page).replace('{nn}', nn(i)).replace('{business}', business);
+          cards.push({ key: img.id, page: e.pageName, name, url: img.url, file: img.file });
+        });
+      });
+    } else if (nameType === 'gallery') {
+      galleryImages.forEach((img, i) => {
+        const name = formats.gallery.replace('{nn}', nn(i)).replace('{business}', business);
+        cards.push({ key: img.id, page: 'Gallery Page', name, url: img.url, file: img.file });
+      });
+    } else if (nameType === 'gallerySeparate') {
+      entries.forEach((e) => {
+        if (!e.pageName) return;
+        const page = san(e.pageName);
+        e.images.forEach((img, i) => {
+          const name = formats.gallerySeparate.replace('{page}', page).replace('{nn}', nn(i)).replace('{business}', business);
+          cards.push({ key: img.id, page: e.pageName, name, url: img.url, file: img.file });
+        });
+      });
+    } else if (nameType === 'content') {
+      entries.forEach((e) => {
+        if (!e.pageName) return;
+        const page = san(e.pageName);
+        e.images.forEach((img, i) => {
+          const name = formats.content.replace('{page}', page).replace('{nn}', nn(i)).replace('{business}', business);
+          cards.push({ key: img.id, page: e.pageName, name, url: img.url, file: img.file });
+        });
+      });
+    } else if (nameType === 'beforeAfter') {
+      entries.forEach((e) => {
+        if (!e.pageName) return;
+        const item = san(e.pageName);
+        if (e.before) cards.push({ key: `${e.id}-before`, page: e.pageName, name: formats.before.replace('{item}', item).replace('{nn}', '01'), url: e.before.url, file: e.before.file });
+        if (e.after) cards.push({ key: `${e.id}-after`, page: e.pageName, name: formats.after.replace('{item}', item).replace('{nn}', '01'), url: e.after.url, file: e.after.file });
+      });
+    }
+    return cards;
   }
 
-  function setListItem(field, i, v) {
-    setForm((f) => {
-      const arr = [...f[field]];
-      arr[i] = v;
-      return { ...f, [field]: arr };
-    });
+  const cards = buildCards();
+  const grouped = cards.reduce((acc, c) => {
+    (acc[c.page] = acc[c.page] || []).push(c);
+    return acc;
+  }, {});
+  const selectedCount = cards.filter((c) => selected[c.key]).length;
+  const allSelected = cards.length > 0 && selectedCount === cards.length;
+
+  function toggleSelected(key) {
+    setSelected((s) => ({ ...s, [key]: !s[key] }));
   }
-  function addListItem(field) {
-    setForm((f) => ({ ...f, [field]: [...f[field], ''] }));
-  }
-  function removeListItem(field, i) {
-    setForm((f) => {
-      const arr = [...f[field]];
-      arr.splice(i, 1);
-      return { ...f, [field]: arr.length ? arr : [''] };
-    });
+  function toggleSelectAll() {
+    if (allSelected) {
+      setSelected({});
+    } else {
+      setSelected(Object.fromEntries(cards.map((c) => [c.key, true])));
+    }
   }
 
-  const logoVals = [applyFmt(format.logo), applyFmt(format.favicon), applyFmt(format.blogLogo), applyFmt(format.introWhy)];
-  const pages = form.pages.filter(Boolean);
-  const heroVals = pages.length ? pages.map((p) => applyFmt(format.heroCust, { page: san(p) })) : [applyFmt(format.heroCust, { page: 'home' })];
-  const galleryNonVals = Array.from({ length: N }, (_, i) => applyFmt(format.galleryNon, { nn: nn(i) }));
-  const gallerySpecVals = pages.flatMap((p) => Array.from({ length: 10 }, (_, i) => applyFmt(format.gallerySpec, { page: san(p), nn: nn(i) })));
-  const baVals = Array.from({ length: N }, (_, i) => [applyFmt(format.before, { nn: nn(i) }), applyFmt(format.after, { nn: nn(i) })]).flat();
-  const badgeVals = form.badges.filter(Boolean).map((b) => applyFmt(format.badge, { badge: san(b) }));
-  const teamVals = form.teamMembers.filter(Boolean).map((m) => applyFmt(format.team, { member: san(m) }));
-  const menuNumVals = Array.from({ length: 10 }, (_, i) => applyFmt(format.menu, { nn: nn(i) }));
-  const menuNamedVals = form.menuNames.filter(Boolean).flatMap((m) => Array.from({ length: 5 }, (_, i) => applyFmt(format.menuNamed, { menu: san(m), nn: nn(i) })));
-  const contentVals = pages.flatMap((p) => Array.from({ length: 10 }, (_, i) => applyFmt(format.pageContent, { page: san(p), nn: nn(i) })));
-  const pdfVals = form.pdfNames.filter(Boolean).map((p) => applyFmt(format.pdf, { pdf: san(p) }));
-  const sliderVals = Array.from({ length: N }, (_, i) => applyFmt(format.heroSlider, { nn: nn(i) }));
+  async function downloadSelected() {
+    const toDownload = cards.filter((c) => selected[c.key]);
+    if (toDownload.length === 0) {
+      showToast('Select at least one image first', 'error');
+      return;
+    }
+    for (const c of toDownload) {
+      const ext = c.file.name.split('.').pop() || 'png';
+      const a = document.createElement('a');
+      a.href = c.url;
+      a.download = `${c.name}.${ext}`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      // eslint-disable-next-line no-await-in-loop
+      await new Promise((r) => setTimeout(r, 250)); // let the browser register each download separately
+    }
+    showToast(`Downloaded ${toDownload.length} image${toDownload.length !== 1 ? 's' : ''}`);
+  }
+
+  const rightTitle = NAME_TYPES.find(([v]) => v === nameType)?.[1] + ' Upload';
+  const isBeforeAfter = nameType === 'beforeAfter';
+  const isFlatGallery = nameType === 'gallery';
+  const isSinglePerPage = nameType === 'hero';
 
   return (
     <AppLayout>
-      <PageHeader
-        title="File Name Generator"
-        subtitle={nob ? `Generating for "${nob}"` : 'Fill in business info below to start'}
-        actions={<HeaderQuickActions />}
-      />
+      <PageHeader title="File Name Generator" subtitle="Manage Your File Names" actions={<HeaderQuickActions />} />
       <Divider className="mb-1" />
 
-      <div className="flex gap-2.5 w-full">
-        <Button
-          variant="outline"
-          onClick={() => {
-            setDraftFmt({ ...format });
-            setEditingFormat(true);
-          }}
-        >
-          Edit Format
-        </Button>
-        <Button
-          variant="outline"
-          className="!border-ch-red !text-ch-red"
-          onClick={() => {
-            setForm(EMPTY_FORM);
-            showToast('Cleared', 'info');
-          }}
-        >
-          Clear All
-        </Button>
+      <div className="flex gap-2.5 items-start w-full flex-wrap">
+        {/* Left column */}
+        <div className="flex flex-col gap-3 bg-ch-secondary rounded-ch-lg shadow-ch p-5 w-full max-w-[400px]">
+          <p className="font-heading font-bold text-h6 text-ch-main">Case Information</p>
+          <Divider tone="secondary" />
+
+          <div>
+            <p className="text-[10px] font-label font-bold uppercase text-ch-main mb-1.5">Business Name (Auto-Fill)*</p>
+            <Input value={caseInfo.businessName} onChange={(e) => setCaseInfo((c) => ({ ...c, businessName: e.target.value }))} placeholder="Purify Drinking Water" />
+          </div>
+          <div>
+            <p className="text-[10px] font-label font-bold uppercase text-ch-main mb-1.5">Entity Designations (Auto-Fill)*</p>
+            <Input value={caseInfo.entityDesignation} onChange={(e) => setCaseInfo((c) => ({ ...c, entityDesignation: e.target.value }))} placeholder="Inc" />
+          </div>
+          <div>
+            <p className="text-[10px] font-label font-bold uppercase text-ch-main mb-1.5">Account Number (Auto-Fill)*</p>
+            <Input value={caseInfo.accountNumber} onChange={(e) => setCaseInfo((c) => ({ ...c, accountNumber: e.target.value }))} />
+          </div>
+
+          <Divider tone="secondary" />
+
+          <div>
+            <p className="text-[10px] font-label font-bold uppercase text-ch-main mb-1.5">Name Type</p>
+            <div className="relative">
+              <select
+                value={nameType}
+                onChange={(e) => {
+                  setNameType(e.target.value);
+                  setSelected({});
+                }}
+                className="w-full h-[52px] px-4 bg-white border border-ch-border rounded-ch-lg outline-none font-body text-body text-ch-main appearance-none"
+              >
+                {NAME_TYPES.map(([v, l]) => (
+                  <option key={v} value={v}>
+                    {l}
+                  </option>
+                ))}
+              </select>
+              <Icon name="chevron" size={16} color="#40513B" className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none" />
+            </div>
+          </div>
+
+          {isFlatGallery ? (
+            <div className="bg-white rounded-ch p-4 flex flex-col gap-2">
+              <p className="text-[10px] font-label font-bold uppercase text-ch-main">Upload Images</p>
+              <UploadZone multiple onFiles={(files) => setGalleryImages((imgs) => [...imgs, ...files.map(fileEntry)])} />
+              {galleryImages.length > 0 && (
+                <div className="flex gap-1.5 flex-wrap">
+                  {galleryImages.map((img) => (
+                    <img key={img.id} src={img.url} alt="" className="w-12 h-12 rounded-ch object-cover" />
+                  ))}
+                </div>
+              )}
+            </div>
+          ) : (
+            entries.map((entry) => (
+              <div key={entry.id} className="bg-white rounded-ch p-4 flex flex-col gap-2 relative">
+                <button onClick={() => removeEntry(entry.id)} className="absolute top-3 right-3 opacity-50 hover:opacity-100">
+                  <Icon name="close" size={12} color="#40513B" />
+                </button>
+                <p className="text-[10px] font-label font-bold uppercase text-ch-main">{isBeforeAfter ? 'Item Name' : 'Page Name'}</p>
+                <div className="relative">
+                  <input
+                    className="w-full h-11 pl-4 pr-9 bg-ch-secondary rounded-ch outline-none font-body text-body text-ch-main"
+                    value={entry.pageName}
+                    onChange={(e) => updateEntry(entry.id, { pageName: e.target.value })}
+                    placeholder={isBeforeAfter ? 'e.g. Water Trek Refilling' : 'e.g. Home'}
+                  />
+                  {entry.pageName && (
+                    <button onClick={() => updateEntry(entry.id, { pageName: '' })} className="absolute right-3 top-1/2 -translate-y-1/2">
+                      <Icon name="close" size={12} color="#C54446" />
+                    </button>
+                  )}
+                </div>
+
+                {isBeforeAfter ? (
+                  <>
+                    <p className="text-[10px] font-label font-bold uppercase text-ch-main">Before Image</p>
+                    {entry.before ? (
+                      <img src={entry.before.url} alt="" className="w-16 h-16 rounded-ch object-cover" />
+                    ) : (
+                      <UploadZone onFiles={(files) => updateEntry(entry.id, { before: fileEntry(files[0]) })} />
+                    )}
+                    <p className="text-[10px] font-label font-bold uppercase text-ch-main">After Image</p>
+                    {entry.after ? (
+                      <img src={entry.after.url} alt="" className="w-16 h-16 rounded-ch object-cover" />
+                    ) : (
+                      <UploadZone onFiles={(files) => updateEntry(entry.id, { after: fileEntry(files[0]) })} />
+                    )}
+                  </>
+                ) : (
+                  <>
+                    <p className="text-[10px] font-label font-bold uppercase text-ch-main">Upload Image{isSinglePerPage ? '' : 's'}</p>
+                    <UploadZone
+                      multiple={!isSinglePerPage}
+                      onFiles={(files) => addImages(entry.id, isSinglePerPage ? files.slice(0, 1) : files)}
+                    />
+                    {entry.images.length > 0 && (
+                      <div className="flex gap-1.5 flex-wrap">
+                        {entry.images.map((img) => (
+                          <img key={img.id} src={img.url} alt="" className="w-12 h-12 rounded-ch object-cover" />
+                        ))}
+                      </div>
+                    )}
+                  </>
+                )}
+              </div>
+            ))
+          )}
+
+          {!isFlatGallery && (
+            <button onClick={addEntry} className="self-center font-body text-body text-ch-main opacity-70 flex items-center gap-1.5">
+              Add More Page
+              <Icon name="plus" size={11} color="#40513B" />
+            </button>
+          )}
+
+          <div className="flex gap-2.5">
+            <Button
+              variant="danger"
+              uppercase={false}
+              className="!bg-white !text-ch-red flex-1"
+              icon={<Icon name="close" size={13} color="#C54446" />}
+              onClick={() => {
+                setEntries([emptyEntry()]);
+                setGalleryImages([]);
+                setSelected({});
+              }}
+            >
+              Remove Fill
+            </Button>
+            <Button
+              variant="primary"
+              uppercase={false}
+              className="flex-1"
+              icon={<Icon name="edit" size={13} color="#fff" />}
+              onClick={() => {
+                setDraftFormats(formats);
+                setEditingFormat(true);
+              }}
+            >
+              Edit File Name Format
+            </Button>
+          </div>
+        </div>
+
+        {/* Right column */}
+        <div className="flex-1 min-w-[320px] bg-white rounded-ch-lg shadow-ch p-5 flex flex-col gap-3">
+          <div className="flex items-center justify-between">
+            <p className="font-heading font-bold text-h6 text-ch-main uppercase">{rightTitle}</p>
+            <p className="font-body text-body text-ch-main opacity-60">
+              Selected: {selectedCount}/{cards.length}
+            </p>
+          </div>
+          <Divider tone="secondary" />
+
+          {cards.length === 0 && (
+            <p className="font-body text-body text-ch-main opacity-50 py-8 text-center">
+              {business ? 'Add a page and upload an image to generate file names.' : 'Enter a business name and upload an image to get started.'}
+            </p>
+          )}
+
+          {Object.entries(grouped).map(([page, imgs]) => (
+            <div key={page} className="flex flex-col gap-2.5">
+              <p className="text-[10px] font-label font-bold uppercase text-ch-main">{page}</p>
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                {imgs.map((c) => (
+                  <div key={c.key} className="flex flex-col gap-1.5">
+                    <button onClick={() => toggleSelected(c.key)} className="relative aspect-square rounded-ch overflow-hidden border border-ch-border">
+                      <img src={c.url} alt="" className="w-full h-full object-cover" />
+                      <span className={`absolute top-1.5 right-1.5 w-4 h-4 rounded border flex items-center justify-center ${selected[c.key] ? 'bg-ch-main border-ch-main' : 'bg-white border-ch-border'}`}>
+                        {selected[c.key] && <Icon name="check" size={10} color="#fff" />}
+                      </span>
+                    </button>
+                    <p className="font-body text-body text-ch-main text-center leading-tight">{c.name}</p>
+                  </div>
+                ))}
+              </div>
+              <Divider tone="secondary" />
+            </div>
+          ))}
+
+          <div className="flex items-center justify-between mt-auto pt-2">
+            <label className="flex items-center gap-2 font-body text-body text-ch-main cursor-pointer">
+              <input type="checkbox" checked={allSelected} onChange={toggleSelectAll} disabled={cards.length === 0} />
+              Select All
+            </label>
+            <Button variant="primary" uppercase={false} icon={<Icon name="archive" size={14} color="#fff" />} onClick={downloadSelected} disabled={cards.length === 0}>
+              Download Selected
+            </Button>
+          </div>
+        </div>
       </div>
 
-      <div className="bg-white rounded-ch shadow-ch p-5 w-full">
-        <p className="font-heading font-bold text-h6 text-ch-main mb-3">Business Information</p>
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-4">
-          <div>
-            <p className="text-[10px] font-label font-bold uppercase text-ch-main opacity-60 mb-1.5">Business Name (NOB)</p>
-            <Input value={form.bizFilename} onChange={(e) => setForm((f) => ({ ...f, bizFilename: e.target.value }))} placeholder="Fire Force" />
-          </div>
-          <div>
-            <p className="text-[10px] font-label font-bold uppercase text-ch-main opacity-60 mb-1.5">Business Name + Suffix</p>
-            <Input value={form.bizAlt} onChange={(e) => setForm((f) => ({ ...f, bizAlt: e.target.value }))} placeholder="Fire Force LLC" />
-          </div>
-          <div>
-            <p className="text-[10px] font-label font-bold uppercase text-ch-main opacity-60 mb-1.5">Account Number</p>
-            <Input value={form.accountNum} onChange={(e) => setForm((f) => ({ ...f, accountNum: e.target.value }))} />
-          </div>
-        </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <DynList label="Pages" items={form.pages} onSet={(i, v) => setListItem('pages', i, v)} onAdd={() => addListItem('pages')} onRemove={(i) => removeListItem('pages', i)} />
-          <DynList label="Badges" items={form.badges} onSet={(i, v) => setListItem('badges', i, v)} onAdd={() => addListItem('badges')} onRemove={(i) => removeListItem('badges', i)} />
-          <DynList label="Team Members" items={form.teamMembers} onSet={(i, v) => setListItem('teamMembers', i, v)} onAdd={() => addListItem('teamMembers')} onRemove={(i) => removeListItem('teamMembers', i)} />
-          <DynList label="Menu Names" items={form.menuNames} onSet={(i, v) => setListItem('menuNames', i, v)} onAdd={() => addListItem('menuNames')} onRemove={(i) => removeListItem('menuNames', i)} />
-          <DynList label="PDF Names" items={form.pdfNames} onSet={(i, v) => setListItem('pdfNames', i, v)} onAdd={() => addListItem('pdfNames')} onRemove={(i) => removeListItem('pdfNames', i)} />
-        </div>
-      </div>
-
-      {!nob && (
-        <div className="w-full bg-white rounded-ch shadow-ch p-6 text-center font-body text-body text-ch-main opacity-60">
-          Enter a business name above to generate file names.
-        </div>
-      )}
-
-      {nob && (
-        <>
-          <div className="flex items-center gap-2 flex-wrap w-full">
-            {TABS.map(([v, l]) => (
-              <Pill key={v} active={tab === v} onClick={() => setTab(v)}>
-                {l}
-              </Pill>
-            ))}
-          </div>
-
-          {tab === 'logo' && (
-            <FngSection title="Logo & Misc" values={logoVals} onCopyAll={copyAll}>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                {logoVals.map((v, i) => (
-                  <CopyCell key={i} value={v} onCopy={copy} copied={copiedVal === v} />
-                ))}
-              </div>
-            </FngSection>
-          )}
-          {tab === 'hero' && (
-            <FngSection title="Hero Images" values={heroVals} onCopyAll={copyAll}>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                {heroVals.map((v, i) => (
-                  <CopyCell key={i} value={v} onCopy={copy} copied={copiedVal === v} />
-                ))}
-              </div>
-            </FngSection>
-          )}
-          {tab === 'gallery' && (
-            <>
-              <FngSection title="Gallery (general)" values={galleryNonVals} onCopyAll={copyAll}>
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
-                  {galleryNonVals.map((v, i) => (
-                    <CopyCell key={i} value={v} onCopy={copy} copied={copiedVal === v} />
-                  ))}
-                </div>
-              </FngSection>
-              {pages.length > 0 && (
-                <FngSection title="Gallery (per page)" values={gallerySpecVals} onCopyAll={copyAll}>
-                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
-                    {gallerySpecVals.map((v, i) => (
-                      <CopyCell key={i} value={v} onCopy={copy} copied={copiedVal === v} />
-                    ))}
-                  </div>
-                </FngSection>
-              )}
-            </>
-          )}
-          {tab === 'beforeafter' && (
-            <FngSection title="Before / After" values={baVals} onCopyAll={copyAll}>
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
-                {baVals.map((v, i) => (
-                  <CopyCell key={i} value={v} onCopy={copy} copied={copiedVal === v} />
-                ))}
-              </div>
-            </FngSection>
-          )}
-          {tab === 'badges' && (
-            <FngSection title="Badges" values={badgeVals} onCopyAll={copyAll}>
-              {badgeVals.length === 0 ? (
-                <p className="font-body text-body text-ch-main opacity-50">Add badge names above.</p>
-              ) : (
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
-                  {badgeVals.map((v, i) => (
-                    <CopyCell key={i} value={v} onCopy={copy} copied={copiedVal === v} />
-                  ))}
-                </div>
-              )}
-            </FngSection>
-          )}
-          {tab === 'team' && (
-            <FngSection title="Team" values={teamVals} onCopyAll={copyAll}>
-              {teamVals.length === 0 ? (
-                <p className="font-body text-body text-ch-main opacity-50">Add team members above.</p>
-              ) : (
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
-                  {teamVals.map((v, i) => (
-                    <CopyCell key={i} value={v} onCopy={copy} copied={copiedVal === v} />
-                  ))}
-                </div>
-              )}
-            </FngSection>
-          )}
-          {tab === 'menu' && (
-            <>
-              <FngSection title="Menu (numbered)" values={menuNumVals} onCopyAll={copyAll}>
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
-                  {menuNumVals.map((v, i) => (
-                    <CopyCell key={i} value={v} onCopy={copy} copied={copiedVal === v} />
-                  ))}
-                </div>
-              </FngSection>
-              {form.menuNames.filter(Boolean).length > 0 && (
-                <FngSection title="Menu (named)" values={menuNamedVals} onCopyAll={copyAll}>
-                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
-                    {menuNamedVals.map((v, i) => (
-                      <CopyCell key={i} value={v} onCopy={copy} copied={copiedVal === v} />
-                    ))}
-                  </div>
-                </FngSection>
-              )}
-            </>
-          )}
-          {tab === 'content' && (
-            <FngSection title="Content Image" values={contentVals} onCopyAll={copyAll}>
-              {contentVals.length === 0 ? (
-                <p className="font-body text-body text-ch-main opacity-50">Add pages above.</p>
-              ) : (
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
-                  {contentVals.map((v, i) => (
-                    <CopyCell key={i} value={v} onCopy={copy} copied={copiedVal === v} />
-                  ))}
-                </div>
-              )}
-            </FngSection>
-          )}
-          {tab === 'pdf' && (
-            <FngSection title="PDF" values={pdfVals} onCopyAll={copyAll}>
-              {pdfVals.length === 0 ? (
-                <p className="font-body text-body text-ch-main opacity-50">Add PDF names above.</p>
-              ) : (
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
-                  {pdfVals.map((v, i) => (
-                    <CopyCell key={i} value={v} onCopy={copy} copied={copiedVal === v} />
-                  ))}
-                </div>
-              )}
-            </FngSection>
-          )}
-          {tab === 'slider' && (
-            <FngSection title="Hero Slider" values={sliderVals} onCopyAll={copyAll}>
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
-                {sliderVals.map((v, i) => (
-                  <CopyCell key={i} value={v} onCopy={copy} copied={copiedVal === v} />
-                ))}
-              </div>
-            </FngSection>
-          )}
-        </>
-      )}
-
-      <Modal open={editingFormat} onClose={() => setEditingFormat(false)} className="!max-w-2xl !text-left max-h-[85vh] overflow-y-auto">
-        <p className="font-heading font-bold text-h6 text-ch-main mb-1">Edit Filename Format Templates</p>
+      <Modal open={editingFormat} onClose={() => setEditingFormat(false)} className="!max-w-xl !text-left max-h-[85vh] overflow-y-auto">
+        <p className="font-heading font-bold text-h6 text-ch-main mb-1">Edit File Name Format</p>
         <p className="font-body text-body text-ch-main opacity-60 mb-4">
-          Tokens: <code>{'{nob}'}</code> name · <code>{'{nobfull}'}</code> name+suffix · <code>{'{nn}'}</code> number · <code>{'{page}'}</code>{' '}
-          <code>{'{member}'}</code> <code>{'{badge}'}</code> <code>{'{menu}'}</code> <code>{'{pdf}'}</code>
+          Tokens: <code>{'{business}'}</code> business name · <code>{'{page}'}</code> page/item name · <code>{'{nn}'}</code> number
         </p>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-          {Object.entries(draftFmt).map(([key, val]) => (
+        <div className="flex flex-col gap-3">
+          {Object.entries(draftFormats).map(([key, val]) => (
             <div key={key}>
-              <p className="text-[10px] font-label font-bold uppercase text-ch-main opacity-60 mb-1">{key.replace(/([A-Z])/g, ' $1').trim()}</p>
+              <p className="text-[10px] font-label font-bold uppercase text-ch-main opacity-60 mb-1">{key}</p>
               <input
                 className="w-full h-9 px-3 bg-ch-secondary rounded-ch outline-none font-mono text-[11px] text-ch-main"
                 value={val}
-                onChange={(e) => setDraftFmt((f) => ({ ...f, [key]: e.target.value }))}
+                onChange={(e) => setDraftFormats((f) => ({ ...f, [key]: e.target.value }))}
               />
             </div>
           ))}
@@ -363,28 +433,20 @@ export default function FileNameGeneratorPage() {
         <div className="flex gap-2.5 mt-5">
           <Button
             variant="primary"
+            uppercase={false}
             className="flex-1"
             onClick={() => {
-              setFormat(draftFmt);
-              localStorage.setItem('ch_fng_format', JSON.stringify(draftFmt));
+              setFormats(draftFormats);
               setEditingFormat(false);
               showToast('Format saved');
             }}
           >
             Save Format
           </Button>
-          <Button
-            variant="outline"
-            onClick={() => {
-              setFormat(DEFAULT_FORMAT);
-              setDraftFmt(DEFAULT_FORMAT);
-              localStorage.removeItem('ch_fng_format');
-              showToast('Reset to default', 'info');
-            }}
-          >
+          <Button variant="outline" uppercase={false} onClick={() => setDraftFormats(DEFAULT_FORMATS)}>
             Reset
           </Button>
-          <Button variant="outline" onClick={() => setEditingFormat(false)}>
+          <Button variant="outline" uppercase={false} onClick={() => setEditingFormat(false)}>
             Cancel
           </Button>
         </div>

@@ -4,17 +4,143 @@ import Button from '../components/Button';
 import Modal from '../components/Modal';
 import Toast, { useToast } from '../components/Toast';
 import AppLayout from '../components/AppLayout';
-import ModeCard from '../components/ModeCard';
-import DailySessionPanel from '../components/DailySessionPanel';
-import SuspendedCaseRow from '../components/SuspendedCaseRow';
-import PostLiveWizard from '../components/PostLiveWizard';
-import { emptyBase } from '../components/formShape';
+import CaseTypeBadge from '../components/CaseTypeBadge';
+import PostLiveWizard, { emptyBase } from '../components/PostLiveWizard';
 import { BREAK_OPTIONS } from '../constants/navigation';
 import { useSession } from '../hooks/useSession';
 import { casesService } from '../services/casesService';
 import { draftsService } from '../services/draftsService';
 import { requestorsService } from '../services/requestorsService';
 import { profileService } from '../services/profileService';
+import { fmtElapsed } from '../utils/format';
+
+/** One of the three big mode-selector cards (Site Comment / Inbound Email / Bundle). */
+function ModeCard({ icon, title, subtitle, onClick }) {
+  return (
+    <button onClick={onClick} className="flex items-center justify-between gap-3 flex-1 min-w-[220px] bg-white rounded-ch shadow-ch p-5 text-left hover:shadow-lg transition-shadow">
+      <div className="flex items-center gap-3">
+        <span className="flex items-center justify-center w-11 h-11 rounded-ch bg-ch-secondary shrink-0">
+          <Icon name={icon} size={20} color="#40513B" />
+        </span>
+        <div>
+          <p className="font-heading font-bold text-h6 text-ch-main">{title}</p>
+          <p className="font-body text-body text-ch-main opacity-60">{subtitle}</p>
+        </div>
+      </div>
+      <Icon name="chevron" size={18} color="#40513B" className="-rotate-90 shrink-0" />
+    </button>
+  );
+}
+
+const SESSION_COLS = ['Type', 'Complexity', 'Case Number', 'Started', 'Ended', 'Duration', 'Outcome', 'Actions'];
+
+/**
+ * Time In/Out + today's case log + summary stats. Time In/Out here is a
+ * local per-browser-session toggle (elapsed shown live) — it doesn't yet
+ * write to the sessions table or drive the shift-alarm system, since that's
+ * the break-timer/shift-alarm milestone. Session Log's read/delete side and
+ * this panel share the same shape so that milestone can wire straight in.
+ */
+function DailySessionPanel({ timedIn, elapsed, onToggleTimeIn, rows, stats }) {
+  return (
+    <div className="bg-white rounded-ch shadow-ch p-5 w-full flex flex-col gap-3">
+      <div className="flex items-center justify-between">
+        <p className="font-heading font-bold text-h6 text-ch-main uppercase">Daily Session</p>
+        <div className="flex items-center gap-3">
+          <div className="flex items-center gap-1.5 px-3 h-9 rounded-ch border border-ch-border font-body text-body text-ch-main tabular-nums">
+            <span className="text-[9px] font-label font-bold uppercase opacity-50">Timer</span>
+            {fmtElapsed(elapsed)}
+          </div>
+          <button
+            onClick={onToggleTimeIn}
+            className={`flex items-center gap-2 px-4 h-9 rounded-ch font-body text-body font-bold text-white ${timedIn ? 'bg-ch-red' : 'bg-ch-main'}`}
+          >
+            {timedIn ? 'Time Out' : 'Time In'}
+            <Icon name="clock" size={14} color="#fff" />
+          </button>
+        </div>
+      </div>
+
+      <div className="overflow-x-auto">
+        <table className="w-full text-left">
+          <thead>
+            <tr>
+              {SESSION_COLS.map((c) => (
+                <th key={c} className="text-[10px] font-label font-bold uppercase text-ch-main opacity-60 pb-2 pr-3 whitespace-nowrap">
+                  {c}
+                </th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {rows.length === 0 ? (
+              <tr>
+                <td colSpan={SESSION_COLS.length} className="text-center font-body text-body text-ch-main opacity-50 py-6">
+                  Time In First To Log Your Session
+                </td>
+              </tr>
+            ) : (
+              rows.map((r, i) => (
+                <tr key={i} className="border-t border-ch-secondary">
+                  <td className="py-2 pr-3 font-body text-body text-ch-main">{r.type}</td>
+                  <td className="py-2 pr-3 font-body text-body text-ch-main capitalize">{r.complexity}</td>
+                  <td className="py-2 pr-3 font-body text-body text-ch-main">{r.caseNum}</td>
+                  <td className="py-2 pr-3 font-body text-body text-ch-main">{r.started}</td>
+                  <td className="py-2 pr-3 font-body text-body text-ch-main">{r.ended || '—'}</td>
+                  <td className="py-2 pr-3 font-body text-body text-ch-main">{r.duration}</td>
+                  <td className="py-2 pr-3 font-body text-body text-ch-main">{r.outcome}</td>
+                  <td className="py-2 pr-3 font-body text-body text-ch-main">{r.actions}</td>
+                </tr>
+              ))
+            )}
+          </tbody>
+        </table>
+      </div>
+
+      <div className="flex gap-2.5 flex-wrap">
+        {[
+          ['Total Hours', stats.totalHours],
+          ['Total Cases For This Session', stats.totalCases],
+          ['Completed Case', stats.completed],
+          ['Clarification Case', stats.clarification],
+          ['Suspended Case', stats.suspended],
+        ].map(([label, val]) => (
+          <div key={label} className="flex-1 min-w-[140px] bg-ch-secondary rounded-ch p-3.5 text-center">
+            <p className="font-heading font-bold text-h6 text-ch-main">{val}</p>
+            <p className="font-body text-body text-ch-main opacity-60">{label}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+/** One row in the Suspended Case list — badge, description+timestamp, Edit + Archive Case buttons. */
+function SuspendedCaseRow({ draft, onResume, onArchive }) {
+  return (
+    <div className="flex items-center justify-between gap-3 py-3 border-t border-ch-secondary first:border-t-0">
+      <div className="min-w-0 flex-1">
+        <div className="flex items-center gap-2.5 flex-wrap">
+          <p className="font-body font-bold text-body text-ch-main">
+            {draft.caseNum || 'Untitled'} - {draft.accountNum || '—'}
+          </p>
+          <CaseTypeBadge caseType={draft._mode} complexity={draft._caseComplexity} />
+        </div>
+        <p className="font-body text-body text-ch-main opacity-60">
+          {draft.amendType || 'No amend type'} - {draft.draftAt}
+        </p>
+      </div>
+      <div className="flex gap-2 shrink-0">
+        <Button variant="outline" size="sm" onClick={() => onResume(draft)}>
+          Edit
+        </Button>
+        <Button variant="outline" size="sm" className="!border-ch-red !text-ch-red" onClick={() => onArchive(draft)}>
+          Archive Case
+        </Button>
+      </div>
+    </div>
+  );
+}
 
 function defaultFileNames(name) {
   const n = (name || 'User').trim().replace(/\s+/g, '_');
@@ -240,12 +366,11 @@ export default function PostLivePage() {
         </div>
         <div className="flex items-center gap-2 flex-wrap">
           {BREAK_OPTIONS.map((opt) => (
-            <button key={opt.mins} className="flex items-center gap-1.5 px-3.5 h-10 rounded-ch bg-white shadow-ch font-body text-body text-ch-main">
-              <Icon name={opt.icon} size={16} color="#40513B" />
+            <Button key={opt.mins} variant="outline" size="sm" className="!border-transparent" icon={<Icon name={opt.icon} size={18} color="#40513B" />} iconPosition="left">
               {opt.label}
-            </button>
+            </Button>
           ))}
-          <Button variant="danger" onClick={signOut} icon={<Icon name="logout" size={16} color="#fff" />}>
+          <Button variant="danger" uppercase={false} onClick={signOut} icon={<Icon name="logout" size={18} color="#fff" />}>
             Log Out
           </Button>
         </div>

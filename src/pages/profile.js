@@ -9,14 +9,52 @@ import Button from '../components/Button';
 import Input from '../components/Input';
 import Toast, { useToast } from '../components/Toast';
 import Icon from '../components/Icon';
-import SettingCard from '../components/SettingCard';
-import RequestorChip from '../components/RequestorChip';
 import { useSession } from '../hooks/useSession';
 import { profileService } from '../services/profileService';
 import { requestorsService } from '../services/requestorsService';
 import { settingsService } from '../services/settingsService';
 import { authService } from '../services/authService';
 import { ROUTES } from '../constants/routes';
+
+/** A settings card: title, description, one or two inputs, a Save button, and a "currently" readout. */
+function SettingCard({ title, description, children, onSave, current, extra }) {
+  return (
+    <Card className="w-full">
+      <p className="font-heading font-bold text-h6 text-ch-main mb-1">{title}</p>
+      <p className="font-body text-body text-ch-main opacity-60 mb-4">{description}</p>
+      <div className="flex items-center gap-3 flex-wrap">
+        {children}
+        <Button variant="primary" size="sm" onClick={onSave} className="ml-auto">
+          Save
+        </Button>
+        {extra}
+      </div>
+      {current && <p className="font-body text-body text-ch-main opacity-60 mt-2">{current}</p>}
+    </Card>
+  );
+}
+
+/** Chip showing a special requestor's initials + name, with a remove button. */
+function RequestorChip({ name, onRemove }) {
+  const initials = (name || '')
+    .split(' ')
+    .map((w) => w && w[0])
+    .filter(Boolean)
+    .join('')
+    .slice(0, 2)
+    .toUpperCase();
+  return (
+    <div className="flex items-center gap-2 bg-ch-secondary rounded-full pl-1 pr-3 py-1">
+      <span className="flex items-center justify-center w-7 h-7 rounded-full bg-ch-main text-white text-[11px] font-bold shrink-0">
+        {initials}
+      </span>
+      <span className="font-body text-body text-ch-main">{name}</span>
+      <button onClick={onRemove} className="text-ch-main opacity-50 hover:opacity-100 text-xs ml-1">
+        ✕
+      </button>
+    </div>
+  );
+}
 
 const DEFAULT_GREETING = [{ id: 'default', label: 'Check-in', base: 'Hi po Ms. Tina, magpapacheck lang po', fillType: 'caseNum' }];
 const APPEND_OPTIONS = [
