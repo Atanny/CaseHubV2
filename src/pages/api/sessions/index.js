@@ -1,11 +1,11 @@
 import supabase from '../../../lib/supabase';
 
 /**
- * Read + delete side of the sessions API, needed by the Session Log page.
- * The write actions (time_in, time_out, log_case, start_break, etc.) belong
- * to the break-timer / shift-alarm system, which is its own milestone — this
- * route accepts the same `action` query params so that milestone can extend
- * it without changing the contract Session Log already depends on.
+ * Sessions API — read/delete (used by Session Log) plus the write actions
+ * ported from the legacy app's AppContext.jsx: time_in, time_out, log_case,
+ * save_log, start_break, end_break. Same action names and payload shape as
+ * the legacy /api/sessions endpoint, so useSessionTimer's calls line up
+ * directly.
  */
 export default async function handler(req, res) {
   if (!supabase) {
@@ -42,6 +42,60 @@ export default async function handler(req, res) {
     return res.status(200).json({ deleted: true });
   }
 
-  res.setHeader('Allow', ['GET', 'DELETE']);
+  if (method === 'POST') {
+    const { action } = req.body || {};
+
+    if (action === 'time_in') {
+      const { email } = req.body;
+      if (!email) return res.status(400).json({ error: 'email required' });
+      const { data, error } = await supabase.from('sessions').insert([{ email, time_in: new Date().toISOString() }]).select('id').single();
+      if (error) return res.status(500).json({ error: error.message });
+      return res.status(200).json({ id: data.id });
+    }
+
+    if (action === 'time_out') {
+      const { session_id } = req.body;
+      if (!session_id) return res.status(400).json({ error: 'session_id required' });
+      const { error } = await supabase.from('sessions').update({ time_out: new Date().toISOString() }).eq('id', session_id);
+      if (error) return res.status(500).json({ error: error.message });
+      return res.status(200).json({ success: true });
+    }
+
+    if (action === 'log_case') {
+      const { session_id, case_num, case_type, note } = req.body;
+      if (!session_id) return res.status(400).json({ error: 'session_id required' });
+      const { error } = await supabase.from('session_cases').insert([{ session_id, case_num, case_type, note, started_at: new Date().toISOString(), ended_at: new Date().toISOString() }]);
+      if (error) return res.status(500).json({ error: error.message });
+      return res.status(200).json({ success: true });
+    }
+
+    if (action === 'save_log') {
+      const { session_id, log_data } = req.body;
+      if (!session_id) return res.status(400).json({ error: 'session_id required' });
+      const { error } = await supabase.from('sessions').update({ session_log: JSON.stringify(log_data || []) }).eq('id', session_id);
+      if (error) return res.status(500).json({ error: error.message });
+      return res.status(200).json({ success: true });
+    }
+
+    if (action === 'start_break') {
+      const { session_id, break_type } = req.body;
+      if (!session_id) return res.status(400).json({ error: 'session_id required' });
+      const { data, error } = await supabase.from('session_breaks').insert([{ session_id, break_type, started_at: new Date().toISOString() }]).select('id').single();
+      if (error) return res.status(500).json({ error: error.message });
+      return res.status(200).json({ id: data.id });
+    }
+
+    if (action === 'end_break') {
+      const { break_id } = req.body;
+      if (!break_id) return res.status(400).json({ error: 'break_id required' });
+      const { error } = await supabase.from('session_breaks').update({ ended_at: new Date().toISOString() }).eq('id', break_id);
+      if (error) return res.status(500).json({ error: error.message });
+      return res.status(200).json({ success: true });
+    }
+
+    return res.status(400).json({ error: `Unknown action: ${action}` });
+  }
+
+  res.setHeader('Allow', ['GET', 'POST', 'DELETE']);
   return res.status(405).json({ error: 'Method not allowed' });
 }

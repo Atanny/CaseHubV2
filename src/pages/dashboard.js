@@ -220,36 +220,40 @@ export default function DashboardPage() {
         {/* Totals + lists */}
         <div className="flex flex-col gap-2.5 flex-[3] min-w-[320px]">
           <p className="text-[10px] font-label font-bold uppercase text-ch-main opacity-60">Pre-Live</p>
-          <div className="flex gap-2.5 flex-wrap">
-            <Card className="flex-1 min-w-[140px] text-center">
-              <p className="font-heading font-bold text-h4 text-[#4760FF]">—</p>
-              <p className="font-body text-body text-ch-main">Total Site Comments</p>
-            </Card>
-            <Card className="flex-1 min-w-[140px] text-center">
-              <p className="font-heading font-bold text-h4 text-amber-600">{archivedDrafts.length}</p>
-              <p className="font-body text-body text-ch-main">Archived Case</p>
-            </Card>
-            <Card className="flex-1 min-w-[140px] text-center">
-              <p className="font-heading font-bold text-h4 text-green-700">—</p>
-              <p className="font-body text-body text-ch-main">Total Cases Finished</p>
-            </Card>
-          </div>
+          <Card className="w-full !p-0 overflow-hidden">
+            <div className="flex flex-wrap divide-x divide-ch-secondary">
+              <div className="flex-1 min-w-[140px] text-center p-5">
+                <p className="font-heading font-bold text-h4 text-[#4760FF]">—</p>
+                <p className="font-body text-body text-ch-main">Total Site Comments</p>
+              </div>
+              <div className="flex-1 min-w-[140px] text-center p-5">
+                <p className="font-heading font-bold text-h4 text-amber-600">{archivedDrafts.length}</p>
+                <p className="font-body text-body text-ch-main">Archived Case</p>
+              </div>
+              <div className="flex-1 min-w-[140px] text-center p-5">
+                <p className="font-heading font-bold text-h4 text-green-700">—</p>
+                <p className="font-body text-body text-ch-main">Total Cases Finished</p>
+              </div>
+            </div>
+          </Card>
 
           <p className="text-[10px] font-label font-bold uppercase text-ch-main opacity-60">Post-Live</p>
-          <div className="flex gap-2.5 flex-wrap">
-            <Card className="flex-1 min-w-[140px] text-center">
-              <p className="font-heading font-bold text-h4 text-[#4760FF]">{scCount}</p>
-              <p className="font-body text-body text-ch-main">Total Site Comments</p>
-            </Card>
-            <Card className="flex-1 min-w-[140px] text-center">
-              <p className="font-heading font-bold text-h4 text-[#8A38F5]">{ibCount}</p>
-              <p className="font-body text-body text-ch-main">Total Inbound Email</p>
-            </Card>
-            <Card className="flex-1 min-w-[140px] text-center">
-              <p className="font-heading font-bold text-h4 text-green-700">{completed}</p>
-              <p className="font-body text-body text-ch-main">Total Cases Finished</p>
-            </Card>
-          </div>
+          <Card className="w-full !p-0 overflow-hidden">
+            <div className="flex flex-wrap divide-x divide-ch-secondary">
+              <div className="flex-1 min-w-[140px] text-center p-5">
+                <p className="font-heading font-bold text-h4 text-[#4760FF]">{scCount}</p>
+                <p className="font-body text-body text-ch-main">Total Site Comments</p>
+              </div>
+              <div className="flex-1 min-w-[140px] text-center p-5">
+                <p className="font-heading font-bold text-h4 text-[#8A38F5]">{ibCount}</p>
+                <p className="font-body text-body text-ch-main">Total Inbound Email</p>
+              </div>
+              <div className="flex-1 min-w-[140px] text-center p-5">
+                <p className="font-heading font-bold text-h4 text-green-700">{completed}</p>
+                <p className="font-body text-body text-ch-main">Total Cases Finished</p>
+              </div>
+            </div>
+          </Card>
 
           <div className="flex items-center justify-between w-full">
             <p className="text-[10px] font-label font-bold uppercase text-ch-main opacity-60">Announcement</p>
@@ -281,7 +285,7 @@ export default function DashboardPage() {
             {latestCases.map((c, i) => (
               <Card
                 key={i}
-                className="flex items-center justify-between gap-2.5 cursor-pointer"
+                className="flex items-center justify-between gap-2.5 cursor-pointer ch-hover-lift"
                 onClick={() => router.push(ROUTES.history)}
               >
                 <div>

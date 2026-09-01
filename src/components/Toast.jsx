@@ -13,7 +13,7 @@ export default function Toast({ msg, type = 'success' }) {
   return (
     <div
       className={cls(
-        'fixed bottom-6 left-1/2 -translate-x-1/2 z-[200] px-5 py-3 rounded-ch shadow-ch',
+        'fixed bottom-6 left-1/2 -translate-x-1/2 z-[200] px-5 py-3 rounded-ch shadow-ch ch-animate-slide-up',
         'font-body text-body',
         TONES[type] || TONES.success
       )}

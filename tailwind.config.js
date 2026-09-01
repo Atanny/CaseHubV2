@@ -19,12 +19,12 @@ module.exports = {
         },
       },
       fontFamily: {
-        // Headings
-        heading: ['var(--font-moderustic)', 'sans-serif'],
-        // Nav labels / badges / small uppercase UI text
-        label: ['var(--font-prompt)', 'sans-serif'],
-        // Body copy / buttons
-        body: ['var(--font-poppins)', 'sans-serif'],
+        // Headings — Baloo 2: bold, rounded, friendly
+        heading: ['var(--font-heading)', 'sans-serif'],
+        // Nav labels / badges / small uppercase UI text — Nunito
+        label: ['var(--font-label)', 'sans-serif'],
+        // Body copy / buttons — Nunito
+        body: ['var(--font-body)', 'sans-serif'],
       },
       fontSize: {
         h4: ['24px', { lineHeight: '1', fontWeight: '700' }],
@@ -37,8 +37,8 @@ module.exports = {
         'ch-sm': '0px 1px 5px 0px rgba(0,0,0,0.1)',
       },
       borderRadius: {
-        ch: '10px',
-        'ch-lg': '14px',
+        ch: '12px',
+        'ch-lg': '16px',
       },
     },
   },

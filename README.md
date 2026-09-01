@@ -1,72 +1,64 @@
 # CaseHub — Rebuild
 
-## This build: button/design-system fixes + File Name Generator rebuild
+## This build: font, animation, dashboard card grouping, muted mode-cards, real Time In/Out
 
-You asked for three big things in one message: (1) fix buttons/typography/spacing/cards
-app-wide to match Figma, (2) rebuild File Name Generator to match its actual Figma design
-with real upload/download, (3) port the break/lunch/timer/opening-hour functionality from
-the ZIP. Those are three genuinely separate, large pieces of work — here's exactly what's
-done and what isn't, so nothing is overstated.
+### Font — changed as requested
+Baloo 2 (headings) + Nunito (body/labels) — both genuinely rounded, friendly Google Fonts,
+replacing the Poppins/Prompt pairing. This also removes the Moderustic fallback note from
+earlier builds, since it's no longer used anywhere.
 
-### ✅ Done and verified in this pass
+### Animation — added
+- Buttons/links/inputs: smooth transitions on hover/press, subtle scale-down on click
+- Cards: fade-in on mount (`ch-animate-in`); interactive cards (Dashboard's recent-cases
+  list, Post-Live's mode cards) lift on hover (`ch-hover-lift`)
+- Modals: backdrop fades in, panel slides up
+- Toasts: slide up on appear
+- Respects `prefers-reduced-motion`
 
-**Global button system** — rebuilt `Button.jsx` to match Figma exactly: bold uppercase
-labels, `rounded-ch-lg` corners (was a smaller fixed radius before), consistent padding,
-and a `uppercase={false}` override for the buttons Figma shows in sentence case (Log Out,
-Edit Case, Download Selected, etc.). This is a shared component, so the fix applies to
-every page at once — Case History, Archived Cases, Session Log, Quick Links, Post-Live,
-Announcements, Profile.
+### Dashboard — "carded" grouping fixed
+Pre-Live and Post-Live were rendering as three separately-shadowed floating boxes each.
+Fixed to one unified card per section, with the three stats as internal columns divided by
+a hairline — matching how a "Pre-Live" / "Post-Live" panel should read as one grouped card.
 
-**Cards & modals** — bumped the corner radius to match Figma's slightly rounder look.
+### Post-Live mode cards — muted until timed in
+Site Comment / Inbound Email / Bundle are now visually muted (45% opacity + grayscale) and
+inert until the user times in, matching the legacy app's gating. Clicking a muted card (or
+its title text via `title=`) shows why.
 
-**Header quick actions** — break buttons are now borderless white pills with bold
-uppercase labels; Log Out is sentence case with a trailing icon, matching your screenshot
-exactly (previously everything was uppercase, including Log Out, which was wrong).
+### Time In / Time Out — now the real logic from the ZIP, not a stand-in
+Previous builds had a fake local-only elapsed timer. This build ports the actual
+`doTimeIn` / `doTimeOut` / `addSessionLog` / `closeWithOutcome` functions from the legacy
+`AppContext.jsx` line-for-line into a new `useSessionTimer` hook:
+- Same localStorage keys (`ch_timed_in`, `ch_timein`, `ch_session_log`, `ch_session_db_id`)
+- Same session-log entry shape (`{id, status, note, startedAt, endedAt, outcome, endNote}`)
+- Same flow: Time In writes a "Time In" entry (from page-load to click) + a fresh "Ongoing"
+  entry, and POSTs `action: 'time_in'` to get a DB session id
+- Starting a case renames the open "Ongoing" entry to "Site Comment"/"Inbound Email" in place
+  (`addSessionLog(status, '', 'renameOngoing')`) rather than closing and reopening
+- Time Out closes the open entry, adds a "Time Out" entry, POSTs `action: 'time_out'`, then
+  logs every case entry from the session via `action: 'log_case'`, then clears the local log
+  after a beat — matching the legacy timing exactly
+- Session log auto-saves to the DB on a 2s debounce (`action: 'save_log'`)
+- `/api/sessions` gained the matching POST actions: `time_in`, `time_out`, `log_case`,
+  `save_log`, `start_break`, `end_break` (break actions are wired for the next milestone —
+  see below)
 
-**Search + date fields** — Figma shows these as two **separate** pill fields side by side.
-The previous build combined them into one bar with an internal divider — fixed to match.
+Daily Session's stat cards and table now read from this real session log instead of a fake
+array.
 
-**File Name Generator — fully rebuilt**, matching your screenshots: Case Information panel
-(Business Name / Entity Designations / Account Number, labeled "(Auto-Fill)"), a Name Type
-dropdown (Hero, Hero Slider, Gallery, Gallery - Separate Page, Content, Before/After —
-exactly the six types shown across your screenshots), per-page upload zones that accept
-real image files (click, drag-drop, or paste), live thumbnails, and a right panel that
-groups the generated file-name cards by page with a checkbox on each, a Select All, and a
-**Download Selected** button that actually renames and downloads the real uploaded files
-(not placeholder text). Hero-type images generate both filename variants (`-Cust` and
-plain) per your screenshot. "Edit File Name Format" opens a token-based format editor so
-the naming convention itself stays adjustable.
+`npm run build` compiles all 30 routes with no errors.
 
-`npm run build` compiles all 30 routes with no errors — confirmed after every change above.
+## Still not ported from the ZIP (flagged last time, still true)
+The **alarm/break/lunch countdown system** — Web Audio–generated tones, the DOM-injected
+alarm overlay that bypasses React so it fires even during a stale render, the 5-minutes-left
+warning, shift-start/shift-end alarms, and the Open Hour toggle. Time In/Out and the session
+log it depends on are now real; the break-button countdown behavior itself is still
+presentational. `start_break`/`end_break` API actions exist and are ready for it.
 
-### ❌ Not done — and I want to be upfront about why
-
-**A full pixel audit of all 11 screens.** I used your screenshots to fix the button system,
-search/date fields, and File Name Generator specifically, but I have not gone through
-every remaining page (Dashboard, Post-Live's 9-screen flow, Profile, Session History,
-Announcements, Quick Links, Sign Up/Login) crop-by-crop verifying spacing, exact card
-proportions, and alignment against your images the way I did for the items above. That's
-realistically its own multi-pass effort given how much surface area there is.
-
-**Break / lunch / timer / opening-hour functionality ported from the ZIP.** I read through
-`AppContext.jsx`'s actual implementation — it's a substantial, real-time subsystem: Web
-Audio API–generated alarm tones, a DOM-injected alarm overlay that bypasses React state
-entirely (so it fires even during a stale render), cross-tab signaling via `localStorage`,
-break countdowns with a 5-minutes-left warning, automatic session-log transitions ("Ongoing"
-→ "Break" → fresh "Ongoing" on end), shift-start/shift-end alarms, and an Open Hour toggle
-with the same session-log handoff pattern. This is not something I could responsibly
-"port" as a side effect of a design pass — it's a dedicated milestone on its own, the same
-way I scoped Post-Live Amends earlier. I have not touched it in this build; the break
-buttons you see are still presentational.
-
-### Recommended next steps, in order
-1. **Card-by-card visual audit** against your 11 screenshots — I'd go page by page the same
-   way I just did for File Name Generator, since that produced results you could verify
-   directly against the image.
-2. **Break/timer/lunch/opening-hour system**, ported faithfully from `AppContext.jsx`'s
-   actual logic (alarm loop, session-log transitions, shift alarms, open hour).
-
-Tell me which you'd like first, or if you'd rather I just proceed through both in order.
+## Still pending from the last full request
+A full pixel audit of the remaining 9 screens against your Figma exports — I've fixed what's
+been reported concretely (buttons, File Name Generator, dashboard cards, fonts) rather than
+guessing at the rest.
 
 ## Setup
 ```

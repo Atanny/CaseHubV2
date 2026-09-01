@@ -3,34 +3,18 @@
 @tailwind utilities;
 
 /*
-  Design fonts from Figma:
-  - Moderustic (headings, H4/H6) — not on Google Fonts; falls back to a similar
-    rounded/geometric sans until a licensed Moderustic font file is added to
-    /public/fonts and declared with @font-face below.
-  - Prompt (nav labels / badges / uppercase micro-copy) — Google Font.
-  - Poppins (body copy / buttons) — Google Font.
+  Font pairing: rounded and friendly per feedback (Moderustic/Poppins read as
+  too sharp/corporate). Baloo 2 for headings (bold, soft, rounded terminals),
+  Nunito for body copy, labels, and buttons (rounded, warm, highly legible at
+  small sizes).
 */
-@import url('https://fonts.googleapis.com/css2?family=Prompt:wght@400;600;700&family=Poppins:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Nunito:wght@400;500;600;700;800&display=swap');
 
 :root {
-  --font-moderustic: 'Poppins', sans-serif; /* placeholder until Moderustic font file is added */
-  --font-prompt: 'Prompt', sans-serif;
-  --font-poppins: 'Poppins', sans-serif;
+  --font-heading: 'Baloo 2', sans-serif;
+  --font-label: 'Nunito', sans-serif;
+  --font-body: 'Nunito', sans-serif;
 }
-
-/*
-  Drop the real Moderustic font files in /public/fonts and uncomment:
-
-  @font-face {
-    font-family: 'Moderustic';
-    src: url('/fonts/Moderustic-Bold.woff2') format('woff2');
-    font-weight: 700;
-    font-style: normal;
-    font-display: swap;
-  }
-
-  Then set --font-moderustic: 'Moderustic', sans-serif;
-*/
 
 * {
   box-sizing: border-box;
@@ -42,7 +26,7 @@ body {
   margin: 0;
   background: #e8dfca;
   color: #40513b;
-  font-family: var(--font-poppins);
+  font-family: var(--font-body);
 }
 
 a {
@@ -52,4 +36,84 @@ a {
 
 button {
   font-family: inherit;
+}
+
+/* ── Motion ──────────────────────────────────────────────────────────── */
+
+*,
+*::before,
+*::after {
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+button,
+a,
+input,
+select,
+textarea,
+[role='button'] {
+  transition: transform 150ms, opacity 150ms, background-color 150ms, border-color 150ms, box-shadow 150ms, color 150ms;
+}
+
+button:active,
+[role='button']:active {
+  transform: scale(0.97);
+}
+
+/* Card / row hover lift — applied via the `.ch-hover-lift` utility class */
+.ch-hover-lift {
+  transition: transform 180ms, box-shadow 180ms;
+}
+.ch-hover-lift:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(64, 81, 59, 0.14);
+}
+
+@keyframes ch-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+.ch-animate-in {
+  animation: ch-fade-in 220ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes ch-slide-up {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.ch-animate-slide-up {
+  animation: ch-slide-up 260ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes ch-backdrop-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+.ch-animate-backdrop {
+  animation: ch-backdrop-in 180ms ease-out both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    transition-duration: 0.001ms !important;
+  }
 }

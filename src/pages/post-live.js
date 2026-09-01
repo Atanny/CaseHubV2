@@ -8,16 +8,24 @@ import CaseTypeBadge from '../components/CaseTypeBadge';
 import PostLiveWizard, { emptyBase } from '../components/PostLiveWizard';
 import { BREAK_OPTIONS } from '../constants/navigation';
 import { useSession } from '../hooks/useSession';
+import { useSessionTimer } from '../hooks/useSessionTimer';
 import { casesService } from '../services/casesService';
 import { draftsService } from '../services/draftsService';
 import { requestorsService } from '../services/requestorsService';
 import { profileService } from '../services/profileService';
 import { fmtElapsed } from '../utils/format';
 
-/** One of the three big mode-selector cards (Site Comment / Inbound Email / Bundle). */
-function ModeCard({ icon, title, subtitle, onClick }) {
+/** One of the three big mode-selector cards (Site Comment / Inbound Email / Bundle). Muted and inert until the user has timed in, matching the legacy app's gating. */
+function ModeCard({ icon, title, subtitle, onClick, disabled }) {
   return (
-    <button onClick={onClick} className="flex items-center justify-between gap-3 flex-1 min-w-[220px] bg-white rounded-ch shadow-ch p-5 text-left hover:shadow-lg transition-shadow">
+    <button
+      onClick={disabled ? undefined : onClick}
+      disabled={disabled}
+      title={disabled ? 'Time in to start a case' : undefined}
+      className={`flex items-center justify-between gap-3 flex-1 min-w-[220px] bg-white rounded-ch-lg shadow-ch p-5 text-left transition-all ${
+        disabled ? 'opacity-45 grayscale cursor-not-allowed' : 'ch-hover-lift cursor-pointer'
+      }`}
+    >
       <div className="flex items-center gap-3">
         <span className="flex items-center justify-center w-11 h-11 rounded-ch bg-ch-secondary shrink-0">
           <Icon name={icon} size={20} color="#40513B" />
@@ -190,11 +198,9 @@ export default function PostLivePage() {
   const [archiveConfirm, setArchiveConfirm] = useState(null);
   const [toast, showToast] = useToast();
 
-  const [timedIn, setTimedIn] = useState(false);
-  const [timeInAt, setTimeInAt] = useState(null);
+  const { timedIn, globalTimeIn, sessionLog, doTimeIn, doTimeOut, addSessionLog, closeWithOutcome } = useSessionTimer(user?.email);
   const [elapsed, setElapsed] = useState(0);
   const [activeBreakMins, setActiveBreakMins] = useState(null);
-  const [sessionRows, setSessionRows] = useState([]);
 
   useEffect(() => {
     if (!user?.email) return;
@@ -217,29 +223,47 @@ export default function PostLivePage() {
   }, [user?.email, user?.name]);
 
   useEffect(() => {
-    if (!timedIn) return;
-    const iv = setInterval(() => setElapsed(Math.floor((Date.now() - timeInAt) / 1000)), 1000);
+    if (!timedIn || !globalTimeIn) return;
+    const iv = setInterval(() => setElapsed(Math.floor((Date.now() - globalTimeIn) / 1000)), 1000);
     return () => clearInterval(iv);
-  }, [timedIn, timeInAt]);
+  }, [timedIn, globalTimeIn]);
 
   function toggleTimeIn() {
     if (timedIn) {
-      setTimedIn(false);
-      setElapsed(0);
+      doTimeOut();
       showToast('Timed out');
     } else {
-      setTimeInAt(Date.now());
-      setTimedIn(true);
+      doTimeIn();
       showToast('Timed in — session started');
     }
   }
 
+  // Session-log rows for the Daily Session table — derived straight from the
+  // legacy-shaped sessionLog entries (Site Comment / Inbound Email / Break rows).
+  const sessionRows = sessionLog
+    .filter((e) => e.status === 'Site Comment' || e.status === 'Inbound Email')
+    .map((e) => ({
+      type: e.status,
+      complexity: e.complexity || 'minor',
+      caseNum: e.caseNum || '—',
+      started: new Date(e.startedAt).toLocaleTimeString(),
+      ended: e.endedAt ? new Date(e.endedAt).toLocaleTimeString() : null,
+      duration: e.endedAt ? fmtElapsed(Math.floor((e.endedAt - e.startedAt) / 1000)) : '—',
+      outcome: e.outcome || (e.endedAt ? 'Completed' : 'In progress'),
+      actions: '—',
+    }));
+
   function openNewCase(mode, bundledWith) {
+    if (!timedIn) {
+      showToast('Time in first to start a case', 'error');
+      return;
+    }
     const id = String(Date.now());
     const form = { ...emptyBase(), _bundledWith: bundledWith || null };
     setTabs((t) => [...t, { id, mode, form }]);
     setActiveTabId(id);
     setBundlePicker(false);
+    addSessionLog(mode === 'inbound' ? 'Inbound Email' : 'Site Comment', '', 'renameOngoing');
   }
 
   function resumeDraft(draft) {
@@ -271,19 +295,7 @@ export default function PostLivePage() {
         await draftsService.remove(tab.id);
         setDrafts((list) => list.filter((d) => d._id !== tab.id));
       }
-      setSessionRows((rows) => [
-        ...rows,
-        {
-          type: tab.mode === 'inbound' ? 'Inbound Email' : 'Site Comment',
-          complexity: form._caseComplexity,
-          caseNum: form.caseNum,
-          started: new Date().toLocaleTimeString(),
-          ended: new Date().toLocaleTimeString(),
-          duration: '—',
-          outcome: 'Completed',
-          actions: '—',
-        },
-      ]);
+      closeWithOutcome('Case Saved', form.caseNum);
       closeTab(tab.id);
       showToast('Case submitted!');
     } catch (e) {
@@ -299,6 +311,7 @@ export default function PostLivePage() {
         const exists = list.some((d) => d._id === saved._id);
         return exists ? list.map((d) => (d._id === saved._id ? saved : d)) : [saved, ...list];
       });
+      closeWithOutcome('Draft Saved', form.caseNum);
       closeTab(tab.id);
       showToast('Case suspended — resume it anytime below.', 'info');
     } catch (e) {
@@ -307,6 +320,7 @@ export default function PostLivePage() {
   }
 
   function handleDiscardCase(tab) {
+    closeWithOutcome('Cancelled');
     closeTab(tab.id);
   }
 
@@ -377,9 +391,9 @@ export default function PostLivePage() {
       </div>
 
       <div className="flex gap-2.5 w-full flex-wrap">
-        <ModeCard icon="postlive" title="Site Comment" subtitle="Multiple Site Comment" onClick={() => openNewCase('siteComment')} />
-        <ModeCard icon="announce" title="Inbound Email" subtitle="Assumption Based Format" onClick={() => openNewCase('inbound')} />
-        <ModeCard icon="links" title="Bundle" subtitle="Linked with existing Case" onClick={() => setBundlePicker(true)} />
+        <ModeCard icon="postlive" title="Site Comment" subtitle="Multiple Site Comment" onClick={() => openNewCase('siteComment')} disabled={!timedIn} />
+        <ModeCard icon="announce" title="Inbound Email" subtitle="Assumption Based Format" onClick={() => openNewCase('inbound')} disabled={!timedIn} />
+        <ModeCard icon="links" title="Bundle" subtitle="Linked with existing Case" onClick={() => timedIn && setBundlePicker(true)} disabled={!timedIn} />
       </div>
 
       <DailySessionPanel
@@ -390,7 +404,7 @@ export default function PostLivePage() {
         stats={{
           totalHours: timedIn ? (elapsed / 3600).toFixed(1) : 0,
           totalCases: sessionRows.length,
-          completed: sessionRows.filter((r) => r.outcome === 'Completed').length,
+          completed: sessionRows.filter((r) => r.outcome === 'Case Saved' || r.outcome === 'Completed').length,
           clarification: sessionRows.filter((r) => r.outcome === 'Clarification').length,
           suspended: drafts.length,
         }}
