@@ -198,9 +198,8 @@ export default function PostLivePage() {
   const [archiveConfirm, setArchiveConfirm] = useState(null);
   const [toast, showToast] = useToast();
 
-  const { timedIn, globalTimeIn, sessionLog, doTimeIn, doTimeOut, addSessionLog, closeWithOutcome } = useSessionTimer(user?.email);
+  const { timedIn, globalTimeIn, sessionLog, breakTimer, doTimeIn, doTimeOut, addSessionLog, closeWithOutcome, startBreak, stopBreak } = useSessionTimer(user?.email);
   const [elapsed, setElapsed] = useState(0);
-  const [activeBreakMins, setActiveBreakMins] = useState(null);
 
   useEffect(() => {
     if (!user?.email) return;
@@ -359,11 +358,15 @@ export default function PostLivePage() {
           onSuspendCase={handleSuspendCase}
           onDiscardCase={handleDiscardCase}
           onStartBreak={(opt) => {
-            setActiveBreakMins(opt.mins);
+            startBreak(opt.label, opt.mins, true);
             showToast(`${opt.label} break started`);
-            setTimeout(() => setActiveBreakMins(null), opt.mins * 60 * 1000);
           }}
-          activeBreakMins={activeBreakMins}
+          activeBreakMins={breakTimer && !breakTimer.ended ? breakTimer.mins : null}
+          breakSecsLeft={breakTimer && !breakTimer.ended ? breakTimer.secsLeft : null}
+          onStopBreak={() => {
+            stopBreak();
+            showToast('Break ended');
+          }}
         />
         <BundlePickerModal open={bundlePicker} onClose={() => setBundlePicker(false)} onPick={(mode, withId) => openNewCase(mode, withId)} />
         <Toast msg={toast.msg} type={toast.type} />
@@ -379,11 +382,39 @@ export default function PostLivePage() {
           <p className="font-body text-body text-ch-main opacity-60">Live Website Amendments</p>
         </div>
         <div className="flex items-center gap-2 flex-wrap">
-          {BREAK_OPTIONS.map((opt) => (
-            <Button key={opt.mins} variant="outline" size="sm" className="!border-transparent" icon={<Icon name={opt.icon} size={18} color="#40513B" />} iconPosition="left">
-              {opt.label}
+          {breakTimer && !breakTimer.ended ? (
+            <Button
+              variant="danger"
+              size="sm"
+              uppercase={false}
+              onClick={() => {
+                stopBreak();
+                showToast('Break ended');
+              }}
+              icon={<Icon name="clock" size={16} color="#fff" />}
+              iconPosition="left"
+            >
+              On {breakTimer.label} — {fmtElapsed(breakTimer.secsLeft)} left
             </Button>
-          ))}
+          ) : (
+            BREAK_OPTIONS.map((opt) => (
+              <Button
+                key={opt.mins}
+                variant="outline"
+                size="sm"
+                className="!border-transparent"
+                disabled={!timedIn}
+                onClick={() => {
+                  startBreak(opt.label, opt.mins, true);
+                  showToast(`${opt.label} break started`);
+                }}
+                icon={<Icon name={opt.icon} size={18} color="#40513B" />}
+                iconPosition="left"
+              >
+                {opt.label}
+              </Button>
+            ))
+          )}
           <Button variant="danger" uppercase={false} onClick={signOut} icon={<Icon name="logout" size={18} color="#fff" />}>
             Log Out
           </Button>

@@ -487,7 +487,7 @@ function QuickCopyChip({ label, value }) {
 }
 
 /** Right sidebar of the wizard: quick-copy formats, File Name Generator link, break buttons, Suspend Case. */
-function QuickToolsPanel({ quickFormats = {}, activeBreak, onStartBreak, onSuspend }) {
+function QuickToolsPanel({ quickFormats = {}, activeBreak, breakSecsLeft, onStartBreak, onStopBreak, onSuspend }) {
   return (
     <div className="flex flex-col gap-2.5 w-full max-w-[220px] shrink-0">
       <div className="bg-white rounded-ch shadow-ch p-4 flex flex-col gap-2">
@@ -502,19 +502,29 @@ function QuickToolsPanel({ quickFormats = {}, activeBreak, onStartBreak, onSuspe
         </Link>
       </div>
 
-      <div className="flex flex-col gap-2">
-        {BREAK_OPTIONS.map((opt) => (
-          <button
-            key={opt.mins}
-            onClick={() => onStartBreak?.(opt)}
-            disabled={activeBreak != null && activeBreak !== opt.mins}
-            className="w-full flex items-center justify-center gap-2 h-10 rounded-ch bg-white shadow-ch font-body text-body text-ch-main disabled:opacity-40"
-          >
-            <Icon name={opt.icon} size={16} color="#40513B" />
-            {opt.label}
-          </button>
-        ))}
-      </div>
+      {activeBreak != null ? (
+        <button
+          onClick={onStopBreak}
+          className="w-full flex flex-col items-center justify-center gap-0.5 py-3 rounded-ch bg-ch-red text-white shadow-ch"
+        >
+          <span className="font-body text-body font-bold">On Break</span>
+          <span className="font-heading font-bold text-h6 tabular-nums">{fmtElapsed(breakSecsLeft || 0)}</span>
+          <span className="font-body text-body opacity-80">Tap to end</span>
+        </button>
+      ) : (
+        <div className="flex flex-col gap-2">
+          {BREAK_OPTIONS.map((opt) => (
+            <button
+              key={opt.mins}
+              onClick={() => onStartBreak?.(opt)}
+              className="w-full flex items-center justify-center gap-2 h-10 rounded-ch bg-white shadow-ch font-body text-body text-ch-main"
+            >
+              <Icon name={opt.icon} size={16} color="#40513B" />
+              {opt.label}
+            </button>
+          ))}
+        </div>
+      )}
 
       <button onClick={onSuspend} className="w-full flex items-center justify-center gap-2 h-11 rounded-ch bg-amber-600 text-white font-body font-bold text-body">
         Suspend Case
@@ -971,6 +981,8 @@ export default function PostLiveWizard({
   onDiscardCase,
   onStartBreak,
   activeBreakMins,
+  breakSecsLeft,
+  onStopBreak,
 }) {
   const activeTab = tabs.find((t) => t.id === activeTabId) || tabs[0];
   const form = activeTab.form;
@@ -1065,7 +1077,14 @@ export default function PostLiveWizard({
           {stepIndex === 4 && <Step5FinalChecklist form={form} setForm={setForm} onBack={back} submitting={submitting} onSubmit={() => setSubmitOpen(true)} />}
         </div>
 
-        <QuickToolsPanel quickFormats={{}} activeBreak={activeBreakMins} onStartBreak={onStartBreak} onSuspend={() => onSuspendCase(activeTab, form)} />
+        <QuickToolsPanel
+          quickFormats={{}}
+          activeBreak={activeBreakMins}
+          breakSecsLeft={breakSecsLeft}
+          onStartBreak={onStartBreak}
+          onStopBreak={onStopBreak}
+          onSuspend={() => onSuspendCase(activeTab, form)}
+        />
       </div>
 
       {lightboxImg && (

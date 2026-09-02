@@ -173,5 +173,77 @@ export function useSessionTimer(userEmail) {
     persistLog(sessionLog.map((e, i) => (i === sessionLog.length - 1 && !e.endedAt ? { ...e, endedAt: now, outcome, caseNum: caseNum || e.caseNum || '' } : e)));
   }
 
-  return { timedIn, globalTimeIn, sessionLog, sessionDbId, doTimeIn, doTimeOut, addSessionLog, closeWithOutcome };
+  // ── Break timer — ported from V1's startBreak/stopBreak ──
+  // Sidebar breaks subtract time already elapsed this session from the
+  // countdown (so a 30-min break started 10 min into the session only counts
+  // down 20 min); form-triggered breaks use the full duration. Matches V1
+  // exactly, including the 5-minutes-left warning threshold and the
+  // session-log "Break" entry it renames from the open "Ongoing" row.
+  const [breakTimer, setBreakTimer] = useState(() => {
+    try {
+      const raw = readLS('ch_break', null);
+      return raw ? JSON.parse(raw) : null;
+    } catch {
+      return null;
+    }
+  });
+
+  function startBreak(label, mins, fullDuration = false) {
+    const now = Date.now();
+    const sessionElapsedMs = !fullDuration && globalTimeIn ? Math.max(0, now - globalTimeIn) : 0;
+    const adjustedMs = Math.max(0, mins * 60 * 1000 - sessionElapsedMs);
+    const endsAt = now + adjustedMs;
+    const warnAt = Math.max(now + 1000, endsAt - 5 * 60 * 1000);
+    const bt = { label, mins, endsAt, warnAt, warned: false, ended: false, secsLeft: Math.floor(adjustedMs / 1000) };
+    setBreakTimer(bt);
+    if (typeof window !== 'undefined') localStorage.setItem('ch_break', JSON.stringify(bt));
+    // Rename the current open Ongoing → "Break" (keeps it open, no outcome yet)
+    addSessionLog('Break', label, 'renameOngoing');
+  }
+
+  function stopBreak() {
+    const now = Date.now();
+    const closed = sessionLog.map((e, i) => (i === sessionLog.length - 1 && !e.endedAt ? { ...e, endedAt: now, outcome: 'Break Ended' } : e));
+    const freshOngoing = { id: now + 1, status: 'Ongoing', note: '', startedAt: now, endedAt: null, outcome: '', endNote: '' };
+    persistLog([...closed, freshOngoing]);
+    setGlobalTimeIn(now);
+    if (typeof window !== 'undefined') localStorage.setItem(LS.timeIn, String(now));
+    setBreakTimer(null);
+    if (typeof window !== 'undefined') localStorage.removeItem('ch_break');
+  }
+
+  // Countdown tick — auto-ends the break and closes the session-log entry
+  // itself once the timer hits zero, same as V1.
+  useEffect(() => {
+    if (!breakTimer || breakTimer.ended) return;
+    const tick = setInterval(() => {
+      const now = Date.now();
+      const secsLeft = Math.max(0, Math.round((breakTimer.endsAt - now) / 1000));
+      if (secsLeft <= 0) {
+        setSessionLog((prev) => {
+          const closed = prev.map((e, i) => (i === prev.length - 1 && !e.endedAt ? { ...e, endedAt: now, outcome: 'Break Ended' } : e));
+          const freshOngoing = { id: now + 1, status: 'Ongoing', note: '', startedAt: now, endedAt: null, outcome: '', endNote: '' };
+          const next = [...closed, freshOngoing];
+          if (typeof window !== 'undefined') localStorage.setItem(LS.sessionLog, JSON.stringify(next));
+          return next;
+        });
+        setGlobalTimeIn(now);
+        if (typeof window !== 'undefined') {
+          localStorage.setItem(LS.timeIn, String(now));
+          localStorage.removeItem('ch_break');
+        }
+        setBreakTimer((bt) => (bt ? { ...bt, ended: true, secsLeft: 0 } : bt));
+      } else {
+        setBreakTimer((bt) => {
+          if (!bt) return bt;
+          const next = { ...bt, secsLeft };
+          if (typeof window !== 'undefined') localStorage.setItem('ch_break', JSON.stringify(next));
+          return next;
+        });
+      }
+    }, 1000);
+    return () => clearInterval(tick);
+  }, [breakTimer?.endsAt, breakTimer?.ended]);
+
+  return { timedIn, globalTimeIn, sessionLog, sessionDbId, breakTimer, doTimeIn, doTimeOut, addSessionLog, closeWithOutcome, startBreak, stopBreak };
 }

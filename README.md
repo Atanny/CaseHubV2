@@ -1,64 +1,55 @@
 # CaseHub — Rebuild
 
-## This build: font, animation, dashboard card grouping, muted mode-cards, real Time In/Out
+## This build: fonts/animations from V1, real Break flow, session log parity
 
-### Font — changed as requested
-Baloo 2 (headings) + Nunito (body/labels) — both genuinely rounded, friendly Google Fonts,
-replacing the Poppins/Prompt pairing. This also removes the Moderustic fallback note from
-earlier builds, since it's no longer used anywhere.
+### Fonts — switched to V1's actual pairing
+Plus Jakarta Sans (headings/prominent numbers) + Poppins (body/labels/buttons) — this is
+the exact pairing the legacy app (`pages/index.js`) uses, not a new choice.
 
-### Animation — added
-- Buttons/links/inputs: smooth transitions on hover/press, subtle scale-down on click
-- Cards: fade-in on mount (`ch-animate-in`); interactive cards (Dashboard's recent-cases
-  list, Post-Live's mode cards) lift on hover (`ch-hover-lift`)
-- Modals: backdrop fades in, panel slides up
-- Toasts: slide up on appear
-- Respects `prefers-reduced-motion`
+### Animations — ported from V1's actual keyframe set
+Read directly out of the legacy app's CSS: `fadeIn` (step/panel reveals), `popIn` (modals),
+`slideUp` (toasts), `pulse-dot` (live indicators), `ongoingPulse` (soft pulse for "Ongoing"
+session rows), `float` (loading spinners), `pageFade` (route-change transition). All added
+as reusable classes in `globals.css` (`ch-animate-in`, `ch-animate-pop`, `ch-animate-slide-up`,
+`ch-pulse-dot`, `ch-ongoing-pulse`, `ch-float`, `ch-animate-page`, `ch-hover-lift`), applied to
+Card/Modal/Toast/AppLayout's route transitions.
 
-### Dashboard — "carded" grouping fixed
-Pre-Live and Post-Live were rendering as three separately-shadowed floating boxes each.
-Fixed to one unified card per section, with the three stats as internal columns divided by
-a hairline — matching how a "Pre-Live" / "Post-Live" panel should read as one grouped card.
+### Break flow — now real, ported from V1's `startBreak`/`stopBreak`
+`useSessionTimer` gained the actual break logic:
+- **Sidebar-triggered breaks subtract elapsed session time** from the countdown (a 30-min
+  break started 10 minutes into a session only counts down 20) — form-triggered breaks
+  (`fullDuration=true`) always use the full duration. Both paths exist, matching V1 exactly.
+- Starting a break **renames the open "Ongoing" session-log entry to "Break"** in place
+  (same `addSessionLog(status, note, 'renameOngoing')` pattern as starting a case) rather
+  than closing and reopening — so the session log reads as one continuous timeline, same
+  as V1.
+- A **countdown tick** runs every second; when it hits zero the break **auto-ends itself**:
+  closes the "Break" entry with outcome "Break Ended", opens a fresh "Ongoing" entry, and
+  resets the session timer — all without the user doing anything, matching V1's auto-end.
+- Manually ending a break early does the same close/reopen, just triggered by a click.
+- Both the landing page (Post-Live's top-right break buttons) and the in-wizard sidebar
+  (Quick Tools panel) now show a **live countdown** and a **"tap to end"** control while a
+  break is active, instead of the previous fake `setTimeout` stand-in.
 
-### Post-Live mode cards — muted until timed in
-Site Comment / Inbound Email / Bundle are now visually muted (45% opacity + grayscale) and
-inert until the user times in, matching the legacy app's gating. Clicking a muted card (or
-its title text via `title=`) shows why.
-
-### Time In / Time Out — now the real logic from the ZIP, not a stand-in
-Previous builds had a fake local-only elapsed timer. This build ports the actual
-`doTimeIn` / `doTimeOut` / `addSessionLog` / `closeWithOutcome` functions from the legacy
-`AppContext.jsx` line-for-line into a new `useSessionTimer` hook:
-- Same localStorage keys (`ch_timed_in`, `ch_timein`, `ch_session_log`, `ch_session_db_id`)
-- Same session-log entry shape (`{id, status, note, startedAt, endedAt, outcome, endNote}`)
-- Same flow: Time In writes a "Time In" entry (from page-load to click) + a fresh "Ongoing"
-  entry, and POSTs `action: 'time_in'` to get a DB session id
-- Starting a case renames the open "Ongoing" entry to "Site Comment"/"Inbound Email" in place
-  (`addSessionLog(status, '', 'renameOngoing')`) rather than closing and reopening
-- Time Out closes the open entry, adds a "Time Out" entry, POSTs `action: 'time_out'`, then
-  logs every case entry from the session via `action: 'log_case'`, then clears the local log
-  after a beat — matching the legacy timing exactly
-- Session log auto-saves to the DB on a 2s debounce (`action: 'save_log'`)
-- `/api/sessions` gained the matching POST actions: `time_in`, `time_out`, `log_case`,
-  `save_log`, `start_break`, `end_break` (break actions are wired for the next milestone —
-  see below)
-
-Daily Session's stat cards and table now read from this real session log instead of a fake
-array.
+This means the Session Log page (which reads the same `sessionLog` shape) will now show
+real "Break" rows with accurate start/end times once the reporting side is extended to
+display them — the data itself is correct today.
 
 `npm run build` compiles all 30 routes with no errors.
 
-## Still not ported from the ZIP (flagged last time, still true)
-The **alarm/break/lunch countdown system** — Web Audio–generated tones, the DOM-injected
-alarm overlay that bypasses React so it fires even during a stale render, the 5-minutes-left
-warning, shift-start/shift-end alarms, and the Open Hour toggle. Time In/Out and the session
-log it depends on are now real; the break-button countdown behavior itself is still
-presentational. `start_break`/`end_break` API actions exist and are ready for it.
+## About the Google Doc case study link
+I wasn't able to open the linked Google Doc — it requires sign-in/JavaScript and returned
+no readable content via fetch. If it contains a spec I need to follow, please paste the
+relevant text directly.
 
-## Still pending from the last full request
-A full pixel audit of the remaining 9 screens against your Figma exports — I've fixed what's
-been reported concretely (buttons, File Name Generator, dashboard cards, fonts) rather than
-guessing at the rest.
+## Still not done (flagged in prior builds, still true)
+- **Open Hour** — V1 has a parallel flow to Break (`startOpenHour`/`stopOpenHour`) that
+  isn't surfaced anywhere in the Figma design I've been given, so it's not wired into the
+  UI. Say the word if you want it added even without a Figma reference for it.
+- **Alarm system** — Web Audio tones, the DOM-injected alarm overlay, 5-minutes-left
+  warning popup, shift-start/shift-end alarms. The break timer itself is real now; the
+  *alarm* that fires during/around it is still not built.
+- **Full pixel audit** of the remaining screens against your Figma exports.
 
 ## Setup
 ```
