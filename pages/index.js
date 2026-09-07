@@ -3035,15 +3035,20 @@ function PostLiveForm({ mode, onSave, onBack, onCancelForm, onSaveDraftDirect, o
           {!isSC&&(<div className="field"><label>Inbound Number <span className="req">*</span></label><input className="inp" placeholder="Enter inbound number" value={form.inboundNum||""} onChange={e=>setF({inboundNum:cleanSpaces(e.target.value)})}/></div>)}
           <div className="field"><label>Amend Type <span className="req">*</span></label><input className="inp" placeholder="e.g. Content, Layout, Link..." value={form.amendType} onChange={e=>setF({amendType:cleanSpaces(e.target.value)})}/></div>
           <div className="field">
-            <label>Case Complexity</label>
-            <select className="inp" value={form._caseComplexity||"minor"} onChange={e=>setF({_caseComplexity:e.target.value})} style={{cursor:"pointer"}}>
-              <option value="minor">Minor</option>
-              <option value="major">Major</option>
-              <option value="complex">Complex</option>
-            </select>
+            <label>Complexity</label>
+            <div style={{display:'flex',gap:10}}>
+              {[["minor","Minor"],["major","Major"],["complex","Complex"]].map(([v,l])=>(
+                <label key={v} onClick={()=>setF({_caseComplexity:v})} style={{flex:1,display:'flex',alignItems:'center',gap:8,padding:'10px 14px',borderRadius:8,border:`1.5px solid ${(form._caseComplexity||"minor")===v?"var(--accent)":"var(--border)"}`,background:"#fff",cursor:'pointer',fontSize:13,color:"var(--text)",transition:'.15s'}}>
+                  <span style={{width:16,height:16,borderRadius:'50%',border:`1.5px solid ${(form._caseComplexity||"minor")===v?"var(--accent)":"var(--border)"}`,display:'flex',alignItems:'center',justifyContent:'center',flexShrink:0}}>
+                    {(form._caseComplexity||"minor")===v&&<span style={{width:8,height:8,borderRadius:'50%',background:"var(--accent)"}}/>}
+                  </span>
+                  {l}
+                </label>
+              ))}
+            </div>
           </div>
           <div className="field"><label>Customer Name</label><input className="inp" placeholder="e.g. John Smith" value={form.customerName||""} onChange={e=>setF({customerName:cleanSpaces(e.target.value)})}/></div>
-          <div className="field"><label>Customer Email</label><input className="inp" type="email" placeholder="e.g. client@email.com" value={form.customerEmail||""} onChange={e=>setF({customerEmail:cleanSpaces(e.target.value)})}/></div>
+                    <div className="field"><label>Customer Email</label><input className="inp" type="email" placeholder="e.g. client@email.com" value={form.customerEmail||""} onChange={e=>setF({customerEmail:cleanSpaces(e.target.value)})}/></div>
           <div className="field" style={{marginBottom:0}}>
             <label>Business Name</label>
             <div style={{display:"flex",gap:8}}>
@@ -3309,31 +3314,9 @@ function PostLiveForm({ mode, onSave, onBack, onCancelForm, onSaveDraftDirect, o
 
       </div>
 
-      <div className="action-group action-group-center">
-        {onStartBreak && [{label:"☕ 15m",mins:15},{label:"🧘 30m",mins:30},{label:"🍱 1h",mins:60}].map(({label,mins})=>(
-          <button key={mins} className="btn btn-amber" style={{borderRadius:8,fontSize:12,padding:"8px 12px"}}
-            onClick={() => {
-              if(!form.caseNum){showToast("Enter a case number first","error");return;}
-              setBreakConfirmData({label,mins});
-              setModal("breakConfirm");
-            }}>
-            {label}
-          </button>
-        ))}
-        {onStartOpenHour && (
-          <button className="btn btn-amber" style={{borderRadius:8,fontSize:12,padding:"8px 12px"}}
-            onClick={() => {
-              if(!form.caseNum){showToast("Enter a case number first","error");return;}
-              setBreakConfirmData({label:"🏢 Open Hour",mins:0,isOpenHour:true});
-              setModal("breakConfirm");
-            }}>
-            🏢 Open Hour
-          </button>
-        )}
-      </div>
+      <div className="action-group action-group-center"/>
 
       <div className="action-group action-group-right">
-        {!isResumingDraft&&<button className="btn btn-draft" style={{borderRadius:8}} onClick={handleDraft}>💾 Suspend Case</button>}
         {onProceedWithNext&&!isEditMode&&(
           <button className="btn" style={{borderRadius:8,background:"rgba(245,158,11,.15)",border:"1px solid rgba(245,158,11,.4)",color:"#f59e0b",fontWeight:700,fontSize:13}} onClick={()=>{
             const elapsed=Math.floor((Date.now()-startTimeRef.current)/1000);
@@ -3505,6 +3488,28 @@ function PostLiveForm({ mode, onSave, onBack, onCancelForm, onSaveDraftDirect, o
             <span>File Name Generator</span><Icon name="download" size={13} color="var(--muted)"/>
           </button>
         </div>
+
+        {onStartBreak && [{label:"15 MIN",mins:15,icon:"coffee"},{label:"30 MIN",mins:30,icon:"meditate"},{label:"1 HOUR",mins:60,icon:"lunch"}].map(({label,mins,icon})=>(
+          <button key={mins} className="btn btn-ghost btn-noicon" style={{justifyContent:'center',gap:8}}
+            onClick={() => {
+              if(!form.caseNum){showToast("Enter a case number first","error");return;}
+              setBreakConfirmData({label:label.toLowerCase(),mins});
+              setModal("breakConfirm");
+            }}>
+            <Icon name={icon} size={14} color="var(--accent)"/>{label}
+          </button>
+        ))}
+        {onStartOpenHour && (
+          <button className="btn btn-ghost btn-noicon" style={{justifyContent:'center',gap:8}}
+            onClick={() => {
+              if(!form.caseNum){showToast("Enter a case number first","error");return;}
+              setBreakConfirmData({label:"Open Hour",mins:0,isOpenHour:true});
+              setModal("breakConfirm");
+            }}>
+            <Icon name="calendar" size={14} color="var(--accent)"/>Meeting
+          </button>
+        )}
+        {!isResumingDraft&&<button className="btn btn-draft" style={{justifyContent:'center'}} onClick={handleDraft}>Suspend Case</button>}
       </div>
 
       <Toast msg={toast.msg} type={toast.type}/>
