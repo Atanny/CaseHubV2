@@ -474,6 +474,15 @@ body.light .sidebar-divider{background:rgba(180,90,40,.1);}
 .btn-green{background:linear-gradient(135deg,#4c8a56,#3a6e43);color:#fff;border:1px solid #fff;}
 .btn-green:hover{filter:brightness(1.08);}
 .spacer{flex:1;}
+.form-quick{width:220px;flex-shrink:0;padding:16px 12px 16px 0;display:flex;flex-direction:column;gap:14px;overflow-y:auto;}
+.quick-format-panel{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px;box-shadow:var(--shadow-sm);}
+.quick-format-header{display:flex;align-items:center;font-size:11px;font-weight:700;color:var(--text);text-transform:uppercase;letter-spacing:.4px;margin-bottom:10px;font-family:'Poppins',sans-serif;}
+.quick-format-row{display:flex;align-items:center;justify-content:space-between;width:100%;padding:9px 12px;margin-bottom:6px;border-radius:8px;border:1px solid var(--border);background:var(--entry-bg);color:var(--text);font-size:11px;font-weight:600;font-family:'Poppins',sans-serif;cursor:pointer;transition:.15s;}
+.quick-format-row:last-child{margin-bottom:0;}
+.quick-format-row:hover:not(:disabled){border-color:var(--accent);background:var(--entry-accent-bg);}
+.quick-format-row:disabled{opacity:.5;cursor:not-allowed;}
+@media (max-width: 1180px){.form-quick{display:none;}}
+
 .action-bar{
   display:grid;grid-template-columns:1fr auto 1fr;
   align-items:center;gap:12px;
@@ -2519,6 +2528,8 @@ function Icon({ name, size=16, color="currentColor", style={} }) {
     copy:         <svg viewBox="0 0 16 16" fill="none" style={s}><rect x="5" y="1" width="10" height="12" stroke={color} strokeWidth="1.5"/><rect x="1" y="4" width="10" height="12" fill="var(--bg)" stroke={color} strokeWidth="1.5"/></svg>,
     close:        <svg viewBox="0 0 16 16" fill="none" style={s}><path d="M3 3l10 10M13 3L3 13" stroke={color} strokeWidth="1.5" strokeLinecap="square"/></svg>,
     download:     <svg viewBox="0 0 16 16" fill="none" style={s}><path d="M8 1v9M4.5 6.5L8 10l3.5-3.5" stroke={color} strokeWidth="1.5" strokeLinecap="square"/><path d="M2 13h12" stroke={color} strokeWidth="1.5" strokeLinecap="square"/></svg>,
+    add:          <svg viewBox="0 0 16 16" fill="none" style={s}><path d="M8 2v12M2 8h12" stroke={color} strokeWidth="1.6" strokeLinecap="square"/></svg>,
+    upload:       <svg viewBox="0 0 16 16" fill="none" style={s}><path d="M8 11V2M4.5 5.5L8 2l3.5 3.5" stroke={color} strokeWidth="1.5" strokeLinecap="square"/><path d="M2 13h12" stroke={color} strokeWidth="1.5" strokeLinecap="square"/></svg>,
     play:         <svg viewBox="0 0 16 16" fill="none" style={s}><path d="M4 2l10 6-10 6V2z" fill={color}/></svg>,
     loading:      <svg viewBox="0 0 16 16" fill="none" style={s}><circle cx="8" cy="8" r="6" stroke={color} strokeWidth="1.5" opacity=".25"/><path d="M8 2a6 6 0 016 6" stroke={color} strokeWidth="1.5" strokeLinecap="square"/></svg>,
     empty:        <svg viewBox="0 0 16 16" fill="none" style={s}><rect x="2" y="2" width="12" height="12" stroke={color} strokeWidth="1.5" opacity=".4"/><path d="M6 6h4M6 10h2" stroke={color} strokeWidth="1.4" strokeLinecap="square" opacity=".4"/></svg>,
@@ -3473,6 +3484,27 @@ function PostLiveForm({ mode, onSave, onBack, onCancelForm, onSaveDraftDirect, o
             <button className="btn btn-ghost" style={{borderRadius:8}} onClick={()=>{setModal(null);setBreakConfirmData(null);}}>Cancel</button>
           </div>
         </div></div>)}
+      </div>
+
+      <div className="form-quick">
+        <div className="quick-format-panel">
+          <div className="quick-format-header">Quick Format &amp; Lyrics <button type="button" title="Add" style={{marginLeft:'auto',width:20,height:20,borderRadius:'50%',border:'1px solid var(--border)',background:'none',color:'var(--muted)',cursor:'pointer',fontSize:12,display:'flex',alignItems:'center',justifyContent:'center'}}>+</button></div>
+          <button type="button" className="quick-format-row" onClick={()=>{copyToClipboard(isSC?buildEntriesText():buildEmailText());showToast('SR Format copied ✅');}}>
+            <span>SR Format</span><Icon name="copy" size={13} color="var(--muted)"/>
+          </button>
+          <button type="button" className="quick-format-row" disabled title="Not yet configured for this case type">
+            <span>AI Images Lyrics</span><Icon name="copy" size={13} color="var(--muted)"/>
+          </button>
+          <button type="button" className="quick-format-row" disabled title="Not yet configured for this case type">
+            <span>No SC Lyrics</span><Icon name="copy" size={13} color="var(--muted)"/>
+          </button>
+        </div>
+        <div className="quick-format-panel">
+          <div className="quick-format-header">Quick Tools</div>
+          <button type="button" className="quick-format-row" onClick={()=>showToast('Open File Name Generator from the sidebar 📁')}>
+            <span>File Name Generator</span><Icon name="download" size={13} color="var(--muted)"/>
+          </button>
+        </div>
       </div>
 
       <Toast msg={toast.msg} type={toast.type}/>
@@ -6390,11 +6422,63 @@ function AnnouncementsPage({ announcements, addAnnouncement, updateAnnouncement,
   const [saving,setSaving]=useState(false);
   const [deleteTarget,setDeleteTarget]=useState(null);
   const [editTarget,setEditTarget]=useState(null); // announcement being edited
-  const [editForm,setEditForm]=useState({title:"",body:"",badge:"info"});
-  const [form,setForm]=useState({title:"",body:"",badge:"info"});
+  const [editForm,setEditForm]=useState({title:"",body:"",badge:"info",image_url:""});
+  const [form,setForm]=useState({title:"",body:"",badge:"info",image_url:""});
+  const [imgUploading,setImgUploading]=useState(false);
   const [toast,showToast]=useToast();
 
   const BADGE_OPTS=[["info","ℹ️ Info"],["update","✅ Update"],["urgent","🚨 Urgent"]];
+
+  // Upload an image file to the `announcement-images` Supabase Storage bucket
+  // (see supabase/migrations/20260907_add_announcement_images.sql) and return its public URL.
+  const uploadImage = (file, setTo) => {
+    if(!file || !file.type?.startsWith("image/")) return;
+    setImgUploading(true);
+    const reader = new FileReader();
+    reader.onload = async () => {
+      try{
+        const res = await fetch("/api/images/upload",{
+          method:"POST",
+          headers:{"Content-Type":"application/json"},
+          body:JSON.stringify({fileBase64:reader.result,fileName:file.name,mimeType:file.type,bucket:"announcement-images"})
+        });
+        const data = await res.json();
+        if(!res.ok) throw new Error(data.error||"Upload failed");
+        setTo(f=>({...f,image_url:data.url}));
+      }catch(e){
+        showToast("❌ "+(e.message||"Image upload failed"),"error");
+      }finally{
+        setImgUploading(false);
+      }
+    };
+    reader.readAsDataURL(file);
+  };
+
+  // Compact upload dropzone: click, drag-drop, or paste an image
+  const ImagePicker = ({value,onChange,uploading}) => {
+    const fileRef=useRef();
+    const [drag,setDrag]=useState(false);
+    return value ? (
+      <div style={{position:"relative",width:"fit-content"}}>
+        <img src={value} alt="Attached" style={{maxWidth:"100%",maxHeight:180,borderRadius:10,border:"1px solid var(--border)",display:"block"}}/>
+        <button type="button" onClick={()=>onChange(null)} title="Remove image" style={{position:"absolute",top:6,right:6,width:22,height:22,borderRadius:"50%",border:"none",background:"rgba(44,36,24,.65)",color:"#fff",cursor:"pointer",fontSize:12,display:"flex",alignItems:"center",justifyContent:"center"}}>✕</button>
+      </div>
+    ) : (
+      <div
+        onClick={()=>!uploading&&fileRef.current?.click()}
+        onDragOver={e=>{e.preventDefault();setDrag(true);}}
+        onDragLeave={()=>setDrag(false)}
+        onDrop={e=>{e.preventDefault();setDrag(false);if(e.dataTransfer.files[0])onChange(e.dataTransfer.files[0]);}}
+        style={{border:`1.5px dashed ${drag?"var(--accent)":"var(--border)"}`,borderRadius:10,padding:"20px 14px",textAlign:"center",cursor:uploading?"default":"pointer",background:drag?"var(--entry-accent-bg)":"var(--entry-bg)",transition:".15s"}}
+      >
+        <input ref={fileRef} type="file" accept="image/*" style={{display:"none"}} onChange={e=>{if(e.target.files[0])onChange(e.target.files[0]);e.target.value="";}}/>
+        {uploading
+          ? <div style={{fontSize:12,color:"var(--muted)"}}>Uploading…</div>
+          : <div style={{fontSize:12,color:"var(--muted)"}}><Icon name="image" size={18} color="var(--muted)"/><div style={{marginTop:6}}>Click or drag an image here</div></div>
+        }
+      </div>
+    );
+  };
 
   const startPost=()=>{
     if(!form.title.trim())return showToast("Title required","error");
@@ -6405,7 +6489,7 @@ function AnnouncementsPage({ announcements, addAnnouncement, updateAnnouncement,
     setSaving(true);
     try{
       await addAnnouncement({...form,author:user.name,createdAt:new Date().toLocaleString()});
-      setForm({title:"",body:"",badge:"info"});
+      setForm({title:"",body:"",badge:"info",image_url:""});
       setAdding(false);setConfirming(false);
       showToast("✅ Announcement posted!");
     }catch(e){
@@ -6415,14 +6499,14 @@ function AnnouncementsPage({ announcements, addAnnouncement, updateAnnouncement,
 
   const startEdit=(a)=>{
     setEditTarget(a);
-    setEditForm({title:a.title,body:a.body||"",badge:a.badge||"info"});
+    setEditForm({title:a.title,body:a.body||"",badge:a.badge||"info",image_url:a.image_url||""});
   };
 
   const saveEdit=async()=>{
     if(!editForm.title.trim())return showToast("Title required","error");
     setSaving(true);
     try{
-      await updateAnnouncement(editTarget.id,{title:editForm.title,body:editForm.body,badge:editForm.badge});
+      await updateAnnouncement(editTarget.id,{title:editForm.title,body:editForm.body,badge:editForm.badge,image_url:editForm.image_url||""});
       setEditTarget(null);
       showToast("✅ Announcement updated!");
     }catch(e){
@@ -6463,8 +6547,9 @@ function AnnouncementsPage({ announcements, addAnnouncement, updateAnnouncement,
         <h3 style={{marginBottom:16}}>New Announcement</h3>
         <div className="field"><label>Title <span className="req">*</span></label><input className="inp" value={form.title} onChange={e=>setForm(f=>({...f,title:e.target.value}))} placeholder="Announcement title" autoFocus/></div>
         <div className="field"><label>Message</label><textarea className="inp" rows={4} value={form.body} onChange={e=>setForm(f=>({...f,body:e.target.value}))} placeholder="Write your message..."/></div>
+        <div className="field"><label>Image (optional)</label><ImagePicker value={form.image_url} uploading={imgUploading} onChange={fileOrNull=>fileOrNull?uploadImage(fileOrNull,setForm):setForm(f=>({...f,image_url:""}))}/></div>
         <div className="field"><label>Type</label>{badgePicker(form.badge,v=>setForm(f=>({...f,badge:v})))}</div>
-        <div className="modal-btns"><button className="btn btn-ghost" onClick={()=>setAdding(false)}>Cancel</button><button className="btn btn-primary" onClick={startPost}>Review & Post →</button></div>
+        <div className="modal-btns"><button className="btn btn-ghost" onClick={()=>setAdding(false)}>Cancel</button><button className="btn btn-primary" onClick={startPost} disabled={imgUploading}>Review & Post →</button></div>
       </div></div>)}
 
       {/* ── Confirm before posting ── */}
@@ -6472,6 +6557,7 @@ function AnnouncementsPage({ announcements, addAnnouncement, updateAnnouncement,
         <div style={{marginBottom:14}}><Icon name="announce" size={40} color="var(--accent)"/></div>
         <h3>Post Announcement?</h3>
         <p style={{color:"var(--muted)",fontSize:13,margin:"10px 0 4px"}}>Title: <strong style={{color:"var(--text)"}}>{form.title}</strong></p>
+        {form.image_url&&<img src={form.image_url} alt="" style={{maxWidth:"100%",maxHeight:140,borderRadius:8,margin:"6px 0"}}/>}
         {form.body&&<p style={{color:"var(--muted)",fontSize:12,marginBottom:4,maxHeight:80,overflow:"hidden"}}>{form.body}</p>}
         <p style={{fontSize:12,color:"var(--muted)",marginBottom:16}}>Visible to your whole team.</p>
         <div className="modal-btns">
@@ -6485,6 +6571,7 @@ function AnnouncementsPage({ announcements, addAnnouncement, updateAnnouncement,
         <h3 style={{marginBottom:16}}>✏️ Edit Announcement</h3>
         <div className="field"><label>Title <span className="req">*</span></label><input className="inp" value={editForm.title} onChange={e=>setEditForm(f=>({...f,title:e.target.value}))} autoFocus/></div>
         <div className="field"><label>Message</label><textarea className="inp" rows={4} value={editForm.body} onChange={e=>setEditForm(f=>({...f,body:e.target.value}))}/></div>
+        <div className="field"><label>Image (optional)</label><ImagePicker value={editForm.image_url} uploading={imgUploading} onChange={fileOrNull=>fileOrNull?uploadImage(fileOrNull,setEditForm):setEditForm(f=>({...f,image_url:""}))}/></div>
         <div className="field"><label>Type</label>{badgePicker(editForm.badge,v=>setEditForm(f=>({...f,badge:v})))}</div>
         <div style={{fontSize:11,color:"var(--muted)",marginBottom:14}}>Only you can edit this — posted by {editTarget.author}</div>
         <div className="modal-btns">
@@ -6523,6 +6610,11 @@ function AnnouncementsPage({ announcements, addAnnouncement, updateAnnouncement,
               )}
             </div>
           </div>
+          {a.image_url&&(
+            <a href={a.image_url} target="_blank" rel="noreferrer">
+              <img src={a.image_url} alt="" style={{width:"100%",maxHeight:260,objectFit:"cover",borderRadius:10,border:"1px solid var(--border)",margin:"10px 0"}}/>
+            </a>
+          )}
           {a.body&&<div className="ann-body">{a.body}</div>}
         </div>
       ))}
@@ -8697,6 +8789,34 @@ function SessionLogPage({ user, refreshKey=0 }) {
 // ── File Name Generator: shared context so CopyCell/Section/DynList are stable top-level components ──
 const FngCtx = createContext({});
 
+// ── Figma-matched dropzone for the left-column per-page reference upload
+//    ("Upload Image" — click, drag-drop, or paste; shows a small preview once set) ──
+function FngPageDropzone({ imgUrl, onFile }){
+  const fileRef=useRef();
+  const [drag,setDrag]=useState(false);
+  if(imgUrl){
+    return (
+      <div style={{position:'relative',border:'1px solid var(--border)',borderRadius:8,overflow:'hidden'}}>
+        <img src={imgUrl} alt="" style={{width:'100%',maxHeight:140,objectFit:'cover',display:'block'}}/>
+        <button type="button" onClick={()=>onFile(null)} title="Remove" style={{position:'absolute',top:6,right:6,width:22,height:22,borderRadius:'50%',border:'none',background:'rgba(44,36,24,.65)',color:'#fff',cursor:'pointer',fontSize:12}}>✕</button>
+      </div>
+    );
+  }
+  return (
+    <div
+      onClick={()=>fileRef.current?.click()}
+      onDragOver={e=>{e.preventDefault();setDrag(true);}}
+      onDragLeave={()=>setDrag(false)}
+      onDrop={e=>{e.preventDefault();setDrag(false);if(e.dataTransfer.files[0])onFile(e.dataTransfer.files[0]);}}
+      style={{border:`1.5px dashed ${drag?'var(--accent)':'var(--border)'}`,borderRadius:8,padding:'20px 14px',textAlign:'center',cursor:'pointer',background:drag?'var(--entry-accent-bg)':'#fff',transition:'.15s'}}
+    >
+      <input ref={fileRef} type="file" accept="image/*" style={{display:'none'}} onChange={e=>{if(e.target.files[0])onFile(e.target.files[0]);e.target.value='';}}/>
+      <Icon name="upload" size={20} color="var(--muted)"/>
+      <div style={{fontSize:11,color:'var(--muted)',marginTop:8}}>Paste or upload your screenshot here</div>
+    </div>
+  );
+}
+
 // Turn a computed name into a safe download filename, preserving the uploaded file's extension.
 function fngDownloadName(name, img){
   const urlExt = (img?.url||"").split("?")[0].split(".").pop().toLowerCase();
@@ -9213,12 +9333,31 @@ function FileNameGeneratorPage({ onFill=null, activeTabData=null }) {
 
   const tabs=[
     {id:'logo',label:'Logo & Misc'},{id:'hero',label:'Hero'},
-    {id:'gallery',label:'Gallery'},{id:'beforeafter',label:'Before/After'},
-    {id:'video',label:'Video Splash'},{id:'badges',label:'Badges'},
-    {id:'team',label:'Team'},{id:'menu',label:'Menu'},
-    {id:'content',label:'Content Image'},{id:'callout',label:'Callout Icon'},
-    {id:'pdf',label:'PDF'},{id:'slider',label:'Hero Slider'},
+    {id:'slider',label:'Hero Slider'},{id:'gallery',label:'Gallery'},
+    {id:'gallerySpec',label:'Gallery - Separate Page'},{id:'content',label:'Content'},
+    {id:'beforeafter',label:'Before/After'},{id:'video',label:'Video Splash'},
+    {id:'badges',label:'Badges'},{id:'team',label:'Team'},
+    {id:'menu',label:'Menu'},{id:'callout',label:'Callout Icon'},
+    {id:'pdf',label:'PDF'},
   ];
+  // Confirmed directly from the Figma file: which list each Name Type shows on the left
+  // (field it edits, its label, and whether that tab has a per-page list at all —
+  // plain "Gallery" has none, just a single upload dropzone).
+  const LIST_CONFIG = {
+    hero:        {field:'pages',       label:'Page Name',   placeholder:'Page'},
+    slider:      {field:'pages',       label:'Page Name',   placeholder:'Page'},
+    gallerySpec: {field:'pages',       label:'Page Name',   placeholder:'Page'},
+    content:     {field:'pages',       label:'Page Name',   placeholder:'Page'},
+    video:       {field:'pages',       label:'Page Name',   placeholder:'Page'},
+    callout:     {field:'pages',       label:'Page Name',   placeholder:'Page'},
+    beforeafter: {field:'pages',       label:'Keywords',    placeholder:'Keyword'},
+    badges:      {field:'badges',      label:'Badge Names', placeholder:'Badge'},
+    team:        {field:'teamMembers', label:'Team Members',placeholder:'Staff'},
+    menu:        {field:'menuNames',   label:'Menu Names',  placeholder:'Menu'},
+    pdf:         {field:'pdfNames',    label:'PDF Names',   placeholder:'PDF'},
+    // gallery, logo: no list — single upload area / fixed named slots only
+  };
+  const listCfg = LIST_CONFIG[tab] || null;
 
   const N=40;
   const logoVals=[applyFmt(format.logo),applyFmt(format.favicon),applyFmt(format.blogLogo),applyFmt(format.asst),applyFmt(format.introWhy),applyFmt(format.recentReviews),applyFmt(format.videoSplash),applyFmt(format.waveZip),applyFmt(format.waveAssist)];
@@ -9241,21 +9380,6 @@ function FileNameGeneratorPage({ onFill=null, activeTabData=null }) {
   return (
     <FngCtx.Provider value={{copy,copied,copyAll,copiedAll,form,setItem,removeItem,addItem,uploads,setUploadFor,removeUploadFor,selected,toggleSelected,activeSlotId,setActiveSlotId}}>
     <div>
-      <div style={{display:'flex',alignItems:'flex-start',justifyContent:'space-between',marginBottom:24,gap:16,flexWrap:'wrap'}}>
-        <div>
-          <div className="page-title" style={{display:'flex',alignItems:'center',gap:10}}><span style={{fontSize:22}}>📁</span> File Name Generator</div>
-          <div className="page-sub">Unlimited inputs · Copy All per section · Import from Excel</div>
-        </div>
-        <div style={{display:'flex',gap:8,flexWrap:'wrap'}}>
-          <label style={{display:'inline-flex',alignItems:'center',gap:7,padding:'8px 14px',background:'linear-gradient(135deg,#10b981,#059669)',color:'#fff',borderRadius:8,fontSize:12,fontWeight:700,cursor:'pointer',boxShadow:'0 2px 10px rgba(16,185,129,.35)'}}>
-            📊 Import Excel<input type="file" accept=".xlsx,.xls,.csv" style={{display:'none'}} onChange={e=>{if(e.target.files[0])handleXlsx(e.target.files[0]);e.target.value='';}}/>
-          </label>
-          <button onClick={()=>{setDraftFmt({...format});setEditingFormat(true);}} style={{padding:'8px 14px',background:'var(--btn-ghost-bg)',border:'1.5px solid var(--btn-ghost-border)',color:'var(--btn-ghost-text)',borderRadius:8,fontSize:12,fontWeight:700,cursor:'pointer'}}>✏️ Edit Format</button>
-          <button onClick={()=>{setForm(EMPTY);if(typeof window!=="undefined")localStorage.removeItem("ch_fng_form");}} style={{padding:'8px 14px',background:'var(--btn-cancel-bg)',border:'1.5px solid var(--btn-cancel-border)',color:'var(--btn-cancel-text)',borderRadius:8,fontSize:12,fontWeight:700,cursor:'pointer'}}>Clear All</button>
-          {onFill&&<button onClick={()=>onFill({bizFilename:form.bizFilename,bizAlt:form.bizAlt,accountNum:form.accountNum})} style={{padding:'8px 14px',background:'var(--accent)',border:'1.5px solid var(--accent)',color:'#fff',borderRadius:8,fontSize:12,fontWeight:700,cursor:'pointer'}}>⚡ Auto-fill Active Form</button>}
-        </div>
-      </div>
-
       {editingFormat&&(
         <div className="modal-bg">
           <div style={{background:'var(--glass-bg)',border:'1px solid var(--glass-border)',backdropFilter:'var(--glass-blur)',borderRadius:14,padding:28,width:'100%',maxWidth:600,maxHeight:'88vh',overflowY:'auto',boxShadow:'var(--glass-shadow)'}}>
@@ -9283,56 +9407,96 @@ function FileNameGeneratorPage({ onFill=null, activeTabData=null }) {
         </div>
       )}
 
-      <div style={{background:'var(--glass-bg)',border:'1px solid var(--glass-border)',backdropFilter:'var(--glass-blur)',WebkitBackdropFilter:'var(--glass-blur)',padding:'20px 22px',marginBottom:20,borderRadius:12,boxShadow:'var(--glass-shadow)'}}>
-        <div style={{fontSize:13,fontWeight:700,marginBottom:14}}>🏢 Business Information</div>
-        <div style={{display:'grid',gridTemplateColumns:'1fr 1fr 1fr 1fr',gap:12,marginBottom:18}}>
-          <div className="field" style={{marginBottom:0}}>
-            <label style={{display:"flex",alignItems:"center",gap:6}}>
-              Business Name — NOB {form.bizFilename&&<span style={{fontSize:9,fontWeight:700,color:"var(--green)",background:"rgba(16,185,129,.12)",border:"1px solid rgba(16,185,129,.3)",borderRadius:20,padding:"1px 7px"}}>auto-filled</span>}
-            </label>
-            <input className="inp" placeholder="e.g. Fire Force" value={form.bizFilename} onChange={e=>setForm(f=>({...f,bizFilename:e.target.value}))}/>
-            <div style={{fontSize:10,color:"var(--muted)",marginTop:3}}>Used as <code style={{color:'var(--accent)'}}>&#123;nob&#125;</code> — no LLC/Corp/Inc</div>
-          </div>
-          <div className="field" style={{marginBottom:0}}>
-            <label style={{display:"flex",alignItems:"center",gap:6}}>NOB + Suffix (Alt Text) {form.bizAlt&&<span style={{fontSize:9,fontWeight:700,color:"var(--green)",background:"rgba(16,185,129,.12)",border:"1px solid rgba(16,185,129,.3)",borderRadius:20,padding:"1px 7px"}}>auto-filled</span>}</label>
-            <input className="inp" placeholder="e.g. Fire Force LLC" value={form.bizAlt} onChange={e=>setForm(f=>({...f,bizAlt:e.target.value}))}/>
-            <div style={{fontSize:10,color:"var(--muted)",marginTop:3}}>Used as <code style={{color:'var(--accent)'}}>&#123;nobfull&#125;</code> — includes suffix</div>
-          </div>
-          <div className="field" style={{marginBottom:0}}>
-            <label style={{display:"flex",alignItems:"center",gap:6}}>Entity Designations (Optional) {form.entityDesignation&&<span style={{fontSize:9,fontWeight:700,color:"var(--green)",background:"rgba(16,185,129,.12)",border:"1px solid rgba(16,185,129,.3)",borderRadius:20,padding:"1px 7px"}}>auto-filled</span>}</label>
-            <input className="inp" placeholder="e.g. Inc, LLC" value={form.entityDesignation} onChange={e=>setForm(f=>({...f,entityDesignation:e.target.value}))}/>
-          </div>
-          <div className="field" style={{marginBottom:0}}>
-            <label style={{display:"flex",alignItems:"center",gap:6}}>Account Number {form.accountNum&&<span style={{fontSize:9,fontWeight:700,color:"var(--green)",background:"rgba(16,185,129,.12)",border:"1px solid rgba(16,185,129,.3)",borderRadius:20,padding:"1px 7px"}}>auto-filled</span>}</label>
-            <input className="inp" placeholder="e.g. ACC-9876" value={form.accountNum} onChange={e=>setForm(f=>({...f,accountNum:e.target.value}))}/>
-          </div>
-        </div>
-        <div style={{display:'grid',gridTemplateColumns:'repeat(5,1fr)',gap:16}}>
-          <div><div style={{fontSize:10,fontWeight:700,color:'var(--muted)',marginBottom:8,textTransform:'uppercase',letterSpacing:'.8px'}}>Page Names</div><DynList field="pages" placeholder="Page"/></div>
-          <div><div style={{fontSize:10,fontWeight:700,color:'var(--muted)',marginBottom:8,textTransform:'uppercase',letterSpacing:'.8px'}}>Badge Names</div><DynList field="badges" placeholder="Badge"/></div>
-          <div><div style={{fontSize:10,fontWeight:700,color:'var(--muted)',marginBottom:8,textTransform:'uppercase',letterSpacing:'.8px'}}>Team Members</div><DynList field="teamMembers" placeholder="Staff"/></div>
-          <div><div style={{fontSize:10,fontWeight:700,color:'var(--muted)',marginBottom:8,textTransform:'uppercase',letterSpacing:'.8px'}}>Menu Names</div><DynList field="menuNames" placeholder="Menu"/></div>
-          <div><div style={{fontSize:10,fontWeight:700,color:'var(--muted)',marginBottom:8,textTransform:'uppercase',letterSpacing:'.8px'}}>PDF Names</div><DynList field="pdfNames" placeholder="PDF"/></div>
-        </div>
-      </div>
+      <div style={{display:'flex',gap:20,alignItems:'flex-start'}}>
+      <div style={{background:'var(--card)',border:'1px solid var(--border)',padding:'20px 20px 20px',borderRadius:12,boxShadow:'var(--shadow-sm)',width:418,flexShrink:0}}>
+        <div style={{fontSize:15,fontWeight:800,fontFamily:"'Plus Jakarta Sans',sans-serif"}}>Case Information</div>
+        <div style={{height:3,background:'var(--border)',margin:'12px 0 18px',borderRadius:2}}/>
 
-      <div style={{display:'flex',gap:2,marginBottom:0,flexWrap:'wrap',borderBottom:'1px solid var(--border)',paddingBottom:0,alignItems:'center',justifyContent:'space-between'}}>
-        <div style={{display:'flex',gap:2,flexWrap:'wrap'}}>
-          {tabs.map(t=>(
-            <button key={t.id} onClick={()=>setTab(t.id)} style={{padding:'8px 13px',fontSize:11,fontWeight:tab===t.id?700:500,border:'none',borderBottom:tab===t.id?'2px solid var(--accent)':'2px solid transparent',background:'none',color:tab===t.id?'var(--accent)':'var(--muted)',cursor:'pointer',fontFamily:"'Poppins',sans-serif",transition:'.15s',marginBottom:-1}}>{t.label}</button>
-          ))}
-        </div>
-        <div style={{display:'flex',alignItems:'center',gap:12,paddingBottom:8,flexShrink:0}}>
-          <label style={{display:'flex',alignItems:'center',gap:6,fontSize:11,fontWeight:700,color:'var(--muted)',cursor:'pointer',userSelect:'none'}}>
-            <input type="checkbox" checked={allSelected} onChange={selectAll}/> Select All
+        <div className="field">
+          <label style={{display:"flex",alignItems:"center",gap:6}}>
+            Business Name (Auto-fill)* {form.bizFilename&&<span style={{fontSize:9,fontWeight:700,color:"var(--green)",background:"rgba(76,138,86,.12)",border:"1px solid rgba(76,138,86,.3)",borderRadius:20,padding:"1px 7px"}}>auto-filled</span>}
           </label>
-          <button onClick={downloadSelected} className="btn btn-save" style={{padding:'6px 14px',fontSize:11}}>
-            <Icon name="download" size={12}/> Download Selected{selected.size>0?` (${selected.size})`:''}
-          </button>
+          <input className="inp" placeholder="e.g. Fire Force" value={form.bizFilename} onChange={e=>setForm(f=>({...f,bizFilename:e.target.value,bizAlt:[e.target.value,f.entityDesignation].filter(Boolean).join(' ')}))}/>
+        </div>
+        <div className="field">
+          <label style={{display:"flex",alignItems:"center",gap:6}}>Entity Designations (Auto-fill)* {form.entityDesignation&&<span style={{fontSize:9,fontWeight:700,color:"var(--green)",background:"rgba(76,138,86,.12)",border:"1px solid rgba(76,138,86,.3)",borderRadius:20,padding:"1px 7px"}}>auto-filled</span>}</label>
+          <input className="inp" placeholder="e.g. Inc, LLC" value={form.entityDesignation} onChange={e=>setForm(f=>({...f,entityDesignation:e.target.value,bizAlt:[f.bizFilename,e.target.value].filter(Boolean).join(' ')}))}/>
+        </div>
+        <div className="field" style={{marginBottom:0}}>
+          <label style={{display:"flex",alignItems:"center",gap:6}}>Account Number (Auto-fill)* {form.accountNum&&<span style={{fontSize:9,fontWeight:700,color:"var(--green)",background:"rgba(76,138,86,.12)",border:"1px solid rgba(76,138,86,.3)",borderRadius:20,padding:"1px 7px"}}>auto-filled</span>}</label>
+          <input className="inp" placeholder="e.g. ACC-9876" value={form.accountNum} onChange={e=>setForm(f=>({...f,accountNum:e.target.value}))}/>
+        </div>
+
+        <div style={{height:2,background:'var(--border)',margin:'18px 0 14px'}}/>
+
+        <label style={{display:'block',fontSize:11,fontWeight:700,color:'var(--text)',marginBottom:8}}>Name Type</label>
+        <select className="inp" value={tab} onChange={e=>setTab(e.target.value)} style={{marginBottom:18}}>
+          {tabs.map(t=><option key={t.id} value={t.id}>{t.label}</option>)}
+        </select>
+
+        {listCfg ? (
+          <div>
+            {form[listCfg.field].map((val,pi)=>{
+              const pageUploadId=`pageref-${tab}-${pi}`;
+              const pageImg=uploads[pageUploadId];
+              return (
+              <div key={pi} style={{border:'1px solid var(--border)',borderRadius:10,padding:22,marginBottom:14,position:'relative',background:'var(--entry-bg)'}}>
+                <button type="button" onClick={()=>removeItem(listCfg.field,pi)} title="Remove" style={{position:'absolute',top:16,right:16,width:12,height:12,border:'none',background:'none',cursor:'pointer',color:'var(--muted)',fontSize:14,lineHeight:1,padding:0}}>✕</button>
+                <div className="field" style={{marginBottom:16}}>
+                  <label>{listCfg.label}</label>
+                  <input className="inp" placeholder={listCfg.placeholder} value={val} onChange={e=>setItem(listCfg.field,pi,e.target.value)}/>
+                </div>
+                <label style={{fontSize:11,fontWeight:700,color:'var(--text)',marginBottom:8,display:'block'}}>Upload Image{listCfg.field!=='pages'?'':'s'}</label>
+                <FngPageDropzone imgUrl={pageImg?.url} onFile={file=>{
+                  if(!file)return;
+                  const reader=new FileReader();
+                  reader.onload=()=>setUploadFor(pageUploadId,{url:reader.result,name:`${san(val||listCfg.placeholder)}-reference`,_file:file,id:pageUploadId});
+                  reader.readAsDataURL(file);
+                }}/>
+              </div>
+              );
+            })}
+            <button onClick={()=>addItem(listCfg.field)} style={{background:'none',border:'2px dashed var(--border)',borderRadius:8,color:'var(--muted)',padding:'10px 14px',fontSize:12,fontWeight:700,cursor:'pointer',width:'100%',fontFamily:"'Poppins',sans-serif",marginBottom:18,display:'flex',alignItems:'center',justifyContent:'center',gap:6}}>Add More {listCfg.field==='pages'?'Page':listCfg.placeholder} <Icon name="add" size={14} color="var(--muted)"/></button>
+          </div>
+        ) : tab==='gallery' ? (
+          <div style={{marginBottom:18}}>
+            <label style={{fontSize:11,fontWeight:700,color:'var(--text)',marginBottom:8,display:'block'}}>Upload Images</label>
+            <FngPageDropzone imgUrl={uploads['pageref-gallery-0']?.url} onFile={file=>{
+              if(!file)return;
+              const reader=new FileReader();
+              reader.onload=()=>setUploadFor('pageref-gallery-0',{url:reader.result,name:'gallery-reference',_file:file,id:'pageref-gallery-0'});
+              reader.readAsDataURL(file);
+            }}/>
+          </div>
+        ) : null}
+
+        <div style={{display:'flex',gap:10}}>
+          <button className="btn btn-danger" style={{flex:1,justifyContent:'center'}} onClick={()=>{setForm(EMPTY);if(typeof window!=="undefined")localStorage.removeItem("ch_fng_form");showToast('Cleared','info');}}>Remove Fill</button>
+          <button className="btn btn-primary" style={{flex:1,justifyContent:'center'}} onClick={()=>{setDraftFmt({...format});setEditingFormat(true);}}>Edit File Name Format</button>
         </div>
       </div>
 
-      <div style={{background:'var(--glass-bg)',border:'1px solid var(--glass-border)',backdropFilter:'var(--glass-blur)',WebkitBackdropFilter:'var(--glass-blur)',padding:'20px 22px',borderRadius:'0 0 12px 12px',boxShadow:'var(--glass-shadow)'}}>
+      <div style={{flex:1,minWidth:0}}>
+      <div style={{display:'flex',alignItems:'flex-start',justifyContent:'space-between',marginBottom:12,gap:16,flexWrap:'wrap'}}>
+        <div>
+          <div className="page-title" style={{display:'flex',alignItems:'center',gap:10,fontSize:18}}><span style={{fontSize:20}}>📁</span> File Name Generator</div>
+          <div className="page-sub">Unlimited inputs · Copy All per section · Import from Excel</div>
+        </div>
+        <div style={{display:'flex',gap:8,flexWrap:'wrap'}}>
+          <label className="btn btn-ghost btn-noicon" style={{cursor:'pointer'}}>
+            <Icon name="upload" size={14}/> Import Excel<input type="file" accept=".xlsx,.xls,.csv" style={{display:'none'}} onChange={e=>{if(e.target.files[0])handleXlsx(e.target.files[0]);e.target.value='';}}/>
+          </label>
+          {onFill&&<button onClick={()=>onFill({bizFilename:form.bizFilename,bizAlt:form.bizAlt,accountNum:form.accountNum})} className="btn btn-outline-accent">Auto-fill Active Form</button>}
+        </div>
+      </div>
+
+      <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:10}}>
+        <div style={{fontSize:15,fontWeight:800,fontFamily:"'Plus Jakarta Sans',sans-serif"}}>{tabs.find(t=>t.id===tab)?.label} Upload</div>
+        <div style={{fontSize:12,color:'var(--muted)',fontWeight:600}}>Selected: {selected.size}/{Object.keys(uploads).length}</div>
+      </div>
+      <div style={{height:1,background:'var(--border)',marginBottom:16}}/>
+
+      <div style={{background:'var(--card)',border:'1px solid var(--border)',padding:'20px 22px',borderRadius:12,boxShadow:'var(--shadow-sm)'}}>
         {tab==='logo'&&(<>
           <FngSection title="Logo" vals={[applyFmt(format.logo)]} sk="logo"><CopyCell val={applyFmt(format.logo)} id="logo"/></FngSection>
           <FngSection title="Favicon" vals={[applyFmt(format.favicon)]} sk="favicon"><CopyCell val={applyFmt(format.favicon)} id="favicon"/></FngSection>
@@ -9365,9 +9529,11 @@ function FileNameGeneratorPage({ onFill=null, activeTabData=null }) {
             {!nob&&<div style={{fontSize:13,color:'var(--muted)'}}>Enter business name and page names above.</div>}
           </FngSection>
         </>)}
-        {tab==='gallery'&&(<>
+        {tab==='gallery'&&(
           <FngSection title="Gallery (Nondescript)" vals={galNonVals} sk="gal-non">{galNonVals.map((v,i)=><CopyCell key={i} val={v} id={`gn-${i}`}/>)}</FngSection>
-          <FngSection title="Gallery (Specific / Categorized by Page)" vals={galSpecVals} sk="gal-spec">
+        )}
+        {tab==='gallerySpec'&&(
+          <FngSection title="Gallery - Separate Page" vals={galSpecVals} sk="gal-spec">
             {nob&&form.pages.filter(Boolean).map((p,pi)=>(
               <div key={pi} style={{marginBottom:12}}>
                 <div style={{fontSize:11,fontWeight:700,color:'var(--muted)',marginBottom:4}}>{p}</div>
@@ -9376,7 +9542,7 @@ function FileNameGeneratorPage({ onFill=null, activeTabData=null }) {
             ))}
             {!nob&&<div style={{fontSize:13,color:'var(--muted)'}}>Enter business name and page names above.</div>}
           </FngSection>
-        </>)}
+        )}
         {tab==='beforeafter'&&(
           <FngSection title="Before / After" vals={baVals} sk="ba">
             {Array.from({length:N},(_,i)=>(
@@ -9452,8 +9618,27 @@ function FileNameGeneratorPage({ onFill=null, activeTabData=null }) {
           </FngSection>
         )}
         {tab==='slider'&&(
-          <FngSection title="Hero Slider" vals={sliderVals} sk="slider">{sliderVals.map((v,i)=><CopyCell key={i} val={v} id={`sl-${i}`}/>)}</FngSection>
+          <FngSection title="Hero Slider" vals={sliderVals} sk="slider">
+            {nob&&heroPages.length ? heroPages.map((p,pi)=>(
+              <div key={pi} style={{marginBottom:8}}>
+                <div style={{fontSize:11,fontWeight:700,color:'var(--muted)',marginBottom:4}}>{p}</div>
+                <CopyCell val={applyFmt(format.heroSlider,{page:san(p),nn:'01'})} id={`sl-${pi}`}/>
+              </div>
+            )) : <CopyCell val={sliderVals[0]} id="sl-0"/>}
+            {!nob&&<div style={{fontSize:13,color:'var(--muted)'}}>Enter business name and page names above.</div>}
+          </FngSection>
         )}
+      </div>
+
+      <div style={{display:'flex',alignItems:'center',justifyContent:'flex-end',gap:16,marginTop:16}}>
+        <label style={{display:'flex',alignItems:'center',gap:6,fontSize:12,fontWeight:700,color:'var(--text)',cursor:'pointer',userSelect:'none'}}>
+          <input type="checkbox" checked={allSelected} onChange={selectAll}/> Select All
+        </label>
+        <button onClick={downloadSelected} className="btn btn-primary">
+          Download Selected{selected.size>0?` (${selected.size})`:''}
+        </button>
+      </div>
+      </div>
       </div>
       <Toast msg={toast.msg} type={toast.type}/>
     </div>

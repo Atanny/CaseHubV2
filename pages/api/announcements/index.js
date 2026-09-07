@@ -10,9 +10,9 @@ export default async function handler(req, res) {
       return res.status(200).json(data)
     }
     if (req.method === 'POST') {
-      const { title, body, badge, author } = req.body
+      const { title, body, badge, author, image_url } = req.body
       if (!title) return res.status(400).json({ error: 'title required' })
-      const { data, error } = await supabase.from('announcements').insert([{ title, body, badge: badge || 'info', author }]).select().single()
+      const { data, error } = await supabase.from('announcements').insert([{ title, body, badge: badge || 'info', author, image_url: image_url || null }]).select().single()
       if (error) throw error
       return res.status(201).json(data)
     }

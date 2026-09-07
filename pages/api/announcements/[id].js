@@ -6,10 +6,12 @@ export default async function handler(req, res) {
   const { id } = req.query
   try {
     if (req.method === 'PUT') {
-      const { title, body, badge } = req.body
+      const { title, body, badge, image_url } = req.body
+      const updates = { title, body, badge }
+      if (image_url !== undefined) updates.image_url = image_url
       const { data, error } = await supabase
         .from('announcements')
-        .update({ title, body, badge })
+        .update(updates)
         .eq('id', id)
         .select()
         .single()
