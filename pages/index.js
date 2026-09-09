@@ -425,6 +425,7 @@ body.light .sidebar-divider{background:rgba(180,90,40,.1);}
 
 /* Page header */
 .page-header{margin-bottom:28px;}
+.pl-dark-header{background:linear-gradient(135deg,#40513b,#33402f);border-radius:12px 12px 0 0;}
 .main-area.form-mode .page-header{display:flex;flex-direction:row;align-items:center;gap:0;justify-content:space-between;flex-wrap:wrap;}
 .main-area.form-mode .page-header>div:first-child{flex:1;min-width:0;}
 .page-title{font-size:26px;font-weight:800;letter-spacing:-.4px;}
@@ -2153,11 +2154,11 @@ function CopyRow({ label, value, groupColor, groupBorder }) {
       className="copy-row-wrap"
       onClick={handleClick}
       title={empty ? undefined : "Click to copy"}
-      style={{cursor: empty ? "default" : "pointer", userSelect:"none", position:"relative", ...(groupColor?{background:groupColor}:{}), ...(groupBorder?{borderColor:groupBorder}:{})}}
+      style={{cursor: empty ? "default" : "pointer", userSelect:"none", position:"relative", background:"#fff", borderColor:"var(--border)"}}
     >
       <div className="copy-row-label" style={{display:"flex",alignItems:"center",justifyContent:"space-between"}}>
         <span>{label}</span>
-        {!empty && <span style={{fontSize:10,opacity:c?1:0.45,color:c?"var(--green)":"var(--muted)",transition:"opacity .2s",fontWeight:700}}>{c?"✓ Copied":"Copy"}</span>}
+        {!empty && <span style={{opacity:c?1:0.55,color:c?"var(--green)":"var(--muted)",transition:"opacity .2s",display:"flex",alignItems:"center"}}>{c?<span style={{fontSize:10,fontWeight:700}}>✓</span>:<Icon name="copy" size={12} color="var(--muted)"/>}</span>}
       </div>
       {empty ? (
         <div style={{fontSize:12,color:"var(--muted)",fontStyle:"italic",padding:"3px 0"}}>—</div>
@@ -2275,9 +2276,12 @@ function StickyPanel({ startTimeRef, form, isSC, buildEntriesText, buildEmailTex
 
   return (
     <div className="right-panel">
-      <div className="right-panel-header">
-        <span style={{fontSize:16,marginRight:8}}>📊</span> Live Summary
-        {f.caseNum&&<span style={{marginLeft:"auto",fontSize:11,fontWeight:600,color:"var(--accent)",background:"var(--entry-accent-bg)",padding:"2px 10px",borderRadius:20,border:"1px solid rgba(64,81,59,.2)"}}>#{f.caseNum}</span>}
+      <div className="right-panel-header" style={{display:"block"}}>
+        <div style={{display:"flex",alignItems:"center"}}>
+          <span style={{fontSize:14,fontWeight:800,fontFamily:"'Plus Jakarta Sans',sans-serif"}}>Information Summary</span>
+          {f.caseNum&&<span style={{marginLeft:"auto",fontSize:11,fontWeight:600,color:"var(--accent)",background:"var(--entry-accent-bg)",padding:"2px 10px",borderRadius:20,border:"1px solid rgba(64,81,59,.2)"}}>#{f.caseNum}</span>}
+        </div>
+        <div style={{fontSize:11,color:"var(--muted)",marginTop:2}}>Click the card to copy the information</div>
       </div>
 
       {/* ── Body: summary content + right-side dot rail ── */}
@@ -2286,32 +2290,32 @@ function StickyPanel({ startTimeRef, form, isSC, buildEntriesText, buildEmailTex
       <div className="summary-panel" ref={summaryPanelRef} style={{flex:1,minWidth:0}}>
         {/* ── GROUP 1: Case Info (blue) ── */}
         <div id="sum-g-caseinfo" style={{marginBottom:10}}>
-          <div style={{fontSize:9,fontWeight:700,color:"var(--accent)",textTransform:"uppercase",letterSpacing:".8px",marginBottom:6,paddingLeft:2,opacity:.7}}>Case Info</div>
-          <CopyRow label="Account #" value={f.accountNum} groupColor="rgba(64,81,59,.13)" groupBorder="rgba(64,81,59,.28)"/>
-          <CopyRow label="Case #" value={f.caseNum} groupColor="rgba(64,81,59,.13)" groupBorder="rgba(64,81,59,.28)"/>
-          {!isSC&&<CopyRow label="Inbound #" value={f.inboundNum} groupColor="rgba(64,81,59,.13)" groupBorder="rgba(64,81,59,.28)"/>}
-          <CopyRow label="Amend Type" value={f.amendType} groupColor="rgba(64,81,59,.13)" groupBorder="rgba(64,81,59,.28)"/>
+          <div style={{fontSize:9,fontWeight:700,color:"var(--accent)",textTransform:"uppercase",letterSpacing:".8px",marginBottom:6,paddingLeft:2,opacity:.7}}>1. Case Information</div>
+          <CopyRow label="Account #" value={f.accountNum}/>
+          <CopyRow label="Case #" value={f.caseNum}/>
+          {!isSC&&<CopyRow label="Inbound #" value={f.inboundNum}/>}
+          <CopyRow label="Amend Type" value={f.amendType}/>
         </div>
-        {/* ── GROUP 2: Customer Info (amber) — only if any filled ── */}
+        {/* ── GROUP 2: Customer Info — only if any filled ── */}
         {(f.customerName||f.customerEmail||f.businessName)&&(
           <div id="sum-g-customer" style={{marginBottom:10}}>
-            <div style={{fontSize:9,fontWeight:700,color:"var(--amber)",textTransform:"uppercase",letterSpacing:".8px",marginBottom:6,paddingLeft:2,opacity:.7}}>Customer Info</div>
-            {f.customerName&&<CopyRow label="Customer Name" value={f.customerName} groupColor="rgba(245,158,11,.1)" groupBorder="rgba(245,158,11,.3)"/>}
-            {f.customerEmail&&<CopyRow label="Customer Email" value={f.customerEmail} groupColor="rgba(245,158,11,.1)" groupBorder="rgba(245,158,11,.3)"/>}
-            {f.businessName&&<CopyRow label="Business Name" value={f.businessName+(f.businessSuffix?' '+f.businessSuffix:'')} groupColor="rgba(245,158,11,.1)" groupBorder="rgba(245,158,11,.3)"/>}
+            <div style={{fontSize:9,fontWeight:700,color:"var(--accent)",textTransform:"uppercase",letterSpacing:".8px",marginBottom:6,paddingLeft:2,opacity:.7}}>2. Customer Information</div>
+            {f.customerName&&<CopyRow label="Customer Name" value={f.customerName}/>}
+            {f.customerEmail&&<CopyRow label="Customer Email" value={f.customerEmail}/>}
+            {f.businessName&&<CopyRow label="Business Name" value={f.businessName+(f.businessSuffix?' '+f.businessSuffix:'')}/>}
           </div>
         )}
-        {/* ── GROUP 3: Amends Copy (orange-accent) ── */}
+        {/* ── GROUP 3: Assumptions ── */}
         <div id="sum-g-amends" style={{marginBottom:10}}>
-          <div style={{fontSize:9,fontWeight:700,color:"rgb(245,148,92)",textTransform:"uppercase",letterSpacing:".8px",marginBottom:6,paddingLeft:2,opacity:.7}}>Amends Copy</div>
-          <CopyRow label={isSC?"Site Comments":"Assumptions"} value={isSC?buildEntriesText():buildEmailText()} groupColor="rgba(245,148,92,.1)" groupBorder="rgba(245,148,92,.3)"/>
+          <div style={{fontSize:9,fontWeight:700,color:"var(--accent)",textTransform:"uppercase",letterSpacing:".8px",marginBottom:6,paddingLeft:2,opacity:.7}}>3. Assumptions</div>
+          <CopyRow label={isSC?"Site Comments":"Assumptions"} value={isSC?buildEntriesText():buildEmailText()}/>
           {(()=>{
             const entries=f.entries.filter(e=>e.clarification&&e.clarification.trim());
             if(!entries.length)return null;
             const clarifLines=isSC
               ?entries.map(e=>`Site Comment #${e.number}: ${e.clarification.trim()}`).join("\n\n")
               :entries.map(e=>e.clarification.trim()).join("\n\n");
-            return <CopyRow label="Email Format" value={clarifLines} groupColor="rgba(245,148,92,.1)" groupBorder="rgba(245,148,92,.3)"/>;
+            return <CopyRow label="Email Format" value={clarifLines}/>;
           })()}
         </div>
         {/* ── GROUP 4: Messages (blue chips) ── */}
@@ -2321,12 +2325,12 @@ function StickyPanel({ startTimeRef, form, isSC, buildEntriesText, buildEmailTex
             <GreetingRow greetingMessages={greetingMessages} caseNum={f.caseNum} inboundNum={f.inboundNum} isSC={isSC}/>
           </div>
         )}
-        {/* ── GROUP 5: Email (purple) — inbound only ── */}
+        {/* ── GROUP 5: Email — inbound only ── */}
         {!isSC&&(
           <div id="sum-g-email" style={{marginBottom:10}}>
-            <div style={{fontSize:9,fontWeight:700,color:"#a78bfa",textTransform:"uppercase",letterSpacing:".8px",marginBottom:6,paddingLeft:2,opacity:.7}}>Email</div>
-            <CopyRow label="Email Type" value={emailTypeLabel} groupColor="rgba(124,58,237,.1)" groupBorder="rgba(124,58,237,.3)"/>
-            <CopyRow label="Email Address" value={f.emailAddress} groupColor="rgba(124,58,237,.1)" groupBorder="rgba(124,58,237,.3)"/>
+            <div style={{fontSize:9,fontWeight:700,color:"var(--accent)",textTransform:"uppercase",letterSpacing:".8px",marginBottom:6,paddingLeft:2,opacity:.7}}>Email</div>
+            <CopyRow label="Email Type" value={emailTypeLabel}/>
+            <CopyRow label="Email Address" value={f.emailAddress}/>
           </div>
         )}
         {allImages.length > 0 && (
@@ -2663,7 +2667,7 @@ function WizardStepBar({ activePage, goToPage, isSC, pageDone={}, pageReachable=
     </>
   );
 }
-function PostLiveForm({ mode, onSave, onBack, onCancelForm, onSaveDraftDirect, onAutoSaveDraft, onStartBreak, onStartOpenHour, onStopOpenHour, openHourActive=false, breakActive=false, draftData, user, onTimerEnd, onQaTimerEnd, specialRequestors, timerLimitSecs, qaTimerLimitSecs=600, globalTimeIn, isEditMode=false, isMinimisedResume=false, caseStartTime=null, externalFormRef=null, isResumingDraft=false, originalOutcome="", originalTotalSecs=0, containerStyle={}, onTimerTick=null, prolongedActive=false, onProlongedDismiss=null, onProceedWithNext=null, prolongedMinsForNext=30, tabStorageKey=null, onTabDataChange=null }) {
+function PostLiveForm({ mode, onSave, onBack, onCancelForm, onSaveDraftDirect, onAutoSaveDraft, onStartBreak, onStartOpenHour, onStopOpenHour, openHourActive=false, breakActive=false, draftData, user, onTimerEnd, onQaTimerEnd, specialRequestors, timerLimitSecs, qaTimerLimitSecs=600, globalTimeIn, isEditMode=false, isMinimisedResume=false, caseStartTime=null, externalFormRef=null, isResumingDraft=false, originalOutcome="", originalTotalSecs=0, containerStyle={}, onTimerTick=null, prolongedActive=false, onProlongedDismiss=null, onProceedWithNext=null, prolongedMinsForNext=30, tabStorageKey=null, onTabDataChange=null, onOpenFileNameGenerator=null }) {
   const isSC = mode==="siteComment";
   const entryLabel = isSC?"Site Comment":"Assumption";
   const rawName = user?.name || "User";
@@ -3484,7 +3488,7 @@ function PostLiveForm({ mode, onSave, onBack, onCancelForm, onSaveDraftDirect, o
         </div>
         <div className="quick-format-panel">
           <div className="quick-format-header">Quick Tools</div>
-          <button type="button" className="quick-format-row" onClick={()=>showToast('Open File Name Generator from the sidebar 📁')}>
+          <button type="button" className="quick-format-row" onClick={()=>onOpenFileNameGenerator?onOpenFileNameGenerator():showToast('Open File Name Generator from the sidebar 📁')}>
             <span>File Name Generator</span><Icon name="download" size={13} color="var(--muted)"/>
           </button>
         </div>
@@ -4431,31 +4435,27 @@ function PostLivePage({ onSaveCase, onUpdateCase, onUpdateDraft, onFormActive, o
           </div>
         )}
 
-        <div className="page-header" style={{padding:"12px 32px 10px",flexShrink:0,borderBottom:"1px solid var(--glass-border)",margin:0,display:"flex",alignItems:"center",gap:12,justifyContent:"space-between"}}>
-          <div>
-            {(()=>{
-              const activeTabMode=(activeLiveTabs.find(t=>t.id===activeFormTabId)||activeLiveTabs[0])?.mode||mode;
-              const isSC=activeTabMode==="siteComment";
-              return (<>
-                <div className="page-title" style={{fontSize:20}}>{isEditingFromLog?`Editing Case #${editingCase.savedCase.caseNum}`:currentDraft&&!isResumingMinimised?`Continuing Suspended Case #${currentDraft.caseNum||""}`:isSC?"Post-Live — Site Comment":"Post-Live — Inbound Email"}</div>
-                <div className="page-sub">{isEditingFromLog?"Editing saved case — all fields are editable.":currentDraft&&!isResumingMinimised?"Resuming suspended case — all fields are editable.":isSC?"Fill in each step. Steps unlock as you progress.":"Assumption-based format with email details."}</div>
-              </>);
-            })()}
+        <div className="page-header pl-dark-header" style={{padding:"16px 32px",flexShrink:0,margin:0,display:"flex",alignItems:"center",gap:16,justifyContent:"space-between"}}>
+          <div style={{display:"flex",alignItems:"center",gap:14,minWidth:0}}>
+            <button onClick={()=>onMinimise&&onMinimise()} title="Minimize" style={{width:34,height:34,borderRadius:"50%",border:"1.5px solid rgba(255,255,255,.35)",background:"rgba(255,255,255,.08)",color:"#fff",cursor:"pointer",display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0,fontSize:16}}>←</button>
+            <div style={{minWidth:0}}>
+              {(()=>{
+                const activeTabMode=(activeLiveTabs.find(t=>t.id===activeFormTabId)||activeLiveTabs[0])?.mode||mode;
+                const isSC=activeTabMode==="siteComment";
+                return (<>
+                  <div className="page-title" style={{fontSize:20,color:"#fff",margin:0}}>{isEditingFromLog?`Editing Case #${editingCase.savedCase.caseNum}`:currentDraft&&!isResumingMinimised?`Continuing Suspended Case #${currentDraft.caseNum||""}`:"Post-Live Amends Form"}</div>
+                  <div className="page-sub" style={{color:"rgba(255,255,255,.7)",margin:0}}>{isEditingFromLog?"Editing saved case — all fields are editable.":currentDraft&&!isResumingMinimised?"Resuming suspended case — all fields are editable.":isSC?"Site Comment":"Inbound Email"}</div>
+                </>);
+              })()}
+            </div>
           </div>
-          {/* ── File Name Generator button ── */}
-          <button style={{fontSize:11,padding:"6px 13px",borderRadius:8,border:"1px solid var(--accent)",background:"var(--accent)",color:"#fff",display:"flex",alignItems:"center",gap:6,cursor:"pointer",fontFamily:"'Poppins',sans-serif",fontWeight:600,letterSpacing:".2px",flexShrink:0}}
-            onClick={()=>{
-              // Trigger a fresh sync so the FNG reads the current active tab's data immediately
-              if(typeof window!=="undefined") window.dispatchEvent(new Event("ch_case_saved"));
-              setShowFnGen(true);
-            }}>
-            <span style={{fontSize:13}}>📋</span> File Name Generator
-          </button>
-          <TimerBar {...(()=>{
-            const activeTab=activeLiveTabs.find(t=>t.id===activeFormTabId)||activeLiveTabs[0];
-            if(activeTab&&activeTab.startTime===null) return zeroTimerState;
-            return tabTimerStates[activeFormTabId]||zeroTimerState;
-          })()} fmtElapsed={fmtElapsed}/>
+          <div style={{'--accent':'#ffffff','--muted':'rgba(255,255,255,.75)','--green':'#8fd98f','--glass-border':'rgba(255,255,255,.25)',flexShrink:0}}>
+            <TimerBar {...(()=>{
+              const activeTab=activeLiveTabs.find(t=>t.id===activeFormTabId)||activeLiveTabs[0];
+              if(activeTab&&activeTab.startTime===null) return zeroTimerState;
+              return tabTimerStates[activeFormTabId]||zeroTimerState;
+            })()} fmtElapsed={fmtElapsed}/>
+          </div>
         </div>
 
 
@@ -4515,7 +4515,7 @@ function PostLivePage({ onSaveCase, onUpdateCase, onUpdateDraft, onFormActive, o
           const tabUseDraft = isFirstTab && useDraft;
           return (
           <div key={tab.key||tab.id} style={{display:isActiveTab?"flex":"none",flexDirection:"column",flex:isActiveTab?1:undefined,overflow:"hidden",minHeight:isActiveTab?0:undefined}}>
-          <PostLiveForm key={tab.key||`${tabMode}-${activeDraftId||"new"}-${isEditingFromLog?"edit":"new"}`} mode={tabMode} draftData={tabDraftData} user={user} onTimerEnd={isActiveTab&&(alarmMins>0)?onTimerEnd:null} onQaTimerEnd={isActiveTab&&(qaAlarmMins>0)?onTimerEnd:null} specialRequestors={specialRequestors} timerLimitSecs={alarmMins*60} qaTimerLimitSecs={qaAlarmMins*60} isEditMode={tabIsEdit} isMinimisedResume={tabIsResumingMin} caseStartTime={tab.startTime!==undefined?tab.startTime:caseStartTimeRef.current} externalFormRef={isFirstTab?sharedFormRef:null} isResumingDraft={tabUseDraft} onTimerTick={tab.startTime!==null?t=>setTabTimerStates(prev=>({...prev,[tab.id]:t})):null} prolongedActive={prolongedActive} onProlongedDismiss={()=>{setProlongedActive(false);setProlongedDeadline(null);}} onProceedWithNext={prolongedMode?handleProceedWithNextCase:null} prolongedMinsForNext={prolongedMins} tabStorageKey={tab.id||null} onTabDataChange={({caseNum,businessName,complexity})=>setActiveLiveTabs(ts=>ts.map(t=>t.id===tab.id?{...t,caseNum,complexity:complexity||'minor',label:(t.mode==='inbound'?'Inbound Email':'Site Comment')+(businessName?' — '+businessName:'')+(caseNum?' #'+caseNum:'')}:t))}
+          <PostLiveForm key={tab.key||`${tabMode}-${activeDraftId||"new"}-${isEditingFromLog?"edit":"new"}`} mode={tabMode} draftData={tabDraftData} user={user} onTimerEnd={isActiveTab&&(alarmMins>0)?onTimerEnd:null} onQaTimerEnd={isActiveTab&&(qaAlarmMins>0)?onTimerEnd:null} specialRequestors={specialRequestors} timerLimitSecs={alarmMins*60} qaTimerLimitSecs={qaAlarmMins*60} isEditMode={tabIsEdit} isMinimisedResume={tabIsResumingMin} caseStartTime={tab.startTime!==undefined?tab.startTime:caseStartTimeRef.current} externalFormRef={isFirstTab?sharedFormRef:null} isResumingDraft={tabUseDraft} onTimerTick={tab.startTime!==null?t=>setTabTimerStates(prev=>({...prev,[tab.id]:t})):null} prolongedActive={prolongedActive} onProlongedDismiss={()=>{setProlongedActive(false);setProlongedDeadline(null);}} onProceedWithNext={prolongedMode?handleProceedWithNextCase:null} prolongedMinsForNext={prolongedMins} tabStorageKey={tab.id||null} onTabDataChange={({caseNum,businessName,complexity})=>setActiveLiveTabs(ts=>ts.map(t=>t.id===tab.id?{...t,caseNum,complexity:complexity||'minor',label:(t.mode==='inbound'?'Inbound Email':'Site Comment')+(businessName?' — '+businessName:'')+(caseNum?' #'+caseNum:'')}:t))} onOpenFileNameGenerator={()=>{if(typeof window!=="undefined") window.dispatchEvent(new Event("ch_case_saved")); setShowFnGen(true);}}
           originalOutcome={tabIsEdit?(editingCase.savedCase._saveOutcome||""):tabUseDraft?"Suspended":""}
           originalTotalSecs={(()=>{
             const targetCase = tabIsEdit ? editingCase.savedCase : tabDraftData;
