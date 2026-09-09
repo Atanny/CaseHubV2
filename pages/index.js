@@ -3031,6 +3031,13 @@ function PostLiveForm({ mode, onSave, onBack, onCancelForm, onSaveDraftDirect, o
 
       <div className="form-left">
 
+        {!isEditMode && (
+          <div style={{display:'flex',justifyContent:'flex-end',marginBottom:6}}>
+            <button type="button" onClick={()=>setModal("clear")} style={{background:'none',border:'none',color:'var(--muted)',fontSize:11,fontWeight:600,cursor:'pointer',display:'flex',alignItems:'center',gap:4,fontFamily:"'Poppins',sans-serif"}}>
+              <Icon name="clear" size={11} color="var(--muted)"/> Clear All Fields
+            </button>
+          </div>
+        )}
         <WizardStepBar activePage={activePage} goToPage={goToPage} isSC={isSC} pageDone={pageDoneMap} pageReachable={pageReachableMap} specialRequestors={specialRequestors}/>
 
         <StepCard num={1} title="Case Information" subtitle="Input the case information — all are required unless labeled optional" done={step1Done} isOpen={activePage===1}>
@@ -3281,59 +3288,34 @@ function PostLiveForm({ mode, onSave, onBack, onCancelForm, onSaveDraftDirect, o
               </button>
             </div>
           )}
-          {activePage===5 && <WizardNav showNext={false}/>}
+          <div className="wizard-nav" style={{justifyContent:"space-between"}}>
+            <div>{activePage>1 && <button type="button" className="wizard-nav-btn wizard-nav-back" onClick={goBack} aria-label="Back">←</button>}</div>
+            <div style={{display:"flex",gap:10}}>
+              {onProceedWithNext&&!isEditMode&&(
+                <button className="btn btn-outline-accent" onClick={()=>{
+                  const elapsed=Math.floor((Date.now()-startTimeRef.current)/1000);
+                  const f={...formRef.current,_saveOutcome:'completed',_elapsedAtSave:elapsed,_totalElapsed:elapsed};
+                  onSave&&onSave(f);
+                  onProceedWithNext(f, prolongedMinsForNext);
+                }}>Next Case</button>
+              )}
+              <button className="btn btn-primary" onClick={handleSave}>Submit This Case</button>
+            </div>
+          </div>
         </StepCard>
 
   
-      <div className="action-bar">
-  {isEditMode ? (
-    <>
-      <div className="action-group action-group-left">
-        <button 
-          className="btn btn-danger" 
-          style={{borderRadius:8}} 
-          onClick={() => onBack && onBack()} 
-        >
-          ✕ Cancel Edit
-        </button>
-
-      </div>
-      <div className="action-group action-group-center"/>
-      <div className="action-group action-group-right">
-        <button className="btn btn-save" style={{borderRadius:8}} onClick={handleSave}>💾 Save Case</button>
-      </div>
-    </>
-  ) : (
-    <>
-      <div className="action-group action-group-left">
-        {/* FIX: Using onBack here ensures new forms/inbound also cancel cleanly */}
-        <button 
-          className="btn btn-ghost" 
-          style={{borderRadius:8}} 
-          onClick={() => onBack && onBack()}
-        >
-          ← Back
-        </button>
-        <button className="btn btn-ghost" style={{borderRadius:8}} onClick={() => setModal("clear")}>🧹 Clear</button>
-
-      </div>
-
-      <div className="action-group action-group-center"/>
-
-      <div className="action-group action-group-right">
-        {onProceedWithNext&&!isEditMode&&(
-          <button className="btn" style={{borderRadius:8,background:"rgba(245,158,11,.15)",border:"1px solid rgba(245,158,11,.4)",color:"#f59e0b",fontWeight:700,fontSize:13}} onClick={()=>{
-            const elapsed=Math.floor((Date.now()-startTimeRef.current)/1000);
-            const f={...formRef.current,_saveOutcome:'completed',_elapsedAtSave:elapsed,_totalElapsed:elapsed};
-            onSave&&onSave(f);
-            onProceedWithNext(f, prolongedMinsForNext);
-          }}>⏭ Next Case</button>
-        )}
-        <button className="btn btn-save" style={{borderRadius:8}} onClick={handleSave}>✅ Save Case</button>
-      </div>
-    </>
-  )}
-</div>
+      {isEditMode && (
+        <div className="action-bar">
+          <div className="action-group action-group-left">
+            <button className="btn btn-danger" style={{borderRadius:8}} onClick={() => onBack && onBack()}>✕ Cancel Edit</button>
+          </div>
+          <div className="action-group action-group-center"/>
+          <div className="action-group action-group-right">
+            <button className="btn btn-save" style={{borderRadius:8}} onClick={handleSave}>💾 Save Case</button>
+          </div>
+        </div>
+      )}
 
         {modal==="clear"&&(<div className="modal-bg"><div className="modal"><div style={{marginBottom:14}}><Icon name="clear" size={40} color="var(--red)"/></div><h3>Clear All Fields?</h3><p style={{color:"var(--muted)",fontSize:13,marginBottom:20,lineHeight:1.6}}>All entered data will be cleared. The form stays open and the timer keeps running.</p><div className="modal-btns"><button className="btn btn-ghost" onClick={()=>setModal(null)}>Cancel</button><button className="btn btn-danger" onClick={()=>{
     setForm(emptyBase());
