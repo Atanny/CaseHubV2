@@ -480,7 +480,7 @@ body.light .sidebar-divider{background:rgba(180,90,40,.1);}
 .form-quick{width:220px;flex-shrink:0;padding:16px 12px 16px 0;display:flex;flex-direction:column;gap:14px;overflow-y:auto;}
 .quick-format-panel{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px;box-shadow:var(--shadow-sm);}
 .quick-format-header{display:flex;align-items:center;font-size:11px;font-weight:700;color:var(--text);text-transform:uppercase;letter-spacing:.4px;margin-bottom:10px;font-family:'Poppins',sans-serif;}
-.quick-format-row{display:flex;align-items:center;justify-content:space-between;width:100%;padding:9px 12px;margin-bottom:6px;border-radius:8px;border:1px solid var(--border);background:var(--entry-bg);color:var(--text);font-size:11px;font-weight:600;font-family:'Poppins',sans-serif;cursor:pointer;transition:.15s;}
+.quick-format-row{display:flex;align-items:center;justify-content:space-between;width:100%;padding:9px 12px;margin-bottom:6px;border-radius:8px;border:1px solid var(--border);background:#fbf9f4;color:var(--text);font-size:11px;font-weight:600;font-family:'Poppins',sans-serif;cursor:pointer;transition:.15s;}
 .quick-format-row:last-child{margin-bottom:0;}
 .quick-format-row:hover:not(:disabled){border-color:var(--accent);background:var(--entry-accent-bg);}
 .quick-format-row:disabled{opacity:.5;cursor:not-allowed;}
@@ -2453,48 +2453,6 @@ function StickyPanel({ startTimeRef, form, isSC, buildEntriesText, buildEmailTex
 )}
       </div>
 
-      {/* ── Right-side color dot rail ── */}
-      <div style={{
-        display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",
-        gap:10,padding:"10px 4px",
-        borderLeft:"1px solid var(--border)",
-        background:"var(--card)",
-        flexShrink:0,width:28,
-      }}>
-        {navDots.map(dot=>(
-          <button
-            key={dot.id}
-            onClick={()=>scrollToGroup(dot.id)}
-            title={dot.label}
-            style={{
-              display:"flex",flexDirection:"column",alignItems:"center",gap:3,
-              background:"none",border:"none",padding:"3px 2px",
-              cursor:"pointer",flexShrink:0,
-              borderRadius:6,
-              transition:".15s",
-            }}
-            onMouseEnter={e=>{e.currentTarget.style.background=`${dot.color}18`;}}
-            onMouseLeave={e=>{e.currentTarget.style.background="none";}}
-          >
-            <span style={{
-              width:9,height:9,borderRadius:"50%",
-              background:dot.color,
-              display:"inline-block",flexShrink:0,
-              opacity:.7,
-              transition:".15s",
-            }}/>
-            <span style={{
-              fontSize:7,fontWeight:800,
-              color:dot.color,
-              letterSpacing:".4px",
-              lineHeight:1,
-              fontFamily:"'Poppins',sans-serif",
-              opacity:.8,
-            }}>{dot.abbr}</span>
-          </button>
-        ))}
-      </div>
-
       </div>{/* closes flex body wrapper */}
     </div>
   );
@@ -2635,38 +2593,25 @@ const WIZARD_PAGES = [
 ];
 const STEP_PAGE = {1:1, 2:2, 3:2, 4:3, 5:3, 6:4, 7:4, 8:5};
 
-function WizardStepBar({ activePage, goToPage, isSC, pageDone={}, pageReachable={}, specialRequestors=[] }) {
+function WizardStepBar({ activePage, goToPage, isSC, pageDone={}, pageReachable={} }) {
   return (
-    <>
-      <div className="wizard-bar">
-        {WIZARD_PAGES.map((p,i)=>{
-          const label = typeof p.label==="function" ? p.label(isSC) : p.label;
-          const done = !!pageDone[p.page];
-          const active = activePage===p.page;
-          const reachable = !!pageReachable[p.page];
-          return (
-            <button key={p.page}
-              className={cls("wizard-bar-item", done&&"done", active&&"active", !reachable&&"disabled")}
-              disabled={!reachable}
-              onClick={()=>reachable&&goToPage(p.page)}>
-              <span className="wizard-bar-circle">{done?"✓":<span/>}</span>
-              <span className="wizard-bar-label">{label}</span>
-            </button>
-          );
-        })}
-      </div>
-      {(specialRequestors||[]).length>0&&(
-        <div className="toc-requestors" style={{marginBottom:14}}>
-          <div className="toc-req-title">Requestors</div>
-          {(specialRequestors||[]).map((name,i)=>(
-            <div key={i} className="toc-req-chip">
-              <span className="toc-req-avatar">{(name||"").split(" ").map(w=>w&&w[0]).filter(Boolean).join("").slice(0,2).toUpperCase()}</span>
-              {name}
-            </div>
-          ))}
-        </div>
-      )}
-    </>
+    <div className="wizard-bar">
+      {WIZARD_PAGES.map((p,i)=>{
+        const label = typeof p.label==="function" ? p.label(isSC) : p.label;
+        const done = !!pageDone[p.page];
+        const active = activePage===p.page;
+        const reachable = !!pageReachable[p.page];
+        return (
+          <button key={p.page}
+            className={cls("wizard-bar-item", done&&"done", active&&"active", !reachable&&"disabled")}
+            disabled={!reachable}
+            onClick={()=>reachable&&goToPage(p.page)}>
+            <span className="wizard-bar-circle">{done?"✓":<span/>}</span>
+            <span className="wizard-bar-label">{label}</span>
+          </button>
+        );
+      })}
+    </div>
   );
 }
 function PostLiveForm({ mode, onSave, onBack, onCancelForm, onSaveDraftDirect, onAutoSaveDraft, onStartBreak, onStartOpenHour, onStopOpenHour, openHourActive=false, breakActive=false, draftData, user, onTimerEnd, onQaTimerEnd, specialRequestors, timerLimitSecs, qaTimerLimitSecs=600, globalTimeIn, isEditMode=false, isMinimisedResume=false, caseStartTime=null, externalFormRef=null, isResumingDraft=false, originalOutcome="", originalTotalSecs=0, containerStyle={}, onTimerTick=null, prolongedActive=false, onProlongedDismiss=null, onProceedWithNext=null, prolongedMinsForNext=30, tabStorageKey=null, onTabDataChange=null, onOpenFileNameGenerator=null }) {
@@ -3040,7 +2985,7 @@ function PostLiveForm({ mode, onSave, onBack, onCancelForm, onSaveDraftDirect, o
             </button>
           </div>
         )}
-        <WizardStepBar activePage={activePage} goToPage={goToPage} isSC={isSC} pageDone={pageDoneMap} pageReachable={pageReachableMap} specialRequestors={specialRequestors}/>
+        <WizardStepBar activePage={activePage} goToPage={goToPage} isSC={isSC} pageDone={pageDoneMap} pageReachable={pageReachableMap}/>
 
         <StepCard num={1} title="Case Information" subtitle="Input the case information — all are required unless labeled optional" done={step1Done} isOpen={activePage===1}>
           <div className="field"><label>Case Number <span className="req">*</span></label><input className="inp" placeholder="e.g. 1234567" value={form.caseNum} onChange={e=>setF({caseNum:cleanSpaces(e.target.value)})}/></div>
