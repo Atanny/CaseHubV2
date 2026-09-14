@@ -385,7 +385,7 @@ body.light .sidebar-divider{background:rgba(180,90,40,.1);}
 
 /* ── Form Mode: main-area fills exactly, no outer scroll ── */
 .main-area.form-mode{overflow:hidden;padding:0;display:flex;flex-direction:column;}
-.main-area.form-mode > div{flex:1;overflow:hidden;display:flex;flex-direction:column;min-height:0;padding-bottom:68px;}
+.main-area.form-mode > div{flex:1;overflow:hidden;display:flex;flex-direction:column;min-height:0;}
 .main-area.form-mode .form-cols{flex:1;min-height:0;overflow:hidden;}
 .main-area.form-mode .page-header{margin-bottom:0;background:var(--glass-bg);backdrop-filter:var(--glass-blur);-webkit-backdrop-filter:var(--glass-blur);flex-shrink:0;}
 /* Live Summary and Steps col: flush, square, same glass bg */
@@ -477,13 +477,15 @@ body.light .sidebar-divider{background:rgba(180,90,40,.1);}
 .btn-green{background:linear-gradient(135deg,#4c8a56,#3a6e43);color:#fff;border:1px solid #fff;}
 .btn-green:hover{filter:brightness(1.08);}
 .spacer{flex:1;}
-.form-quick{width:220px;flex-shrink:0;padding:16px 12px 16px 0;display:flex;flex-direction:column;gap:14px;overflow-y:auto;}
-.quick-format-panel{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px;box-shadow:var(--shadow-sm);}
-.quick-format-header{display:flex;align-items:center;font-size:11px;font-weight:700;color:var(--text);text-transform:uppercase;letter-spacing:.4px;margin-bottom:10px;font-family:'Poppins',sans-serif;}
-.quick-format-row{display:flex;align-items:center;justify-content:space-between;width:100%;padding:9px 12px;margin-bottom:6px;border-radius:8px;border:1px solid var(--border);background:#fbf9f4;color:var(--text);font-size:11px;font-weight:600;font-family:'Poppins',sans-serif;cursor:pointer;transition:.15s;}
+.form-quick{width:220px;flex-shrink:0;padding:16px 12px 16px 0;display:flex;flex-direction:column;gap:8px;overflow-y:auto;}
+.quick-format-panel{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:12px;box-shadow:var(--shadow-sm);}
+.quick-format-header{display:flex;align-items:center;font-size:11px;font-weight:700;color:var(--text);text-transform:uppercase;letter-spacing:.4px;margin-bottom:8px;font-family:'Poppins',sans-serif;}
+.quick-format-row{display:flex;align-items:center;justify-content:space-between;width:100%;padding:8px 12px;margin-bottom:5px;border-radius:8px;border:1px solid var(--border);background:#fbf9f4;color:var(--text);font-size:11px;font-weight:600;font-family:'Poppins',sans-serif;cursor:pointer;transition:.15s;}
 .quick-format-row:last-child{margin-bottom:0;}
 .quick-format-row:hover:not(:disabled){border-color:var(--accent);background:var(--entry-accent-bg);}
 .quick-format-row:disabled{opacity:.5;cursor:not-allowed;}
+.btn-alert{background:linear-gradient(135deg,#e0a339,#c8863a);color:#fff;border:1px solid #fff;}
+.btn-alert:hover{filter:brightness(1.06);}
 @media (max-width: 1180px){.form-quick{display:none;}}
 
 .action-bar{
@@ -597,7 +599,7 @@ body.light .action-bar{background:rgba(255,248,243,.92);}
 .pl-type-sub{font-size:11px;color:var(--muted);margin-top:3px;font-family:'Poppins',sans-serif;}
 /* Form layout */
 .form-cols{display:flex;gap:0;align-items:stretch;flex-wrap:nowrap;}
-.form-left{flex:1;min-width:0;padding-bottom:140px;overflow-wrap:break-word;word-break:break-word;overflow-y:auto;padding-right:12px;padding-left:32px;padding-top:16px;}
+.form-left{flex:1;min-width:0;padding-bottom:24px;overflow-wrap:break-word;word-break:break-word;overflow-y:auto;padding-right:12px;padding-left:32px;padding-top:16px;}
 .form-right{
   width:280px;
   flex-shrink:0;
@@ -2976,7 +2978,7 @@ function PostLiveForm({ mode, onSave, onBack, onCancelForm, onSaveDraftDirect, o
         <StickyPanel startTimeRef={startTimeRef} form={form} isSC={isSC} buildEntriesText={buildEntriesText} buildEmailText={buildEmailText} onTimerEnd={onTimerEnd} onQaTimerEnd={onQaTimerEnd} specialRequestors={specialRequestors} timerLimitSecs={timerLimitSecs} qaTimerLimitSecs={qaTimerLimitSecs} greetingMessages={user?.greetingMessages} footerElapsed={footerElapsed} phase2Elapsed={phase2Elapsed}/>
       </div>
 
-      <div className="form-left">
+      <div className="form-left" style={isEditMode?{paddingBottom:140}:undefined}>
 
         {!isEditMode && (
           <div style={{display:'flex',justifyContent:'flex-end',marginBottom:6}}>
@@ -3404,7 +3406,7 @@ function PostLiveForm({ mode, onSave, onBack, onCancelForm, onSaveDraftDirect, o
 
       <div className="form-quick">
         <div className="quick-format-panel">
-          <div className="quick-format-header">Quick Format &amp; Lyrics <button type="button" title="Add" style={{marginLeft:'auto',width:20,height:20,borderRadius:'50%',border:'1px solid var(--border)',background:'none',color:'var(--muted)',cursor:'pointer',fontSize:12,display:'flex',alignItems:'center',justifyContent:'center'}}>+</button></div>
+          <div className="quick-format-header">Quick Format &amp; Lyrics <button type="button" title="Add" style={{marginLeft:'auto',width:22,height:22,borderRadius:6,border:'1px solid var(--border)',background:'none',color:'var(--muted)',cursor:'pointer',fontSize:13,display:'flex',alignItems:'center',justifyContent:'center'}}>+</button></div>
           <button type="button" className="quick-format-row" onClick={()=>{copyToClipboard(isSC?buildEntriesText():buildEmailText());showToast('SR Format copied ✅');}}>
             <span>SR Format</span><Icon name="copy" size={13} color="var(--muted)"/>
           </button>
@@ -3414,10 +3416,8 @@ function PostLiveForm({ mode, onSave, onBack, onCancelForm, onSaveDraftDirect, o
           <button type="button" className="quick-format-row" disabled title="Not yet configured for this case type">
             <span>No SC Lyrics</span><Icon name="copy" size={13} color="var(--muted)"/>
           </button>
-        </div>
-        <div className="quick-format-panel">
-          <div className="quick-format-header">Quick Tools</div>
-          <button type="button" className="quick-format-row" onClick={()=>onOpenFileNameGenerator?onOpenFileNameGenerator():showToast('Open File Name Generator from the sidebar 📁')}>
+          <div className="quick-format-header" style={{marginTop:10}}>Quick Tools</div>
+          <button type="button" className="quick-format-row" style={{marginBottom:0}} onClick={()=>onOpenFileNameGenerator?onOpenFileNameGenerator():showToast('Open File Name Generator from the sidebar 📁')}>
             <span>File Name Generator</span><Icon name="download" size={13} color="var(--muted)"/>
           </button>
         </div>
@@ -3442,7 +3442,7 @@ function PostLiveForm({ mode, onSave, onBack, onCancelForm, onSaveDraftDirect, o
             <Icon name="calendar" size={14} color="var(--accent)"/>Meeting
           </button>
         )}
-        {!isResumingDraft&&<button className="btn btn-draft" style={{justifyContent:'center'}} onClick={handleDraft}>Suspend Case</button>}
+        {!isResumingDraft&&<button className="btn btn-alert" style={{justifyContent:'center'}} onClick={handleDraft}>Suspend Case</button>}
       </div>
 
       <Toast msg={toast.msg} type={toast.type}/>
