@@ -426,6 +426,7 @@ body.light .sidebar-divider{background:rgba(180,90,40,.1);}
 /* Page header */
 .page-header{margin-bottom:28px;}
 .pl-dark-header{background:linear-gradient(135deg,#40513b,#33402f);border-radius:12px 12px 0 0;}
+.main-area.form-mode .page-header.pl-dark-header{background:linear-gradient(135deg,#40513b,#33402f) !important;backdrop-filter:none !important;-webkit-backdrop-filter:none !important;}
 .main-area.form-mode .page-header{display:flex;flex-direction:row;align-items:center;gap:0;justify-content:space-between;flex-wrap:wrap;}
 .main-area.form-mode .page-header>div:first-child{flex:1;min-width:0;}
 .page-title{font-size:26px;font-weight:800;letter-spacing:-.4px;}
@@ -444,6 +445,7 @@ body.light .sidebar-divider{background:rgba(180,90,40,.1);}
   border:none;transition:.2s;display:inline-flex;align-items:center;gap:10px;
   letter-spacing:.02em;font-family:'Poppins',sans-serif;
   box-shadow:2px 5px 10px 0px rgba(64,81,59,.1);
+  white-space:nowrap;flex-shrink:0;
 }
 .btn::after{
   content:'';width:16px;height:16px;flex-shrink:0;
@@ -1678,7 +1680,7 @@ function CopyName({ name, onCopy }) {
       <span className="copy-name-text">{name}</span>
       <button className={cls("copy-btn",c&&"green")}
         onClick={()=>copyToClipboard(name).then(()=>{setC(true);onCopy&&onCopy();setTimeout(()=>setC(false),1800);})}>
-        {c?"✓ Copied!":"Copy"}
+        {c?"Copied!":"Copy"}
       </button>
     </div>
   );
@@ -2090,7 +2092,7 @@ function ImageUpload({ baseName, multiple, onImages, immediateUpload=false, init
               <div className="img-thumb" style={{position:"relative"}}>
                 <img src={img.url} alt=""/>
                 <button className="img-thumb-del" onClick={()=>remove(img.id)}>✕</button>
-                {img._inDB && <div style={{position:"absolute",bottom:0,left:0,right:0,background:"rgba(16,185,129,.85)",color:"#fff",fontSize:9,textAlign:"center",padding:"1px 0"}}>✓ in DB</div>}
+                {img._inDB && <div style={{position:"absolute",bottom:0,left:0,right:0,background:"rgba(16,185,129,.85)",color:"#fff",fontSize:9,textAlign:"center",padding:"1px 0"}}>in DB</div>}
                 {!img._inDB && <div style={{position:"absolute",bottom:0,left:0,right:0,background:"rgba(245,158,11,.85)",color:"#fff",fontSize:9,textAlign:"center",padding:"1px 0"}}>⏳ on save</div>}
               </div>
               <button className="img-dl-btn" onClick={()=>dl(img)}>⬇ Save</button>
@@ -2134,8 +2136,8 @@ function EntryCard({ entry, label, index, onChange, onDelete, showNumber, onDrag
       ) : (
         <>
           {showNumber&&(<div className="field"><label>Number <span className="req">*</span></label><input draggable={false} className="inp" placeholder="e.g. 25" value={entry.number} onChange={e=>onChange({...entry,number:e.target.value})}/></div>)}
-          <div className="field"><label>Note (optional)</label><textarea draggable={false} className="inp" rows={3} value={entry.note} onChange={e=>onChange({...entry,note:e.target.value})} placeholder="Describe what was done or assumed..."/><div className="ai-row"><button className="ai-btn" disabled={!entry.note?.trim()||checking==="note"} onClick={()=>ai("note")}>{checking==="note"?"Checking...":(checking===`fixed-note`?"✓ Fixed!":"Grammar Check")}</button></div></div>
-          <div className="field"><label>Clarification (optional)</label><textarea draggable={false} className="inp" rows={3} value={entry.clarification} onChange={e=>onChange({...entry,clarification:e.target.value})} placeholder="Confirmation or extra details..."/><div className="ai-row"><button className="ai-btn" disabled={!entry.clarification?.trim()||checking==="clarification"} onClick={()=>ai("clarification")}>{checking==="clarification"?"Checking...":(checking===`fixed-clarification`?"✓ Fixed!":"Grammar Check")}</button></div></div>
+          <div className="field"><label>Note (optional)</label><textarea draggable={false} className="inp" rows={3} value={entry.note} onChange={e=>onChange({...entry,note:e.target.value})} placeholder="Describe what was done or assumed..."/><div className="ai-row"><button className="ai-btn" disabled={!entry.note?.trim()||checking==="note"} onClick={()=>ai("note")}>{checking==="note"?"Checking...":(checking===`fixed-note`?"Fixed!":"Grammar Check")}</button></div></div>
+          <div className="field"><label>Clarification (optional)</label><textarea draggable={false} className="inp" rows={3} value={entry.clarification} onChange={e=>onChange({...entry,clarification:e.target.value})} placeholder="Confirmation or extra details..."/><div className="ai-row"><button className="ai-btn" disabled={!entry.clarification?.trim()||checking==="clarification"} onClick={()=>ai("clarification")}>{checking==="clarification"?"Checking...":(checking===`fixed-clarification`?"Fixed!":"Grammar Check")}</button></div></div>
         </>
       )}
     </div>
@@ -2227,7 +2229,7 @@ function GreetingRow({ greetingMessages, caseNum, inboundNum, isSC }) {
               whiteSpace:"nowrap",
             }}
           >
-            {copiedId===m.id?"✓ Copied":m.label||"Message"}
+            {copiedId===m.id?"Copied":m.label||"Message"}
           </button>
         ))}
       </div>
@@ -2432,7 +2434,7 @@ function StickyPanel({ startTimeRef, form, isSC, buildEntriesText, buildEmailTex
             color: "#fff", fontSize: 8, textAlign: "center",
             padding: "2px 0", fontWeight: 700, letterSpacing: ".3px",
           }}>
-            {img._inDB ? "✓ SAVED" : "⏳ ON SAVE"}
+            {img._inDB ? "SAVED" : "⏳ ON SAVE"}
           </div>
         </div>
       ))}
@@ -2442,9 +2444,9 @@ function StickyPanel({ startTimeRef, form, isSC, buildEntriesText, buildEmailTex
     <div style={{marginTop:6,fontSize:11,fontWeight:700,textAlign:"center",transition:".2s",
       color: dlState==="done"?"var(--green)":dlState==="downloading"?"var(--accent)":dlState==="error"?"var(--red)":"var(--muted)",
     }}>
-      {dlState==="done"   && "✅ Download Complete!"}
+      {dlState==="done"   && "Download Complete!"}
       {dlState==="downloading" && "⏳ Downloading…"}
-      {dlState==="error"  && "❌ Download failed"}
+      {dlState==="error"  && "Download failed"}
       {dlState==="idle"   && "Click to download All"}
     </div>
   </div>
@@ -2583,7 +2585,7 @@ function TimerBar({ footerElapsed, resumeElapsed, phase2Elapsed, isDraftResumed,
       <span style={{fontSize:9,color:color||"var(--muted)",fontFamily:"'Poppins',sans-serif",fontWeight:700,textTransform:"uppercase",letterSpacing:".5px",opacity:.8,display:"flex",alignItems:"center",gap:4}}>
         {label}
         {extra.pulsing&&<span style={{width:6,height:6,borderRadius:"50%",background:"var(--green)",display:"inline-block",animation:"pulse-dot 1.2s infinite"}}/>}
-        {extra.paused&&<span style={{fontSize:8,color:"var(--muted)",fontWeight:600,opacity:.7}}>⏸ paused</span>}
+        {extra.paused&&<span style={{fontSize:8,color:"var(--muted)",fontWeight:600,opacity:.7}}>paused</span>}
       </span>
       <span style={{fontSize:28,fontWeight:800,fontFamily:"'Plus Jakarta Sans',sans-serif",color:color||"var(--accent)",letterSpacing:"-1.5px",fontVariantNumeric:"tabular-nums"}}>{fmtElapsed(val)}</span>
     </div>
@@ -2983,7 +2985,7 @@ function PostLiveForm({ mode, onSave, onBack, onCancelForm, onSaveDraftDirect, o
       await onSaveDraftDirect(getCleanForm());
     }catch(e){
       setDraftSaving(false);
-      showToast("❌ Failed to Suspend Case — check connection","error");
+      showToast("Failed to Suspend Case — check connection","error");
     }
   };
 
@@ -3187,7 +3189,7 @@ function PostLiveForm({ mode, onSave, onBack, onCancelForm, onSaveDraftDirect, o
               </div>
             </div>
           )}
-          <button className={cls("copy-all-btn",copiedAll&&"copied")} onClick={handleCopyAll}>{copiedAll?"✓ Copied!":"📋 Copy All "+(isSC?"Site Comments":"Assumptions + Email")}</button>
+          <button className={cls("copy-all-btn",copiedAll&&"copied")} onClick={handleCopyAll}>{copiedAll?"Copied!":"Copy All "+(isSC?"Site Comments":"Assumptions + Email")}</button>
           {/* Device Check — folded into the same wizard page as the notepad, matching the Figma "Notepad/Assumption" tab */}
           <div className="check-devices-inline">
             <label className="wizard-subsection-label">Check Devices</label>
@@ -3260,7 +3262,7 @@ function PostLiveForm({ mode, onSave, onBack, onCancelForm, onSaveDraftDirect, o
             ));
           })()}
           <div className="field" style={{marginTop:14,marginBottom:0}}>
-            <label style={{fontSize:10,fontWeight:700,color:"var(--accent)",marginBottom:4,display:"block",textTransform:"uppercase",letterSpacing:".7px"}}>🔗 Tracker Link</label>
+            <label style={{fontSize:10,fontWeight:700,color:"var(--accent)",marginBottom:4,display:"block",textTransform:"uppercase",letterSpacing:".7px"}}>Tracker Link</label>
             <input
               className="inp"
               type="url"
@@ -3308,11 +3310,11 @@ function PostLiveForm({ mode, onSave, onBack, onCancelForm, onSaveDraftDirect, o
       {isEditMode && (
         <div className="action-bar">
           <div className="action-group action-group-left">
-            <button className="btn btn-danger" style={{borderRadius:8}} onClick={() => onBack && onBack()}>✕ Cancel Edit</button>
+            <button className="btn btn-danger" style={{borderRadius:8}} onClick={() => onBack && onBack()}>Cancel Edit</button>
           </div>
           <div className="action-group action-group-center"/>
           <div className="action-group action-group-right">
-            <button className="btn btn-save" style={{borderRadius:8}} onClick={handleSave}>💾 Save Case</button>
+            <button className="btn btn-save" style={{borderRadius:8}} onClick={handleSave}>Save Case</button>
           </div>
         </div>
       )}
@@ -3365,7 +3367,7 @@ function PostLiveForm({ mode, onSave, onBack, onCancelForm, onSaveDraftDirect, o
           </div>
           <div className="modal-btns">
             <button className="btn btn-ghost" onClick={()=>setModal(null)}>Keep Editing</button>
-            <button className="btn btn-draft" onClick={confirmSaveDraft} disabled={draftSaving} style={{opacity:draftSaving?.6:1}}>{draftSaving?"Saving…":"💾 Save & Go Back"}</button>
+            <button className="btn btn-draft" onClick={confirmSaveDraft} disabled={draftSaving} style={{opacity:draftSaving?.6:1}}>{draftSaving?"Saving…":"Save & Go Back"}</button>
           </div>
         </div></div>)}
         {modal==="breakConfirm"&&breakConfirmData&&(<div className="modal-bg"><div className="modal">
@@ -3391,7 +3393,7 @@ function PostLiveForm({ mode, onSave, onBack, onCancelForm, onSaveDraftDirect, o
                   }
                 }catch(e){
                   setDraftSaving(false);
-                  showToast("❌ Failed to suspend case — check connection","error");
+                  showToast("Failed to suspend case — check connection","error");
                 }
               }}
             >
@@ -3693,7 +3695,7 @@ function SavedCaseCard({ c, openId, setOpenId, idx=0, onEdit }) {
           <div className="saved-meta">{c.amendType} · {c.savedAt}{c.endedAt&&<span style={{marginLeft:8,color:"var(--green)",fontWeight:700}}>✓ {c.endedAt}</span>}</div>
         </div>
         <span className="saved-type">{isSC?"Site Comment":"Inbound Email"}</span>
-        {(()=>{const b=c._bundledWith;if(!b)return null;const nums=(Array.isArray(b)?b:[b]).filter(Boolean);if(!nums.length)return null;const isMulti=nums.length>1;const col=isMulti?"#f59e0b":"#10b981";const bg=isMulti?"rgba(245,158,11,.14)":"rgba(16,185,129,.14)";const bdr=isMulti?"1px solid rgba(245,158,11,.35)":"1px solid rgba(16,185,129,.35)";return <span style={{fontSize:10,padding:"2px 8px",borderRadius:20,background:bg,border:bdr,color:col,fontWeight:700,flexShrink:0,fontFamily:"'Poppins',sans-serif"}}>🔗 w/ #{nums.join(", #")}</span>;})()}
+        {(()=>{const b=c._bundledWith;if(!b)return null;const nums=(Array.isArray(b)?b:[b]).filter(Boolean);if(!nums.length)return null;const isMulti=nums.length>1;const col=isMulti?"#f59e0b":"#10b981";const bg=isMulti?"rgba(245,158,11,.14)":"rgba(16,185,129,.14)";const bdr=isMulti?"1px solid rgba(245,158,11,.35)":"1px solid rgba(16,185,129,.35)";return <span style={{fontSize:10,padding:"2px 8px",borderRadius:20,background:bg,border:bdr,color:col,fontWeight:700,flexShrink:0,fontFamily:"'Poppins',sans-serif"}}>w/ #{nums.join(", #")}</span>;})()}
         {onEdit&&<button className="btn btn-ghost" style={{fontSize:10,padding:"3px 10px",marginLeft:4}} onClick={e=>{e.stopPropagation();onEdit(c);}}><Icon name="edit" size={11} style={{marginRight:3}}/>Edit</button>}
         <span style={{color:"var(--muted)",fontSize:12,transition:".25s",display:"inline-block",transform:open?"rotate(180deg)":"none"}}>▼</span>
       </div>
@@ -3715,7 +3717,7 @@ function SavedCaseCard({ c, openId, setOpenId, idx=0, onEdit }) {
           )}
           {!isSC&&c.emailAddress&&(<div style={{fontSize:13,color:"var(--muted)",marginBottom:8}}><Icon name="inbound" size={12} style={{marginRight:4,verticalAlign:"middle"}}/>{c.emailType==="clarification"?"Clarification":"Completed"} → <span style={{color:"var(--text)",fontWeight:600}}>{c.emailAddress}</span></div>)}
           <div style={{marginBottom:8}}>
-            <div style={{fontSize:10,fontWeight:700,textTransform:"uppercase",letterSpacing:".8px",color:"var(--muted)",marginBottom:5,fontFamily:"'Poppins',sans-serif"}}>🔗 Tracker Link</div>
+            <div style={{fontSize:10,fontWeight:700,textTransform:"uppercase",letterSpacing:".8px",color:"var(--muted)",marginBottom:5,fontFamily:"'Poppins',sans-serif"}}>Tracker Link</div>
             {c.trackerChecklistLink ? (
               <a href={c.trackerChecklistLink} target="_blank" rel="noopener noreferrer"
                 style={{display:"inline-flex",alignItems:"center",gap:6,fontSize:12,fontWeight:600,color:"var(--accent)",wordBreak:"break-all",padding:"5px 10px",background:"var(--entry-accent-bg)",border:"1px solid rgba(64,81,59,.2)",borderRadius:8,textDecoration:"none",transition:".15s",maxWidth:"100%"}}
@@ -4454,14 +4456,14 @@ function PostLivePage({ onSaveCase, onUpdateCase, onUpdateDraft, onFormActive, o
               <div>
                 <div className="break-label">{breakTimer.label.split(" ").slice(1).join(" ")}</div>
                 <div style={{fontSize:10,color:"var(--muted)"}}>
-                  {breakTimer.ended?"✅ Break over!":breakTimer.warned?"⚠️ 5 min warning!":"On break"}
+                  {breakTimer.ended?"Break over!":breakTimer.warned?"⚠️ 5 min warning!":"On break"}
                 </div>
               </div>
               <div className="break-time">{breakTimer.ended?"Done!":mm+":"+ss}</div>
               <div className="break-progress" style={{flex:1}}>
                 <div className="break-progress-fill" style={{width:pct+"%"}}/>
               </div>
-              <button className="break-stop" onClick={onStopBreak}>✕ End</button>
+              <button className="break-stop" onClick={onStopBreak}>End</button>
             </div>
           );
         })()}
@@ -4475,7 +4477,7 @@ function PostLivePage({ onSaveCase, onUpdateCase, onUpdateDraft, onFormActive, o
               <div style={{fontSize:10,color:"var(--muted)"}}>Active — session timer paused</div>
             </div>
             <div className="break-progress" style={{flex:1}}/>
-            <button className="break-stop" onClick={onStopOpenHour}>✕ End</button>
+            <button className="break-stop" onClick={onStopOpenHour}>End</button>
           </div>
         )}
 
@@ -4698,7 +4700,7 @@ function PostLivePage({ onSaveCase, onUpdateCase, onUpdateDraft, onFormActive, o
           <div className="modal-bg" onClick={e=>{if(e.target===e.currentTarget)setShowFnGen(false);}}>
             <div style={{background:"var(--glass-bg)",border:"1px solid var(--glass-border)",backdropFilter:"var(--glass-blur)",WebkitBackdropFilter:"var(--glass-blur)",borderRadius:14,padding:"24px 28px",width:"95%",maxWidth:1100,maxHeight:"90vh",display:"flex",flexDirection:"column",boxShadow:"var(--glass-shadow)",overflowY:"auto"}}>
               <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:16,flexShrink:0}}>
-                <h3 style={{margin:0,fontSize:18,fontWeight:700}}>📋 File Name Generator</h3>
+                <h3 style={{margin:0,fontSize:18,fontWeight:700}}>File Name Generator</h3>
                 <button onClick={()=>setShowFnGen(false)} style={{background:"none",border:"none",cursor:"pointer",fontSize:22,color:"var(--muted)",lineHeight:1}}>×</button>
               </div>
               {(()=>{
@@ -4867,7 +4869,7 @@ function PostLivePage({ onSaveCase, onUpdateCase, onUpdateDraft, onFormActive, o
           <p style={{color:"var(--muted)",fontSize:13,marginBottom:20,lineHeight:1.6}}>This case will be moved to the <strong style={{color:"var(--text)"}}>Archive</strong> page. You can view it there anytime — nothing is permanently deleted.</p>
           <div className="modal-btns">
             <button className="btn btn-ghost" onClick={()=>setDeleteDraftConfirm(null)}>Keep Suspended</button>
-            <button className="btn btn-primary" style={{background:"var(--amber)",borderColor:"var(--amber)"}} onClick={()=>{onArchiveDraft&&onArchiveDraft(deleteDraftConfirm.id,deleteDraftConfirm.mode);setDeleteDraftConfirm(null);}}>📦 Move to Archive</button>
+            <button className="btn btn-primary" style={{background:"var(--amber)",borderColor:"var(--amber)"}} onClick={()=>{onArchiveDraft&&onArchiveDraft(deleteDraftConfirm.id,deleteDraftConfirm.mode);setDeleteDraftConfirm(null);}}>Move to Archive</button>
           </div>
         </div></div>)}
         <button className="pl-type-btn" disabled={amendTypesDisabled||prolongedActive} onClick={()=>enterMode("siteComment")} style={{opacity:(amendTypesDisabled||prolongedActive)?.4:1,flex:1,minWidth:220}}>
@@ -4983,7 +4985,7 @@ function PostLivePage({ onSaveCase, onUpdateCase, onUpdateDraft, onFormActive, o
       }}
     >
       Start a new case bundled with an existing one. A{" "}
-      <span style={{ color: "#10b981", fontWeight: 700 }}>🔗 Bundled</span>{" "}
+      <span style={{ color: "#10b981", fontWeight: 700 }}>Bundled</span>{" "}
       badge will appear on <strong>both</strong> cases in Case History.
     </p>
 
@@ -5130,10 +5132,10 @@ function PostLivePage({ onSaveCase, onUpdateCase, onUpdateDraft, onFormActive, o
 
           const statusLabel =
             sel.source === "suspended"
-              ? "⏸ Suspended"
+              ? "Suspended"
               : sel.source === "saved"
-              ? "✅ Saved"
-              : "🕐 Session";
+              ? "Saved"
+              : "Session";
 
           return (
             <div
@@ -5271,7 +5273,7 @@ function PostLivePage({ onSaveCase, onUpdateCase, onUpdateDraft, onFormActive, o
           );
 
           showToast(
-            "🔗 Bundle set — info from the existing case has been pre-filled",
+            "Bundle set — info from the existing case has been pre-filled",
             "info"
           );
         }}
@@ -5316,7 +5318,7 @@ function PostLivePage({ onSaveCase, onUpdateCase, onUpdateDraft, onFormActive, o
                 )}
               </div>
               <span className="draft-badge">{d._mode==="siteComment"?"Site Comment":"Inbound Email"}</span>
-              {(()=>{const b=d._bundledWith;if(!b)return null;const nums=(Array.isArray(b)?b:[b]).filter(Boolean);if(!nums.length)return null;const isMulti=nums.length>1;const col=isMulti?"#f59e0b":"#10b981";const bg=isMulti?"rgba(245,158,11,.14)":"rgba(16,185,129,.14)";const bdr=isMulti?"1px solid rgba(245,158,11,.35)":"1px solid rgba(16,185,129,.35)";return <span style={{fontSize:10,padding:"2px 8px",borderRadius:20,background:bg,border:bdr,color:col,fontWeight:700,flexShrink:0,fontFamily:"'Poppins',sans-serif"}}>🔗 w/ #{nums.join(", #")}</span>;})()}
+              {(()=>{const b=d._bundledWith;if(!b)return null;const nums=(Array.isArray(b)?b:[b]).filter(Boolean);if(!nums.length)return null;const isMulti=nums.length>1;const col=isMulti?"#f59e0b":"#10b981";const bg=isMulti?"rgba(245,158,11,.14)":"rgba(16,185,129,.14)";const bdr=isMulti?"1px solid rgba(245,158,11,.35)":"1px solid rgba(16,185,129,.35)";return <span style={{fontSize:10,padding:"2px 8px",borderRadius:20,background:bg,border:bdr,color:col,fontWeight:700,flexShrink:0,fontFamily:"'Poppins',sans-serif"}}>w/ #{nums.join(", #")}</span>;})()}
               <button className="draft-resume" disabled={!timedIn||breakActive||isMinimised} onClick={()=>enterMode(d._mode, true, d._id)} style={{opacity:(!timedIn||breakActive||isMinimised)?.45:1,cursor:(!timedIn||breakActive||isMinimised)?"not-allowed":"pointer"}}><Icon name="play" size={11} style={{marginRight:4}}/> Continue</button>
               <button
                 className="entry-del"
@@ -5432,7 +5434,7 @@ function PostLivePage({ onSaveCase, onUpdateCase, onUpdateDraft, onFormActive, o
 
   const hasDuplicateCases=Object.values(caseNumCounts).some(v=>v>1);
   return <>
-    {hasDuplicateCases&&<div style={{padding:"10px 16px",background:"rgba(245,158,11,.1)",borderBottom:"1px solid rgba(245,158,11,.2)",fontSize:11,fontWeight:700,color:"var(--amber)",fontFamily:"'Poppins',sans-serif"}}>⚠ Duplicate case numbers — only the latest entry per case can be edited.</div>}
+    {hasDuplicateCases&&<div style={{padding:"10px 16px",background:"rgba(245,158,11,.1)",borderBottom:"1px solid rgba(245,158,11,.2)",fontSize:11,fontWeight:700,color:"var(--amber)",fontFamily:"'Poppins',sans-serif"}}>Duplicate case numbers — only the latest entry per case can be edited.</div>}
     
     <div className="session-log-table-head">
       <span>Case Number</span><span>Status</span><span>Started</span><span>Ended</span><span>Duration</span><span>Complexity</span><span>Outcome</span><span>Actions</span>
@@ -5581,7 +5583,7 @@ function PostLivePage({ onSaveCase, onUpdateCase, onUpdateDraft, onFormActive, o
               const bdr = isMulti ? "1px solid rgba(245,158,11,.35)" : "1px solid rgba(16,185,129,.35)";
               return (
                 <span style={{display:"inline-flex",alignItems:"center",gap:3,fontSize:9,fontWeight:800,color:col,background:bg,border:bdr,padding:"2px 7px",borderRadius:20,whiteSpace:"nowrap",fontFamily:"'Poppins',sans-serif",lineHeight:1.4}}>
-                  {isSavedBundle ? `🔗 w/ #${bundleNums.join(", #")}` : isChosenBundle ? "🔗 Bundling w/ new case" : `🔗 Bundle of #${activeBundleCaseNum}`}
+                  {isSavedBundle ? `🔗 w/ #${bundleNums.join(", #")}` : isChosenBundle ? "Bundling w/ new case" : `🔗 Bundle of #${activeBundleCaseNum}`}
                 </span>
               );
             })()}
@@ -5620,11 +5622,11 @@ function PostLivePage({ onSaveCase, onUpdateCase, onUpdateDraft, onFormActive, o
           </span>
           <div>
             {isDeleted?(
-              <span style={{fontSize:10,fontWeight:700,color:"#c54446",fontFamily:"'Poppins',sans-serif",background:"rgba(197,68,70,.12)",padding:"3px 8px",borderRadius:2,border:"1px solid rgba(197,68,70,.3)"}}>🗑 Deleted</span>
+              <span style={{fontSize:10,fontWeight:700,color:"#c54446",fontFamily:"'Poppins',sans-serif",background:"rgba(197,68,70,.12)",padding:"3px 8px",borderRadius:2,border:"1px solid rgba(197,68,70,.3)"}}>Deleted</span>
             ):(outcome==="Prolonged"||outcome==="Pending")?(
               <span style={{fontSize:9,fontWeight:700,color:"#f59e0b",fontFamily:"'Poppins',sans-serif",background:"rgba(245,158,11,.1)",padding:"3px 8px",borderRadius:6,border:"1px solid rgba(245,158,11,.3)"}}>⏳ Tracker pending</span>
             ):outcome==="Completed Prolonged"?(
-              <span style={{fontSize:9,fontWeight:700,color:"var(--green)",fontFamily:"'Poppins',sans-serif",background:"rgba(16,185,129,.1)",padding:"3px 8px",borderRadius:6,border:"1px solid rgba(16,185,129,.3)"}}>✅ Prolonged done</span>
+              <span style={{fontSize:9,fontWeight:700,color:"var(--green)",fontFamily:"'Poppins',sans-serif",background:"rgba(16,185,129,.1)",padding:"3px 8px",borderRadius:6,border:"1px solid rgba(16,185,129,.3)"}}>Prolonged done</span>
             ):showButton?(
               <button
                 className="session-log-edit-btn"
@@ -5822,7 +5824,7 @@ function PostLivePage({ onSaveCase, onUpdateCase, onUpdateDraft, onFormActive, o
 
           <div className="modal-btns">
             <button className="btn btn-ghost" onClick={()=>setEditCase(null)}>Cancel</button>
-            <button className="btn btn-save" onClick={()=>{onUpdateCase&&onUpdateCase(editCase._id,editCase);setEditCase(null);showToast("Case updated ✅");}}>💾 Save Changes</button>
+            <button className="btn btn-save" onClick={()=>{onUpdateCase&&onUpdateCase(editCase._id,editCase);setEditCase(null);showToast("Case updated ✅");}}>Save Changes</button>
           </div>
         </div></div>
         );
@@ -6004,7 +6006,7 @@ function EditableCaseCard({ c, onUpdate, onRequestDelete, onLightbox, openId, se
               const nums = Array.isArray(bundled) ? bundled : [bundled];
               if(!nums.length) return null;
               const isMulti=nums.length>1;const col=isMulti?"#f59e0b":"#10b981";const bg=isMulti?"rgba(245,158,11,.14)":"rgba(16,185,129,.14)";const bdr=isMulti?"1px solid rgba(245,158,11,.35)":"1px solid rgba(16,185,129,.35)";
-              return <span style={{marginLeft:4,fontSize:10,padding:"2px 9px",borderRadius:20,background:bg,border:bdr,color:col,fontWeight:700,fontFamily:"'Poppins',sans-serif"}}>🔗 Bundled w/ #{nums.join(", #")}</span>;
+              return <span style={{marginLeft:4,fontSize:10,padding:"2px 9px",borderRadius:20,background:bg,border:bdr,color:col,fontWeight:700,fontFamily:"'Poppins',sans-serif"}}>Bundled w/ #{nums.join(", #")}</span>;
             })()}
             {c.savedAt}{c.endedAt&&<span style={{marginLeft:8,color:"var(--green)",fontWeight:600}}> · Done {c.endedAt}</span>}
             {(()=>{
@@ -6019,7 +6021,7 @@ function EditableCaseCard({ c, onUpdate, onRequestDelete, onLightbox, openId, se
           </div>
         </div>
         <div style={{display:"flex",gap:8,flexShrink:0}} onClick={e=>e.stopPropagation()}>
-          {!editMode&&<button className="case-expand-btn" onClick={()=>{startEdit();}}>✏️ Edit</button>}
+          {!editMode&&<button className="case-expand-btn" onClick={()=>{startEdit();}}>Edit</button>}
           <button className="case-expand-btn" onClick={()=>setIsOpen(o=>!o)}>
             <span className="case-expand-icon">▼</span>{isOpen?"Collapse":"Details"}
           </button>
@@ -6063,7 +6065,7 @@ function EditableCaseCard({ c, onUpdate, onRequestDelete, onLightbox, openId, se
                   {!isSC&&<div className="case-field-row"><div className="case-field-label">Inbound #</div><div className="case-field-val">{c.inboundNum||"—"}</div></div>}
                   <div className="case-field-row"><div className="case-field-label">Amend Type</div><div className="case-field-val">{c.amendType||"—"}</div></div>
                   <div className="case-field-row"><div className="case-field-label">Complexity</div><div className="case-field-val">{c._caseComplexity==="major"?"Major":c._caseComplexity==="complex"?"Complex":"Minor"}</div></div>
-                  <div className="case-field-row"><div className="case-field-label">In-Progress</div><div className="case-field-val">{c.inProgress?"✅ Yes":"—"}</div></div>
+                  <div className="case-field-row"><div className="case-field-label">In-Progress</div><div className="case-field-val">{c.inProgress?"Yes":"—"}</div></div>
                 </>
               )}
             </div>
@@ -6113,7 +6115,7 @@ function EditableCaseCard({ c, onUpdate, onRequestDelete, onLightbox, openId, se
                 ) : (
                   <>
                     <div className="case-field-row"><div className="case-field-label">Email Address</div><div className="case-field-val">{c.emailAddress||"—"}</div></div>
-                    <div className="case-field-row"><div className="case-field-label">Email Type</div><div className="case-field-val" style={{color:c.emailType==="clarification"?"var(--amber)":"var(--green)",fontWeight:700}}>{c.emailType==="clarification"?"❓ Clarification":"✅ Completed"}</div></div>
+                    <div className="case-field-row"><div className="case-field-label">Email Type</div><div className="case-field-val" style={{color:c.emailType==="clarification"?"var(--amber)":"var(--green)",fontWeight:700}}>{c.emailType==="clarification"?"Clarification":"Completed"}</div></div>
                   </>
                 )}
               </div>
@@ -6121,7 +6123,7 @@ function EditableCaseCard({ c, onUpdate, onRequestDelete, onLightbox, openId, se
 
             {/* ── DEVICE CHECK ── */}
             <div className="case-section">
-              <div className="case-section-title">📱 Device Check</div>
+              <div className="case-section-title">Device Check</div>
               {editMode ? (
                 <div className="device-edit-group">
                   {[["mobile","Mobile"],["tablet","Tablet"],["desktop","Desktop"]].map(([k,l])=>(
@@ -6142,7 +6144,7 @@ function EditableCaseCard({ c, onUpdate, onRequestDelete, onLightbox, openId, se
             {/* ── FINAL CHECKLIST ── */}
             {(c.checklist||editMode)&&(
               <div className="case-section">
-                <div className="case-section-title">✅ Final Checklist{!editMode&&` — ${checkDone}/${checkTotal}`}</div>
+                <div className="case-section-title">Final Checklist{!editMode&&` — ${checkDone}/${checkTotal}`}</div>
                 {editMode ? (
                   <div className="checklist-edit-grid">
                     {Object.entries(CHECKLIST_LABELS).map(([k,l])=>(
@@ -6269,7 +6271,7 @@ function EditableCaseCard({ c, onUpdate, onRequestDelete, onLightbox, openId, se
             {/* ── TRACKER LINK ── */}
             {(true) && (
               <div className="case-section">
-                <div className="case-section-title">🔗 Tracker Link</div>
+                <div className="case-section-title">Tracker Link</div>
                 {editMode ? (
                   <div className="field" style={{marginBottom:0}}>
                     <input
@@ -6311,16 +6313,16 @@ function EditableCaseCard({ c, onUpdate, onRequestDelete, onLightbox, openId, se
             <div className="case-actions">
               {editMode ? (
                 <>
-                  <button className="btn btn-ghost" onClick={cancelEdit}>✕ Cancel</button>
+                  <button className="btn btn-ghost" onClick={cancelEdit}>Cancel</button>
                   <div style={{flex:1}}/>
-                  <button className="btn btn-save" onClick={saveEdit}>💾 Save Changes</button>
+                  <button className="btn btn-save" onClick={saveEdit}>Save Changes</button>
                 </>
               ) : (
                 <>
                   <button className="h-btn dl" onClick={()=>downloadCase(c)}>⬇️ Download ZIP</button>
                   <div style={{flex:1}}/>
-                  <button className="h-btn" onClick={startEdit} style={{borderColor:"var(--accent)",color:"var(--accent)"}}>✏️ Edit Case</button>
-                  <button className="h-btn danger" onClick={()=>onRequestDelete&&onRequestDelete(c._id,c.caseNum)}>🗑 Delete</button>
+                  <button className="h-btn" onClick={startEdit} style={{borderColor:"var(--accent)",color:"var(--accent)"}}>Edit Case</button>
+                  <button className="h-btn danger" onClick={()=>onRequestDelete&&onRequestDelete(c._id,c.caseNum)}>Delete</button>
                 </>
               )}
             </div>
@@ -6363,7 +6365,7 @@ function CaseHistory({ cases, onUpdate, onDelete }) {
       <div className="filter-row">
         {[["all","All"],["site","Site Comment"],["inbound","Inbound Email"]].map(([v,l])=>(<button key={v} className={cls("filter-btn",filterMode===v&&"active")} onClick={()=>setFilterMode(v)}>{l}</button>))}
         <input type="date" className="inp" style={{width:"auto",padding:"7px 12px",fontSize:12,marginLeft:"auto"}} value={filterDate} onChange={e=>setFilterDate(e.target.value)} title="Filter by date"/>
-        {(search||filterDate||filterMode!=="all")&&<button className="filter-btn" onClick={()=>{setSearch("");setFilterDate("");setFilterMode("all");}}>✕ Clear</button>}
+        {(search||filterDate||filterMode!=="all")&&<button className="filter-btn" onClick={()=>{setSearch("");setFilterDate("");setFilterMode("all");}}>Clear</button>}
       </div>
 
       {filtered.length===0?(
@@ -6414,7 +6416,7 @@ function AnnouncementsPage({ announcements, addAnnouncement, updateAnnouncement,
   const [imgUploading,setImgUploading]=useState(false);
   const [toast,showToast]=useToast();
 
-  const BADGE_OPTS=[["info","ℹ️ Info"],["update","✅ Update"],["urgent","🚨 Urgent"]];
+  const BADGE_OPTS=[["info","ℹ️ Info"],["update","Update"],["urgent","Urgent"]];
 
   // Upload an image file to the `announcement-images` Supabase Storage bucket
   // (see supabase/migrations/20260907_add_announcement_images.sql) and return its public URL.
@@ -6478,9 +6480,9 @@ function AnnouncementsPage({ announcements, addAnnouncement, updateAnnouncement,
       await addAnnouncement({...form,author:user.name,createdAt:new Date().toLocaleString()});
       setForm({title:"",body:"",badge:"info",image_url:""});
       setAdding(false);setConfirming(false);
-      showToast("✅ Announcement posted!");
+      showToast("Announcement posted!");
     }catch(e){
-      showToast("❌ Failed to save — check connection","error");
+      showToast("Failed to save — check connection","error");
     }finally{setSaving(false);}
   };
 
@@ -6495,9 +6497,9 @@ function AnnouncementsPage({ announcements, addAnnouncement, updateAnnouncement,
     try{
       await updateAnnouncement(editTarget.id,{title:editForm.title,body:editForm.body,badge:editForm.badge,image_url:editForm.image_url||""});
       setEditTarget(null);
-      showToast("✅ Announcement updated!");
+      showToast("Announcement updated!");
     }catch(e){
-      showToast("❌ Failed to update","error");
+      showToast("Failed to update","error");
     }finally{setSaving(false);}
   };
 
@@ -6506,7 +6508,7 @@ function AnnouncementsPage({ announcements, addAnnouncement, updateAnnouncement,
     try{
       await removeAnnouncement(deleteTarget);
       showToast("Removed","info");
-    }catch(e){showToast("❌ Failed to delete","error");}
+    }catch(e){showToast("Failed to delete","error");}
     setDeleteTarget(null);
   };
 
@@ -6549,13 +6551,13 @@ function AnnouncementsPage({ announcements, addAnnouncement, updateAnnouncement,
         <p style={{fontSize:12,color:"var(--muted)",marginBottom:16}}>Visible to your whole team.</p>
         <div className="modal-btns">
           <button className="btn btn-ghost" onClick={()=>setConfirming(false)} disabled={saving}>← Go Back</button>
-          <button className="btn btn-primary" onClick={confirmPost} disabled={saving}>{saving?"Saving…":"✅ Confirm & Post"}</button>
+          <button className="btn btn-primary" onClick={confirmPost} disabled={saving}>{saving?"Saving…":"Confirm & Post"}</button>
         </div>
       </div></div>)}
 
       {/* ── Edit modal (author only) ── */}
       {editTarget&&(<div className="modal-bg"><div className="edit-modal">
-        <h3 style={{marginBottom:16}}>✏️ Edit Announcement</h3>
+        <h3 style={{marginBottom:16}}>Edit Announcement</h3>
         <div className="field"><label>Title <span className="req">*</span></label><input className="inp" value={editForm.title} onChange={e=>setEditForm(f=>({...f,title:e.target.value}))} autoFocus/></div>
         <div className="field"><label>Message</label><textarea className="inp" rows={4} value={editForm.body} onChange={e=>setEditForm(f=>({...f,body:e.target.value}))}/></div>
         <div className="field"><label>Image (optional)</label><ImagePicker value={editForm.image_url} uploading={imgUploading} onChange={fileOrNull=>fileOrNull?uploadImage(fileOrNull,setEditForm):setEditForm(f=>({...f,image_url:""}))}/></div>
@@ -6563,7 +6565,7 @@ function AnnouncementsPage({ announcements, addAnnouncement, updateAnnouncement,
         <div style={{fontSize:11,color:"var(--muted)",marginBottom:14}}>Only you can edit this — posted by {editTarget.author}</div>
         <div className="modal-btns">
           <button className="btn btn-ghost" onClick={()=>setEditTarget(null)} disabled={saving}>Cancel</button>
-          <button className="btn btn-save" onClick={saveEdit} disabled={saving}>{saving?"Saving…":"💾 Save Changes"}</button>
+          <button className="btn btn-save" onClick={saveEdit} disabled={saving}>{saving?"Saving…":"Save Changes"}</button>
         </div>
       </div></div>)}
 
@@ -6588,9 +6590,9 @@ function AnnouncementsPage({ announcements, addAnnouncement, updateAnnouncement,
               <div className="ann-meta">By {a.author} · {a.createdAt}</div>
             </div>
             <div style={{display:"flex",alignItems:"center",gap:8,flexShrink:0}}>
-              <span className={cls("ann-badge",a.badge||"info")}>{a.badge==="urgent"?"🚨 Urgent":a.badge==="update"?"✅ Update":"ℹ️ Info"}</span>
+              <span className={cls("ann-badge",a.badge||"info")}>{a.badge==="urgent"?"Urgent":a.badge==="update"?"Update":"ℹ️ Info"}</span>
               {isAuthor(a)&&(
-                <button className="h-btn" style={{borderColor:"var(--accent)",color:"var(--accent)",padding:"4px 10px",fontSize:11}} onClick={()=>startEdit(a)}>✏️ Edit</button>
+                <button className="h-btn" style={{borderColor:"var(--accent)",color:"var(--accent)",padding:"4px 10px",fontSize:11}} onClick={()=>startEdit(a)}>Edit</button>
               )}
               {isAuthor(a)&&(
                 <button className="entry-del" onClick={()=>setDeleteTarget(a.id)}><Icon name="trash" size={13} color="var(--red)"/></button>
@@ -6651,13 +6653,13 @@ function LinksPage({ links, setLinks, addLink, updateLink, removeLink }) {
   return (
     <div>
       <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:24}}>
-        <div><div className="page-title">🔗 Quick Links</div><div className="page-sub">Custom links shown in the sidebar</div></div>
+        <div><div className="page-title">Quick Links</div><div className="page-sub">Custom links shown in the sidebar</div></div>
         <button className="btn btn-primary" onClick={()=>setAdding(true)}>＋ Add Link</button>
       </div>
 
       {/* Add modal */}
       {adding&&(<div className="modal-bg"><div className="edit-modal">
-        <h3 style={{marginBottom:16}}>🔗 Add Quick Link</h3>
+        <h3 style={{marginBottom:16}}>Add Quick Link</h3>
         <div className="field"><label>Label <span className="req">*</span></label><input className="inp" value={form.title} onChange={e=>setForm(f=>({...f,title:e.target.value}))} placeholder="e.g. Salesforce" autoFocus/></div>
         <div className="field"><label>URL <span className="req">*</span></label><input className="inp" value={form.url} onChange={e=>setForm(f=>({...f,url:e.target.value}))} placeholder="https://..." onKeyDown={e=>e.key==="Enter"&&submit()}/></div>
         <div className="field"><label>Icon</label>{iconPicker(form.icon,ic=>setForm(f=>({...f,icon:ic})))}</div>
@@ -6666,11 +6668,11 @@ function LinksPage({ links, setLinks, addLink, updateLink, removeLink }) {
 
       {/* Edit modal */}
       {editing&&(<div className="modal-bg"><div className="edit-modal">
-        <h3 style={{marginBottom:16}}>✏️ Edit Link</h3>
+        <h3 style={{marginBottom:16}}>Edit Link</h3>
         <div className="field"><label>Label <span className="req">*</span></label><input className="inp" value={editForm.title} onChange={e=>setEditForm(f=>({...f,title:e.target.value}))} autoFocus/></div>
         <div className="field"><label>URL <span className="req">*</span></label><input className="inp" value={editForm.url} onChange={e=>setEditForm(f=>({...f,url:e.target.value}))} onKeyDown={e=>e.key==="Enter"&&saveEdit()}/></div>
         <div className="field"><label>Icon</label>{iconPicker(editForm.icon,ic=>setEditForm(f=>({...f,icon:ic})))}</div>
-        <div className="modal-btns"><button className="btn btn-ghost" onClick={()=>setEditing(null)}>Cancel</button><button className="btn btn-save" onClick={saveEdit}>💾 Save Changes</button></div>
+        <div className="modal-btns"><button className="btn btn-ghost" onClick={()=>setEditing(null)}>Cancel</button><button className="btn btn-save" onClick={saveEdit}>Save Changes</button></div>
       </div></div>)}
 
       {links.length===0&&(<div className="empty-history"><div style={{fontSize:52,marginBottom:14}}>🔗</div><div style={{fontFamily:"'Plus Jakarta Sans',sans-serif",fontSize:18,fontWeight:800,marginBottom:6}}>No links yet</div><div>Add a link to have it appear in the sidebar.</div></div>)}
@@ -6701,7 +6703,7 @@ function LinksPage({ links, setLinks, addLink, updateLink, removeLink }) {
           <div className="link-info"><div className="link-title">{l.title}</div><div className="link-url">{l.url}</div></div>
           <div className="link-actions">
             <a href={l.url} target="_blank" rel="noopener noreferrer" className="h-btn" style={{textDecoration:"none"}}>↗ Open</a>
-            <button className="h-btn" style={{borderColor:"var(--accent)",color:"var(--accent)"}} onClick={()=>startEdit(l)}>✏️ Edit</button>
+            <button className="h-btn" style={{borderColor:"var(--accent)",color:"var(--accent)"}} onClick={()=>startEdit(l)}>Edit</button>
             <button className="h-btn danger" onClick={()=>remove(l.id)}><Icon name="trash" size={13} color="var(--red)"/></button>
           </div>
           </div>
@@ -6948,7 +6950,7 @@ function ProfilePage({ user, setUser, onLogout, timerLimit, saveTimerLimit, qaLi
           </div>
           );
         })}
-        <button className="btn btn-primary" style={{marginTop:4}} onClick={saveProfile} disabled={saving}>{saving?"Saving...":"💾 Save Messages"}</button>
+        <button className="btn btn-primary" style={{marginTop:4}} onClick={saveProfile} disabled={saving}>{saving?"Saving...":"Save Messages"}</button>
       </div>
 
       {/* ── Special Requestors card ── */}
@@ -7001,7 +7003,7 @@ function ProfilePage({ user, setUser, onLogout, timerLimit, saveTimerLimit, qaLi
           <input className="inp" value={form.screenshotName||""} onChange={e=>setForm(f=>({...f,screenshotName:e.target.value}))}/>
           <div style={{fontSize:11,color:"var(--muted)",marginTop:4}}>Used in: Step 6 — Backup Screenshots</div>
         </div>
-        <button className="btn btn-primary" onClick={saveProfile} disabled={saving}>{saving?"Saving...":"💾 Save File Names"}</button>
+        <button className="btn btn-primary" onClick={saveProfile} disabled={saving}>{saving?"Saving...":"Save File Names"}</button>
       </div>
 
       {/* ── Password card ── */}
@@ -7029,7 +7031,7 @@ function ProfilePage({ user, setUser, onLogout, timerLimit, saveTimerLimit, qaLi
 
       {/* ── QA Checklist timer card ── */}
       <div className="profile-card">
-        <h3 style={{fontSize:16,fontWeight:700,marginBottom:4}}>✅ QA Checklist Alert</h3>
+        <h3 style={{fontSize:16,fontWeight:700,marginBottom:4}}>QA Checklist Alert</h3>
         <p style={{fontSize:12,color:"var(--muted)",marginBottom:16}}>Alarm fires after this many minutes since QA Checklist was started. Default is 10 min.</p>
         <div style={{display:"flex",alignItems:"center",gap:12}}>
           <input className="inp" type="number" min="1" max="240" style={{width:90,textAlign:"center",fontWeight:700,fontSize:15}}
@@ -7220,7 +7222,7 @@ function SignupPage({ onSignup, goLogin }) {
         <div className="auth-title">Create account</div>
         <div className="auth-sub">Join your CaseHub workspace</div>
         {err&&<div style={{background:"var(--btn-cancel-bg)",border:"1px solid var(--btn-cancel-border)",color:"var(--btn-cancel-text)",borderRadius:8,padding:"10px 14px",fontSize:13,marginBottom:16,textAlign:"center"}}>{err}</div>}
-        {form._confirmed&&<div style={{background:"rgba(16,185,129,.1)",border:"1px solid var(--green)",color:"var(--green)",borderRadius:8,padding:"14px",fontSize:13,marginBottom:16,textAlign:"center",lineHeight:1.6}}>✅ Account created!<br/><span style={{opacity:.8,fontSize:12}}>{form._msg}</span><br/><button className="auth-link" style={{marginTop:8,display:"block",textAlign:"center"}} onClick={goLogin}>← Back to Sign In</button></div>}
+        {form._confirmed&&<div style={{background:"rgba(16,185,129,.1)",border:"1px solid var(--green)",color:"var(--green)",borderRadius:8,padding:"14px",fontSize:13,marginBottom:16,textAlign:"center",lineHeight:1.6}}>Account created!<br/><span style={{opacity:.8,fontSize:12}}>{form._msg}</span><br/><button className="auth-link" style={{marginTop:8,display:"block",textAlign:"center"}} onClick={goLogin}>← Back to Sign In</button></div>}
         {!form._confirmed&&<><div className="field"><label>Full Name</label><input className="inp" placeholder="Your name" value={form.name} onChange={e=>setForm(f=>({...f,name:e.target.value}))} disabled={loading}/></div>
         <div className="field"><label>Email</label><input className="inp" type="email" placeholder="you@email.com" value={form.email} onChange={e=>setForm(f=>({...f,email:e.target.value}))} disabled={loading}/></div>
         <div className="field"><label>Password</label><input className="inp" type="password" placeholder="Min. 6 characters" value={form.password} onChange={e=>setForm(f=>({...f,password:e.target.value}))} disabled={loading}/></div>
@@ -7860,7 +7862,7 @@ function App() {
         <div class="alarm-sub">${sub}</div>
         <div class="alarm-btns">
           <button id="ch-dom-alarm-snooze" class="alarm-snooze">⏰ Snooze 30 min</button>
-          <button id="ch-dom-alarm-dismiss" class="alarm-dismiss">✅ I'm Aware</button>
+          <button id="ch-dom-alarm-dismiss" class="alarm-dismiss">I'm Aware</button>
         </div>
       </div>`;
     document.body.appendChild(el);
@@ -8487,14 +8489,14 @@ function App() {
             <div>
               <div className="break-label">{breakTimer.label.split(" ").slice(1).join(" ")}</div>
               <div style={{fontSize:10,color:"var(--muted)"}}>
-                {breakTimer.ended?"✅ Break over!":breakTimer.warned?"⚠️ 5 min warning!":"On break"}
+                {breakTimer.ended?"Break over!":breakTimer.warned?"⚠️ 5 min warning!":"On break"}
               </div>
             </div>
             <div className="break-time">{breakTimer.ended?"Done!":mm+":"+ss}</div>
             <div className="break-progress" style={{flex:1}}>
               <div className="break-progress-fill" style={{width:pct+"%"}}/>
             </div>
-            <button className="break-stop" onClick={()=>setCancelBreakConfirm(true)}>✕ End</button>
+            <button className="break-stop" onClick={()=>setCancelBreakConfirm(true)}>End</button>
           </div>
         );
       })()}
@@ -8711,7 +8713,7 @@ function SessionLogPage({ user, refreshKey=0 }) {
               <div style={{display:"flex",gap:8,alignItems:"center"}}>
                 {cases.length>0 && <span style={{fontSize:10,padding:"3px 10px",background:"var(--entry-accent-bg)",border:"1px solid rgba(64,81,59,.25)",color:"var(--accent)",fontWeight:700,borderRadius:20}}>{cases.length} case{cases.length!==1?"s":""}</span>}
                 {breaks.length>0 && <span style={{fontSize:10,padding:"3px 10px",background:"var(--entry-bg)",border:"1px solid var(--border)",color:"var(--amber)",fontWeight:700,borderRadius:20}}>{breaks.length} break{breaks.length!==1?"s":""}</span>}
-                <button onClick={e=>{e.stopPropagation();setDeleteId(s.id);}} style={{background:"rgba(197,68,70,.1)",border:"1px solid rgba(197,68,70,.3)",color:"var(--red)",borderRadius:6,padding:"3px 10px",fontSize:11,fontWeight:700,cursor:"pointer",transition:".15s",flexShrink:0}} title="Delete session">🗑 Delete</button>
+                <button onClick={e=>{e.stopPropagation();setDeleteId(s.id);}} style={{background:"rgba(197,68,70,.1)",border:"1px solid rgba(197,68,70,.3)",color:"var(--red)",borderRadius:6,padding:"3px 10px",fontSize:11,fontWeight:700,cursor:"pointer",transition:".15s",flexShrink:0}} title="Delete session">Delete</button>
                 <span style={{color:"var(--muted)",fontSize:12,transform:isOpen?"rotate(180deg)":"none",display:"inline-block",transition:".2s"}}>▼</span>
               </div>
             </div>
@@ -8720,7 +8722,7 @@ function SessionLogPage({ user, refreshKey=0 }) {
               <div style={{borderTop:"1px solid var(--border)",padding:"14px 18px",background:"var(--entry-bg)"}}>
                 {cases.length > 0 && (
                   <div style={{marginBottom:14}}>
-                    <div style={{fontSize:10,fontWeight:700,textTransform:"uppercase",letterSpacing:".8px",color:"var(--muted)",marginBottom:8,fontFamily:"'Poppins',sans-serif",display:"flex",alignItems:"center",gap:6}}>📁 Cases</div>
+                    <div style={{fontSize:10,fontWeight:700,textTransform:"uppercase",letterSpacing:".8px",color:"var(--muted)",marginBottom:8,fontFamily:"'Poppins',sans-serif",display:"flex",alignItems:"center",gap:6}}>Cases</div>
                     {cases.map((c,i)=>(
                       <div key={c.id||i} style={{display:"flex",alignItems:"center",gap:12,padding:"9px 12px",background:"var(--card)",border:"1px solid var(--border)",marginBottom:6,borderRadius:8}}>
                         <div style={{width:8,height:8,borderRadius:"50%",background:c.case_type==="siteComment"?"var(--accent)":"#7c3aed",flexShrink:0}}/>
@@ -8737,7 +8739,7 @@ function SessionLogPage({ user, refreshKey=0 }) {
                 )}
                 {breaks.length > 0 && (
                   <div>
-                    <div style={{fontSize:10,fontWeight:700,textTransform:"uppercase",letterSpacing:".8px",color:"var(--muted)",marginBottom:8,fontFamily:"'Poppins',sans-serif"}}>☕ Breaks</div>
+                    <div style={{fontSize:10,fontWeight:700,textTransform:"uppercase",letterSpacing:".8px",color:"var(--muted)",marginBottom:8,fontFamily:"'Poppins',sans-serif"}}>Breaks</div>
                     {breaks.map((b,i)=>(
                       <div key={b.id||i} style={{display:"flex",alignItems:"center",gap:12,padding:"9px 12px",background:"var(--card)",border:"1px solid var(--border)",marginBottom:6,borderRadius:8}}>
                         <Icon name="coffee" size={13} color="var(--amber)"/>
@@ -8875,7 +8877,7 @@ function CopyCell({val,id}){
       </div>
       <div className="fng-slot-body" onClick={()=>val&&copy(val,id)} title={val?"Click to copy filename":""}>
         <span className="fng-slot-name">{val||'—'}</span>
-        {val&&<span className="fng-slot-copy">{done?'✓ Copied':'⌘ Copy'}</span>}
+        {val&&<span className="fng-slot-copy">{done?'Copied':'⌘ Copy'}</span>}
       </div>
       {img&&(
         <div className="fng-slot-actions">
@@ -8893,7 +8895,7 @@ function FngSection({title,vals,sk,children}){
     <div style={{marginBottom:20}}>
       <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:8,borderBottom:'1px solid var(--border)',paddingBottom:6}}>
         <div style={{fontSize:10,fontWeight:700,textTransform:'uppercase',letterSpacing:'1px',color:'var(--muted)',fontFamily:"'Poppins',sans-serif"}}>{title}</div>
-        {(vals||[]).filter(Boolean).length>0&&<button onClick={()=>copyAll(vals,sk)} style={{padding:'3px 10px',fontSize:10,background:copiedAll===sk?'var(--green)':'var(--card2)',color:copiedAll===sk?'#fff':'var(--muted)',border:'1px solid var(--border)',cursor:'pointer',fontWeight:700,borderRadius:6,transition:'.15s',flexShrink:0}}>{copiedAll===sk?'✓ Copied All':'Copy All'}</button>}
+        {(vals||[]).filter(Boolean).length>0&&<button onClick={()=>copyAll(vals,sk)} style={{padding:'3px 10px',fontSize:10,background:copiedAll===sk?'var(--green)':'var(--card2)',color:copiedAll===sk?'#fff':'var(--muted)',border:'1px solid var(--border)',cursor:'pointer',fontWeight:700,borderRadius:6,transition:'.15s',flexShrink:0}}>{copiedAll===sk?'Copied All':'Copy All'}</button>}
       </div>
       {children}
     </div>
@@ -8945,7 +8947,7 @@ function SidebarShiftTimer({globalTimeIn, shiftEndTime}){
     <div className="sidebar-shift-timer" style={{borderColor:isWarn?"var(--amber)":"var(--border)"}}>
       <div className="sidebar-shift-row">
         <span className="sidebar-shift-label" style={{color:isWarn?"var(--amber)":"var(--muted)"}}>
-          {isWarn?"⚠ Shift ending soon":"⏱ Shift Time"}
+          {isWarn?"Shift ending soon":"⏱ Shift Time"}
         </span>
         <span className="sidebar-shift-meta">
           <span>{startLabel}</span>
@@ -8975,7 +8977,7 @@ function ArchivePage({ archivedDrafts=[], onDelete }) {
   if(archivedDrafts.length===0){
     return (
       <div className="page-wrap">
-        <div className="page-title">📦 Archived Cases</div>
+        <div className="page-title">Archived Cases</div>
         <div className="page-sub">Suspended cases you've archived are stored here.</div>
         <div style={{textAlign:"center",color:"var(--muted)",padding:"60px 0",fontSize:14}}>
           <div style={{marginBottom:16}}><Icon name="archive" size={52} color="var(--muted)"/></div>
@@ -8988,7 +8990,7 @@ function ArchivePage({ archivedDrafts=[], onDelete }) {
 
   return (
     <div className="page-wrap">
-      <div className="page-title">📦 Archived Cases</div>
+      <div className="page-title">Archived Cases</div>
       <div className="page-sub">{archivedDrafts.length} archived case{archivedDrafts.length!==1?"s":""} — view-only</div>
 
       {confirmDelete&&(
@@ -9062,7 +9064,7 @@ function ArchivePage({ archivedDrafts=[], onDelete }) {
                   )}
                   {d.trackerChecklistLink&&(
                     <div style={{marginTop:8,fontSize:12}}>
-                      <a href={d.trackerChecklistLink} target="_blank" rel="noreferrer" style={{color:"var(--accent)",fontWeight:600,textDecoration:"none"}}>🔗 Tracker Link</a>
+                      <a href={d.trackerChecklistLink} target="_blank" rel="noreferrer" style={{color:"var(--accent)",fontWeight:600,textDecoration:"none"}}>Tracker Link</a>
                     </div>
                   )}
                 </div>
@@ -9371,7 +9373,7 @@ function FileNameGeneratorPage({ onFill=null, activeTabData=null }) {
         <div className="modal-bg">
           <div style={{background:'var(--glass-bg)',border:'1px solid var(--glass-border)',backdropFilter:'var(--glass-blur)',borderRadius:14,padding:28,width:'100%',maxWidth:600,maxHeight:'88vh',overflowY:'auto',boxShadow:'var(--glass-shadow)'}}>
             <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:16}}>
-              <h3 style={{margin:0,fontSize:16}}>✏️ Edit Filename Format Templates</h3>
+              <h3 style={{margin:0,fontSize:16}}>Edit Filename Format Templates</h3>
               <button onClick={()=>setEditingFormat(false)} style={{background:'none',border:'none',color:'var(--muted)',fontSize:22,cursor:'pointer',lineHeight:1}}>×</button>
             </div>
             <div style={{fontSize:11,color:'var(--muted)',marginBottom:16,padding:'8px 12px',background:'var(--entry-bg)',borderRadius:8,border:'1px solid var(--border)',lineHeight:2}}>
@@ -9494,7 +9496,7 @@ function FileNameGeneratorPage({ onFill=null, activeTabData=null }) {
           <FngSection title="Video Splash" vals={[applyFmt(format.videoSplash)]} sk="videoSplash"><CopyCell val={applyFmt(format.videoSplash)} id="videoSplash"/></FngSection>
           <FngSection title="Wave Zip" vals={[applyFmt(format.waveZip)]} sk="waveZip"><CopyCell val={applyFmt(format.waveZip)} id="waveZip"/></FngSection>
           <FngSection title="Wave-Assistant Zip" vals={[applyFmt(format.waveAssist)]} sk="waveAssist"><CopyCell val={applyFmt(format.waveAssist)} id="waveAssist"/></FngSection>
-          <div style={{marginTop:12}}><button onClick={()=>copyAll(logoVals,'logo-all')} className="btn btn-ghost" style={{width:'100%',justifyContent:'center',fontSize:12}}>{copiedAll==='logo-all'?'✓ Copied All':'Copy All Logo & Misc'}</button></div>
+          <div style={{marginTop:12}}><button onClick={()=>copyAll(logoVals,'logo-all')} className="btn btn-ghost" style={{width:'100%',justifyContent:'center',fontSize:12}}>{copiedAll==='logo-all'?'Copied All':'Copy All Logo & Misc'}</button></div>
         </>)}
         {tab==='hero'&&(<>
           <FngSection title="Hero — AI Artwork / Customer Supplied" vals={heroCustVals} sk="hero-cust">
