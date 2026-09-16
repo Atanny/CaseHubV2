@@ -441,7 +441,7 @@ body.light .sidebar-divider{background:rgba(180,90,40,.1);}
 
 /* Buttons */
 .btn{
-  padding:10px 20px;border-radius:10px;font-size:12px;font-weight:500;
+  padding:10px 20px;border-radius:20px;font-size:12px;font-weight:500;
   border:none;transition:.2s;display:inline-flex;align-items:center;gap:10px;
   letter-spacing:.02em;font-family:'Poppins',sans-serif;
   box-shadow:2px 5px 10px 0px rgba(64,81,59,.1);
@@ -484,8 +484,8 @@ body.light .sidebar-divider{background:rgba(180,90,40,.1);}
 .quick-format-row:last-child{margin-bottom:0;}
 .quick-format-row:hover:not(:disabled){border-color:var(--accent);background:var(--entry-accent-bg);}
 .quick-format-row:disabled{opacity:.5;cursor:not-allowed;}
-.btn-alert{background:linear-gradient(135deg,#e0a339,#c8863a);color:#fff;border:1px solid #fff;}
-.btn-alert:hover{filter:brightness(1.06);}
+.btn-alert{background:linear-gradient(135deg,#dcc196,#c9a876);color:#fff;border:1px solid #fff;}
+.btn-alert:hover{filter:brightness(1.04);}
 @media (max-width: 1180px){.form-quick{display:none;}}
 
 .action-bar{
@@ -867,7 +867,7 @@ select.inp{cursor:pointer;}
 .draft-dot{width:10px;height:10px;border-radius:50%;background:linear-gradient(135deg,var(--amber),#d97706);flex-shrink:0;animation:pulse 2s infinite;}
 @keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(.8)}}
 .draft-badge{font-size:11px;font-weight:700;padding:4px 11px;border-radius:30px;background:var(--btn-draft-bg);color:var(--btn-draft-text);white-space:nowrap;border:1px solid rgba(245,158,11,.35);}
-.draft-resume{font-size:12px;font-weight:700;padding:8px 16px;border-radius:30px;background:linear-gradient(135deg,#f59e0b,#d97706);color:#fff;border:none;cursor:pointer;transition:.18s;white-space:nowrap;box-shadow:0 2px 10px rgba(245,158,11,.4);font-family:'Poppins',sans-serif;}
+.draft-resume{font-size:12px;font-weight:700;padding:8px 16px;border-radius:20px;background:linear-gradient(135deg,#f59e0b,#d97706);color:#fff;border:none;cursor:pointer;transition:.18s;white-space:nowrap;box-shadow:0 2px 10px rgba(245,158,11,.4);font-family:'Poppins',sans-serif;}
 .draft-resume:hover{filter:brightness(1.1);}
 
 /* Case History */
@@ -879,7 +879,7 @@ select.inp{cursor:pointer;}
 .case-num-badge{font-size:16px;font-weight:800;color:var(--accent);background:var(--entry-accent-bg);border:1.5px solid rgba(91,156,246,.25);border-radius:30px;padding:5px 14px;white-space:nowrap;}
 .case-meta-main{font-size:13px;font-weight:600;margin-bottom:3px;font-family:'Poppins',sans-serif;}
 .case-meta-sub{font-size:11px;color:var(--muted);font-family:'Poppins',sans-serif;}
-.case-expand-btn{background:var(--btn-ghost-bg);border:1.5px solid var(--btn-ghost-border);color:var(--btn-ghost-text);border-radius:30px;padding:6px 12px;font-size:12px;font-weight:600;display:flex;align-items:center;gap:5px;transition:.2s;white-space:nowrap;flex-shrink:0;font-family:'Poppins',sans-serif;}
+.case-expand-btn{background:var(--btn-ghost-bg);border:1.5px solid var(--btn-ghost-border);color:var(--btn-ghost-text);border-radius:20px;padding:6px 12px;font-size:12px;font-weight:600;display:flex;align-items:center;gap:5px;transition:.2s;white-space:nowrap;flex-shrink:0;font-family:'Poppins',sans-serif;}
 .case-card:hover .case-expand-btn{border-color:var(--accent);color:var(--accent);}
 .case-expand-icon{transition:.25s;display:inline-block;}
 .case-card.expanded .case-expand-icon{transform:rotate(180deg);}
@@ -891,7 +891,7 @@ select.inp{cursor:pointer;}
 .case-field-row:last-child{border-bottom:none;padding-bottom:0;}
 .case-field-label{font-size:11px;color:var(--muted);width:120px;flex-shrink:0;font-weight:500;font-family:'Poppins',sans-serif;}
 .case-field-val{font-size:13px;font-weight:600;flex:1;word-break:break-word;color:var(--text);font-family:'Poppins',sans-serif;}
-.case-field-edit{background:var(--btn-ghost-bg);border:1.5px solid var(--btn-ghost-border);color:var(--btn-ghost-text);border-radius:30px;padding:4px 10px;font-size:11px;font-weight:600;cursor:pointer;transition:.15s;flex-shrink:0;font-family:'Poppins',sans-serif;}
+.case-field-edit{background:var(--btn-ghost-bg);border:1.5px solid var(--btn-ghost-border);color:var(--btn-ghost-text);border-radius:20px;padding:4px 10px;font-size:11px;font-weight:600;cursor:pointer;transition:.15s;flex-shrink:0;font-family:'Poppins',sans-serif;}
 .case-field-edit:hover{border-color:var(--accent);color:var(--accent);background:var(--entry-accent-bg);}
 .case-entry-card{background:var(--card);border:1.5px solid var(--border);border-radius:30px;padding:12px 14px;margin-bottom:8px;}
 .case-entry-card:last-child{margin-bottom:0;}
@@ -911,7 +911,7 @@ select.inp{cursor:pointer;}
 .case-img-thumb:hover{transform:scale(1.06);border-color:var(--accent);}
 .case-img-thumb img{width:100%;height:100%;object-fit:cover;}
 .case-actions{display:flex;gap:8px;margin-top:16px;padding-top:16px;border-top:1px solid var(--border);}
-.h-btn{background:var(--btn-ghost-bg);border:1.5px solid var(--btn-ghost-border);color:var(--btn-ghost-text);border-radius:30px;padding:8px 14px;font-size:12px;font-weight:700;transition:.18s;display:inline-flex;align-items:center;gap:6px;font-family:'Poppins',sans-serif;}
+.h-btn{background:var(--btn-ghost-bg);border:1.5px solid var(--btn-ghost-border);color:var(--btn-ghost-text);border-radius:20px;padding:8px 14px;font-size:12px;font-weight:700;transition:.18s;display:inline-flex;align-items:center;gap:6px;font-family:'Poppins',sans-serif;}
 .h-btn:hover{border-color:var(--text);color:var(--text);}
 .h-btn.danger:hover{border-color:var(--btn-cancel-border);color:var(--btn-cancel-text);background:var(--btn-cancel-bg);}
 .h-btn.dl:hover{border-color:var(--green);color:var(--green);background:rgba(16,185,129,.08);}
@@ -921,8 +921,8 @@ select.inp{cursor:pointer;}
 
 /* Inline edit */
 .inline-edit-inp{background:var(--inp-bg);border:1.5px solid var(--accent);border-radius:30px;color:var(--text);padding:6px 11px;font-size:13px;outline:none;flex:1;box-shadow:0 0 0 3px rgba(245,148,92,.12);font-family:'Poppins',sans-serif;}
-.inline-save-btn{background:linear-gradient(135deg,var(--green),#059669);color:#fff;border:none;border-radius:30px;padding:6px 12px;font-size:12px;font-weight:700;cursor:pointer;transition:.15s;font-family:'Poppins',sans-serif;}
-.inline-cancel-btn{background:var(--btn-ghost-bg);border:1.5px solid var(--btn-ghost-border);color:var(--btn-ghost-text);border-radius:30px;padding:6px 10px;font-size:12px;font-weight:600;cursor:pointer;transition:.15s;font-family:'Poppins',sans-serif;}
+.inline-save-btn{background:linear-gradient(135deg,var(--green),#059669);color:#fff;border:none;border-radius:20px;padding:6px 12px;font-size:12px;font-weight:700;cursor:pointer;transition:.15s;font-family:'Poppins',sans-serif;}
+.inline-cancel-btn{background:var(--btn-ghost-bg);border:1.5px solid var(--btn-ghost-border);color:var(--btn-ghost-text);border-radius:20px;padding:6px 10px;font-size:12px;font-weight:600;cursor:pointer;transition:.15s;font-family:'Poppins',sans-serif;}
 
 /* Soon */
 .soon-wrap{display:flex;align-items:center;justify-content:center;min-height:60vh;flex-direction:column;gap:16px;}
@@ -937,7 +937,7 @@ select.inp{cursor:pointer;}
 .search-inp:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(245,148,92,.1);}
 .search-icon{position:absolute;left:13px;top:50%;transform:translateY(-50%);color:var(--muted);font-size:15px;}
 .filter-row{display:flex;gap:10px;margin-bottom:16px;flex-wrap:wrap;}
-.filter-btn{background:var(--card);border:1.5px solid var(--border);color:var(--muted);border-radius:30px;padding:7px 14px;font-size:12px;font-weight:600;cursor:pointer;transition:.15s;font-family:'Poppins',sans-serif;}
+.filter-btn{background:var(--card);border:1.5px solid var(--border);color:var(--muted);border-radius:20px;padding:7px 14px;font-size:12px;font-weight:600;cursor:pointer;transition:.15s;font-family:'Poppins',sans-serif;}
 .filter-btn:hover,.filter-btn.active{border-color:var(--accent);color:var(--accent);background:var(--entry-accent-bg);}
 
 /* Auth pages */
@@ -972,7 +972,7 @@ select.inp{cursor:pointer;}
 .ann-title{font-size:15px;font-weight:700;font-family:'Plus Jakarta Sans',sans-serif;}
 .ann-meta{font-size:11px;color:var(--muted);margin-top:3px;font-family:'Poppins',sans-serif;}
 .ann-body{font-size:13px;color:var(--muted);line-height:1.7;font-family:'Poppins',sans-serif;}
-.ann-badge{font-size:11px;font-weight:700;padding:3px 10px;border-radius:30px;white-space:nowrap;}
+.ann-badge{font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;white-space:nowrap;}
 .ann-badge.info{background:var(--h-badge-site-bg);color:var(--accent);}
 .ann-badge.urgent{background:rgba(197,68,70,.15);color:var(--red);}
 .ann-badge.update{background:rgba(16,185,129,.12);color:var(--green);}
@@ -996,7 +996,7 @@ select.inp{cursor:pointer;}
 }
 .requestor-chip:hover{border-color:rgba(245,148,92,.4);}
 .requestor-avatar{width:28px;height:28px;border-radius:50%;background:var(--btn-save-bg);display:flex;align-items:center;justify-content:center;color:#fff;font-size:11px;font-weight:700;flex-shrink:0;}
-.requestor-del{background:none;border:none;color:var(--muted);font-size:14px;padding:2px 4px;border-radius:30px;transition:.15s;cursor:pointer;}
+.requestor-del{background:none;border:none;color:var(--muted);font-size:14px;padding:2px 4px;border-radius:20px;transition:.15s;cursor:pointer;}
 .requestor-del:hover{color:var(--red);}
 
 /* ── Case History Edit Styles ── */
@@ -1206,13 +1206,13 @@ body.light .sidebar-divider{background:rgba(180,90,40,.1);}
   box-shadow:0 6px 20px rgba(64,81,59,.4),inset 0 1px 0 rgba(255,255,255,.2);
   transform:translateY(-1px);
 }
-.btn-ghost{border-radius:8px;}
-.btn-cancel,.btn-danger{border-radius:8px;}
-.btn-draft,.btn-amber{border-radius:8px;}
-.btn-green{border-radius:8px;}
-.back-btn{border-radius:7px;}
-.copy-btn,.copy-row-btn,.draft-resume{border-radius:6px;}
-.filter-btn{border-radius:7px;}
+.btn-ghost{border-radius:20px;}
+.btn-cancel,.btn-danger{border-radius:20px;}
+.btn-draft,.btn-amber{border-radius:20px;}
+.btn-green{border-radius:20px;}
+.back-btn{border-radius:20px;}
+.copy-btn,.copy-row-btn,.draft-resume{border-radius:20px;}
+.filter-btn{border-radius:20px;}
 
 /* Time In button — make it pop */
 .btn-save.timein-btn{
@@ -1226,7 +1226,7 @@ body.light .sidebar-divider{background:rgba(180,90,40,.1);}
   transform:translateY(-2px);
 }
 .btn-danger.timeout-btn{
-  border-radius:8px;
+  border-radius:20px;
   box-shadow:0 2px 10px rgba(197,68,70,.2);
 }
 .btn-danger.timeout-btn:hover{transform:translateY(-1px);}
@@ -1483,7 +1483,7 @@ body.light .sidebar-divider{background:rgba(180,90,40,.1);}
 /* Inline edit */
 .inline-edit-inp{border-radius:7px;}
 .inline-save-btn{border-radius:6px;}
-.inline-cancel-btn{border-radius:6px;}
+.inline-cancel-btn{border-radius:20px;}
 
 /* History case */
 .case-entry-card{border-radius:8px;}
@@ -1557,7 +1557,7 @@ body.light .sidebar-divider{background:rgba(180,90,40,.1);}
 .checklist-group{margin-bottom:16px;}
 .checklist-group:last-of-type{margin-bottom:0;}
 .wizard-nav{display:flex;justify-content:flex-end;gap:10px;margin-top:18px;padding-top:14px;border-top:1px solid var(--border);}
-.wizard-nav-btn{width:38px;height:38px;border-radius:50%;border:none;display:flex;align-items:center;justify-content:center;font-size:16px;cursor:pointer;transition:.2s;font-family:'Poppins',sans-serif;}
+.wizard-nav-btn{width:38px;height:38px;border-radius:20px;border:none;display:flex;align-items:center;justify-content:center;font-size:16px;cursor:pointer;transition:.2s;font-family:'Poppins',sans-serif;}
 .wizard-nav-back{background:var(--card2);color:var(--text);}
 .wizard-nav-back:hover{background:var(--border);}
 .wizard-nav-next{background:#41503b;color:#fff;}
@@ -3257,11 +3257,11 @@ function PostLiveForm({ mode, onSave, onBack, onCancelForm, onSaveDraftDirect, o
       {isEditMode && (
         <div className="action-bar">
           <div className="action-group action-group-left">
-            <button className="btn btn-danger" style={{borderRadius:8}} onClick={() => onBack && onBack()}>Cancel Edit</button>
+            <button className="btn btn-danger" style={{borderRadius:20}} onClick={() => onBack && onBack()}>Cancel Edit</button>
           </div>
           <div className="action-group action-group-center"/>
           <div className="action-group action-group-right">
-            <button className="btn btn-save" style={{borderRadius:8}} onClick={handleSave}>Save Case</button>
+            <button className="btn btn-save" style={{borderRadius:20}} onClick={handleSave}>Save Case</button>
           </div>
         </div>
       )}
@@ -3285,7 +3285,7 @@ function PostLiveForm({ mode, onSave, onBack, onCancelForm, onSaveDraftDirect, o
           <button onClick={()=>setModal(null)} aria-label="Close" style={{position:"absolute",top:18,right:16,width:12,height:12,border:"none",background:"none",cursor:"pointer",color:"var(--accent)",fontSize:16,lineHeight:1,padding:0}}>✕</button>
           <h3>Submit Case <span style={{color:"#4760ff"}}>#{form.caseNum}</span>?</h3>
           <p style={{color:"var(--accent)",fontSize:12,marginBottom:20,lineHeight:1.6}}>Submitted data will be saved to session logs.</p>
-          <div style={{marginBottom:18,textAlign:"left"}}><div style={{fontSize:11,fontWeight:700,color:"var(--muted)",textTransform:"uppercase",letterSpacing:".7px",fontFamily:"'Poppins',sans-serif",marginBottom:8}}>Case Outcome</div><div style={{display:"flex",gap:10}}><button onClick={()=>setSaveOutcomeType("completed")} style={{flex:1,padding:"10px 12px",borderRadius:10,border:`2px solid ${saveOutcomeType==="completed"?"var(--accent)":"var(--border)"}`,background:saveOutcomeType==="completed"?"var(--entry-accent-bg)":"var(--card)",color:saveOutcomeType==="completed"?"var(--accent)":"var(--muted)",fontWeight:700,fontSize:12,fontFamily:"'Poppins',sans-serif",cursor:"pointer",transition:".15s",display:"flex",flexDirection:"column",alignItems:"center",gap:4}}><span style={{fontSize:18}}>✅</span>Completed</button><button onClick={()=>setSaveOutcomeType("clarification")} style={{flex:1,padding:"10px 12px",borderRadius:10,border:`2px solid ${saveOutcomeType==="clarification"?"var(--amber)":"var(--border)"}`,background:saveOutcomeType==="clarification"?"rgba(200,134,58,.1)":"var(--card)",color:saveOutcomeType==="clarification"?"var(--amber)":"var(--muted)",fontWeight:700,fontSize:12,fontFamily:"'Poppins',sans-serif",cursor:"pointer",transition:".15s",display:"flex",flexDirection:"column",alignItems:"center",gap:4}}><span style={{fontSize:18}}>🔄</span>Clarification</button></div></div><div className="modal-btns"><button className="btn btn-primary" onClick={()=>{showToast("Case saved! ✅");const elapsed=Math.floor((Date.now()-startTimeRef.current)/1000);const p2=phase2Elapsed!==null?phase2Elapsed:0;const totalSecs=elapsed+(isEditMode?0:p2);const f={...formRef.current,_saveOutcome:saveOutcomeType,_elapsedAtSave:elapsed,_phase2Elapsed:p2,_totalElapsed:totalSecs,trackerChecklistLink:formRef.current.trackerChecklistLink||""};onSave&&onSave(f);setModal("postSubmitBreak");}}>Submit Case</button><button className="btn btn-danger" onClick={()=>setModal(null)}>No, Cancel</button></div></div></div>)}
+          <div style={{marginBottom:18,textAlign:"left"}}><div style={{fontSize:11,fontWeight:700,color:"var(--muted)",textTransform:"uppercase",letterSpacing:".7px",fontFamily:"'Poppins',sans-serif",marginBottom:8}}>Case Outcome</div><div style={{display:"flex",gap:10}}><button onClick={()=>setSaveOutcomeType("completed")} style={{flex:1,padding:"10px 12px",borderRadius:20,border:`2px solid ${saveOutcomeType==="completed"?"var(--accent)":"var(--border)"}`,background:saveOutcomeType==="completed"?"var(--entry-accent-bg)":"var(--card)",color:saveOutcomeType==="completed"?"var(--accent)":"var(--muted)",fontWeight:700,fontSize:12,fontFamily:"'Poppins',sans-serif",cursor:"pointer",transition:".15s",display:"flex",flexDirection:"column",alignItems:"center",gap:4}}><span style={{fontSize:18}}>✅</span>Completed</button><button onClick={()=>setSaveOutcomeType("clarification")} style={{flex:1,padding:"10px 12px",borderRadius:20,border:`2px solid ${saveOutcomeType==="clarification"?"var(--amber)":"var(--border)"}`,background:saveOutcomeType==="clarification"?"rgba(200,134,58,.1)":"var(--card)",color:saveOutcomeType==="clarification"?"var(--amber)":"var(--muted)",fontWeight:700,fontSize:12,fontFamily:"'Poppins',sans-serif",cursor:"pointer",transition:".15s",display:"flex",flexDirection:"column",alignItems:"center",gap:4}}><span style={{fontSize:18}}>🔄</span>Clarification</button></div></div><div className="modal-btns"><button className="btn btn-primary" onClick={()=>{showToast("Case saved! ✅");const elapsed=Math.floor((Date.now()-startTimeRef.current)/1000);const p2=phase2Elapsed!==null?phase2Elapsed:0;const totalSecs=elapsed+(isEditMode?0:p2);const f={...formRef.current,_saveOutcome:saveOutcomeType,_elapsedAtSave:elapsed,_phase2Elapsed:p2,_totalElapsed:totalSecs,trackerChecklistLink:formRef.current.trackerChecklistLink||""};onSave&&onSave(f);setModal("postSubmitBreak");}}>Submit Case</button><button className="btn btn-danger" onClick={()=>setModal(null)}>No, Cancel</button></div></div></div>)}
 
         {modal==="postSubmitBreak"&&(<div className="modal-bg"><div className="modal">
           <button onClick={()=>setModal(null)} aria-label="Close" style={{position:"absolute",top:18,right:16,width:12,height:12,border:"none",background:"none",cursor:"pointer",color:"var(--accent)",fontSize:16,lineHeight:1,padding:0}}>✕</button>
@@ -3399,14 +3399,14 @@ function PostLiveForm({ mode, onSave, onBack, onCancelForm, onSaveDraftDirect, o
             </button>
           </div>
           <div className="modal-btns" style={{justifyContent:"center"}}>
-            <button className="btn btn-ghost" style={{borderRadius:8}} onClick={()=>{setModal(null);setBreakConfirmData(null);}}>Cancel</button>
+            <button className="btn btn-ghost" style={{borderRadius:20}} onClick={()=>{setModal(null);setBreakConfirmData(null);}}>Cancel</button>
           </div>
         </div></div>)}
       </div>
 
       <div className="form-quick">
         <div className="quick-format-panel">
-          <div className="quick-format-header">Quick Format &amp; Lyrics <button type="button" title="Add" style={{marginLeft:'auto',width:22,height:22,borderRadius:6,border:'1px solid var(--border)',background:'none',color:'var(--muted)',cursor:'pointer',fontSize:13,display:'flex',alignItems:'center',justifyContent:'center'}}>+</button></div>
+          <div className="quick-format-header">Quick Format &amp; Lyrics <button type="button" title="Add" style={{marginLeft:'auto',width:22,height:22,borderRadius:20,border:'1px solid var(--border)',background:'none',color:'var(--muted)',cursor:'pointer',fontSize:13,display:'flex',alignItems:'center',justifyContent:'center'}}>+</button></div>
           <button type="button" className="quick-format-row" onClick={()=>{copyToClipboard(isSC?buildEntriesText():buildEmailText());showToast('SR Format copied ✅');}}>
             <span>SR Format</span><Icon name="copy" size={13} color="var(--muted)"/>
           </button>
@@ -3508,7 +3508,43 @@ function SparkLine({ data, color="#f5945c", height=40, width=200 }) {
 // ─────────────────────────────────────────────────────────────────────────────
 // DASHBOARD
 // ─────────────────────────────────────────────────────────────────────────────
-function Dashboard({ savedCases, setPage, specialRequestors, addRequestor, removeRequestor, user }) {
+// ── Shared page header: title/subtitle + break pills + Log Out, used on every non-wizard page ──
+function PageHeader({ title, subtitle, onStartBreak, onStartOpenHour, onLogout }){
+  const [pending,setPending]=useState(null); // {label,mins,isOpenHour}
+  return (
+    <>
+      <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",gap:16,flexWrap:"wrap",marginBottom:24}}>
+        <div>
+          <div className="page-title">{title}</div>
+          {subtitle&&<div className="page-sub">{subtitle}</div>}
+        </div>
+        <div style={{display:"flex",gap:8,flexWrap:"wrap",alignItems:"center"}}>
+          {onStartBreak&&[{label:"15 min",mins:15,icon:"coffee",short:"15 MIN"},{label:"30 min",mins:30,icon:"meditate",short:"30 MIN"},{label:"1 hour",mins:60,icon:"lunch",short:"1 HOUR"}].map(({label,mins,icon,short})=>(
+            <button key={mins} className="btn btn-ghost btn-noicon" style={{gap:7}} onClick={()=>setPending({label,mins,short})}>
+              <Icon name={icon} size={14} color="var(--accent)"/>{short}
+            </button>
+          ))}
+          {onStartOpenHour&&(
+            <button className="btn btn-ghost btn-noicon" style={{gap:7}} onClick={()=>setPending({label:"Meeting",mins:0,isOpenHour:true,short:"MEETING"})}>
+              <Icon name="calendar" size={14} color="var(--accent)"/>MEETING
+            </button>
+          )}
+          {onLogout&&<button className="btn btn-alert" onClick={onLogout}>Log Out</button>}
+        </div>
+      </div>
+      {pending&&(<div className="modal-bg"><div className="modal">
+        <h3>Start {pending.label} {pending.isOpenHour?"":"Break"}?</h3>
+        <p style={{color:"var(--accent)",fontSize:12,marginBottom:20}}>Your timer will pause while you're away.</p>
+        <div className="modal-btns">
+          <button className="btn btn-primary" onClick={()=>{pending.isOpenHour?onStartOpenHour():onStartBreak(pending.label+" break",pending.mins);setPending(null);}}>Start</button>
+          <button className="btn btn-outline-accent" onClick={()=>setPending(null)}>Cancel</button>
+        </div>
+      </div></div>)}
+    </>
+  );
+}
+
+function Dashboard({ savedCases, setPage, specialRequestors, addRequestor, removeRequestor, user, announcements=[], onStartBreak, onStartOpenHour, onLogout, timerLimit }) {
   const [toast,showToast] = useToast();
   const now = new Date();
   const total    = savedCases.length;
@@ -3530,94 +3566,122 @@ function Dashboard({ savedCases, setPage, specialRequestors, addRequestor, remov
   const last14=[...Array(14)].map((_,i)=>{const d=new Date();d.setDate(d.getDate()-13+i);return savedCases.filter(c=>new Date(c.savedAt).toDateString()===d.toDateString()).length;});
 
   const greetHour=now.getHours();
-  const greeting=greetHour<12?"Good morning 🌅":greetHour<17?"Good afternoon ☀️":"Good evening 🌙";
-
+  const thisWeekStart=new Date(now);thisWeekStart.setDate(now.getDate()-now.getDay());thisWeekStart.setHours(0,0,0,0);
+  const completedThisWeek=savedCases.filter(c=>c.checklist&&Object.values(c.checklist).every(Boolean)&&new Date(c.savedAt)>=thisWeekStart).length;
+  const latestAnnouncement=(announcements||[])[0];
 
   return (
     <div>
-      <div style={{background:"var(--glass-bg)",border:"1px solid var(--glass-border)",backdropFilter:"var(--glass-blur)",WebkitBackdropFilter:"var(--glass-blur)",borderRadius:14,padding:"22px 24px",marginBottom:24,display:"flex",alignItems:"center",justifyContent:"space-between",gap:16,flexWrap:"wrap",boxShadow:"var(--glass-shadow)"}}>
-        <div>
-          <h2 style={{fontSize:24,fontWeight:800,letterSpacing:"-.5px",marginBottom:4}}>{greeting}, {user?.name?.split(" ")[0]||"there"} 👋</h2>
-          <p style={{color:"var(--muted)",fontSize:13,fontFamily:"'Poppins',sans-serif"}}>{now.toLocaleDateString("en-US",{weekday:"long",month:"long",day:"numeric",year:"numeric"})}</p>
-        </div>
-        <div style={{display:"flex",gap:10,flexWrap:"wrap"}}>
-          <div style={{background:"var(--entry-bg)",border:"1px solid var(--border)",borderRadius:10,padding:"10px 16px",textAlign:"center",minWidth:70}}>
-            <div style={{fontSize:22,fontWeight:800,color:"var(--accent)",lineHeight:1}}>{today}</div>
-            <div style={{fontSize:10,color:"var(--muted)",fontWeight:700,textTransform:"uppercase",letterSpacing:".6px",marginTop:3}}>Today</div>
+      <PageHeader title="Dashboard" subtitle="Summary Of Data" onStartBreak={onStartBreak} onStartOpenHour={onStartOpenHour} onLogout={onLogout}/>
+
+      {/* ── Profile + top stats row ── */}
+      <div style={{display:"flex",gap:16,flexWrap:"wrap",marginBottom:16}}>
+        <div style={{flex:2,minWidth:280,background:"var(--card)",border:"1px solid var(--border)",borderRadius:12,padding:"18px 22px",display:"flex",alignItems:"center",gap:16,boxShadow:"var(--shadow-sm)"}}>
+          <div style={{width:52,height:52,borderRadius:"50%",background:"var(--accent)",color:"#fff",display:"flex",alignItems:"center",justifyContent:"center",fontSize:18,fontWeight:800,flexShrink:0,fontFamily:"'Plus Jakarta Sans',sans-serif"}}>
+            {(user?.name||"U").split(" ").map(w=>w&&w[0]).filter(Boolean).join("").slice(0,2).toUpperCase()}
           </div>
-          <div style={{background:"var(--entry-bg)",border:"1px solid var(--border)",borderRadius:10,padding:"10px 16px",textAlign:"center",minWidth:70}}>
-            <div style={{fontSize:22,fontWeight:800,color:"var(--green)",lineHeight:1}}>{rate}%</div>
-            <div style={{fontSize:10,color:"var(--muted)",fontWeight:700,textTransform:"uppercase",letterSpacing:".6px",marginTop:3}}>Complete</div>
-          </div>
-          <div style={{background:"var(--entry-bg)",border:"1px solid var(--border)",borderRadius:10,padding:"10px 16px",textAlign:"center",minWidth:70}}>
-            <div style={{fontSize:22,fontWeight:800,color:"var(--text)",lineHeight:1}}>{total}</div>
-            <div style={{fontSize:10,color:"var(--muted)",fontWeight:700,textTransform:"uppercase",letterSpacing:".6px",marginTop:3}}>Total</div>
+          <div>
+            <div style={{fontSize:18,fontWeight:800,fontFamily:"'Plus Jakarta Sans',sans-serif"}}>Hello, {(user?.name||"there").toUpperCase()}</div>
+            <div style={{fontSize:12,color:"var(--muted)"}}>{user?.jobTitle||"Web Designer"}</div>
           </div>
         </div>
-      </div>
-
-      <div className="stat-grid">
-        <div className="stat-card blue"><div className="stat-icon">📁</div><div className="stat-label">Total Cases</div><div className="stat-val">{total}</div><div className="stat-sub">All time</div></div>
-        <div className="stat-card green"><div className="stat-icon">📅</div><div className="stat-label">Today</div><div className="stat-val">{today}</div><div className="stat-sub">Cases today</div></div>
-        <div className="stat-card amber"><div className="stat-icon"> </div><div className="stat-label">Site Comments</div><div className="stat-val">{scCount}</div><div className="stat-sub">Post-live</div></div>
-        <div className="stat-card purple"><div className="stat-icon"> </div><div className="stat-label">Inbound Email</div><div className="stat-val">{ibCount}</div><div className="stat-sub">Assumptions</div></div>
-        <div className="stat-card green"><div className="stat-icon">✅</div><div className="stat-label">Completed</div><div className="stat-val">{rate}%</div><div className="stat-sub">Checklist rate</div></div>
-        <div className="stat-card red"><div className="stat-icon"> </div><div className="stat-label">Incomplete</div><div className="stat-val">{total-completed}</div><div className="stat-sub">Missing checklist</div></div>
-      </div>
-
-      {/* Charts row */}
-      <div className="section-title">Analytics</div>
-      <div className="analytics-grid">
-        <div className="analytics-card">
-          <div className="analytics-title">Cases by Amend Type</div>
-          {typeData.length>0?<BarChart data={typeData} colorClass={["blue","purple","green","amber","blue"]}/>:<div className="empty-analytics">Save cases to see data</div>}
-        </div>
-        <div className="analytics-card">
-          <div className="analytics-title">Type Split</div>
-          {total>0?<DonutChart data={[{label:"Site Comment",val:scCount},{label:"Inbound Email",val:ibCount}]}/>:<div className="empty-analytics">No data yet</div>}
-        </div>
-        <div className="analytics-card">
-          <div className="analytics-title">Cases by Day of Week</div>
-          {total>0?<BarChart data={dayData} colorClass={["blue","blue","blue","blue","blue","purple","amber"]}/>:<div className="empty-analytics">No data yet</div>}
-        </div>
-        <div className="analytics-card">
-          <div className="analytics-title">Last 14 Days Activity</div>
-          {total>0?(<div style={{paddingTop:8}}><SparkLine data={last14} width={220} height={50}/><div style={{fontSize:11,color:"var(--muted)",marginTop:8}}>Cases per day over the last 2 weeks</div></div>):<div className="empty-analytics">No data yet</div>}
-        </div>
-        <div className="analytics-card">
-          <div className="analytics-title">Checklist Completion</div>
-          {total>0?(<><BarChart data={[{label:"Completed",val:completed},{label:"Incomplete",val:total-completed}]} colorClass={["green","red"]}/><div style={{fontSize:11,color:"var(--muted)",marginTop:6,textAlign:"center"}}>{rate}% completion rate</div></>):<div className="empty-analytics">No data yet</div>}
-        </div>
-        <div className="analytics-card">
-          <div className="analytics-title">Completion Rate</div>
-          {total>0?<DonutChart data={[{label:"Complete",val:completed},{label:"Incomplete",val:total-completed}]}/>:<div className="empty-analytics">No data yet</div>}
-        </div>
-      </div>
-
-      {/* Quick Actions */}
-      <div className="section-title" style={{marginTop:4}}>Quick Actions</div>
-      <div className="quick-links">
-        <div className="quick-card" onClick={()=>setPage("postlive")}><span className="quick-icon"><Icon name="postlive" size={22}/></span><div><div className="quick-title">Post-Live Amends</div><div className="quick-sub">Site Comment or Inbound Email</div></div></div>
-        <div className="quick-card" onClick={()=>setPage("prelive")}><span className="quick-icon"><Icon name="prelive" size={22}/></span><div><div className="quick-title">Pre-Live Amends</div><div className="quick-sub">Coming soon</div></div></div>
-        <div className="quick-card" onClick={()=>setPage("history")}><span className="quick-icon"><Icon name="history" size={22}/></span><div><div className="quick-title">Case History</div><div className="quick-sub">{total} case{total!==1?"s":""} saved</div></div></div>
-        <div className="quick-card" onClick={()=>setPage("announcements")}><span className="quick-icon"><Icon name="announce" size={22}/></span><div><div className="quick-title">Announcements</div><div className="quick-sub">Team updates</div></div></div>
-      </div>
-
-      {/* Recent */}
-      {savedCases.length>0&&(<>
-        <div className="section-title">Recent Cases</div>
-        {[...savedCases].slice(0,6).map((c,i)=>(
-          <div key={i} className="activity-row" style={{cursor:"pointer"}} onClick={()=>setPage("history")}>
-            <div className={cls("act-dot",c._mode==="siteComment"?"blue":"purple")}/>
-            <div className="act-info"><div className="act-title">Case #{c.caseNum} — {c.accountNum}</div><div className="act-sub">{c.amendType} · {c.savedAt}</div></div>
-            <span className={cls("act-badge",c._mode==="siteComment"?"site":"email")}>{c._mode==="siteComment"?"Site Comment":"Inbound Email"}</span>
+        {[["Overall Cases",total],["My Latest Quota",completedThisWeek],["Cases Finished Today",today]].map(([label,val])=>(
+          <div key={label} style={{flex:1,minWidth:130,background:"var(--card)",border:"1px solid var(--border)",borderRadius:12,padding:"16px 20px",textAlign:"center",boxShadow:"var(--shadow-sm)"}}>
+            <div style={{fontSize:26,fontWeight:800,color:"var(--text)",fontFamily:"'Plus Jakarta Sans',sans-serif"}}>{val}</div>
+            <div style={{fontSize:11,color:"var(--muted)",marginTop:2}}>{label}</div>
           </div>
         ))}
-        <div style={{textAlign:"right",marginTop:8}}>
-          <button className="h-btn" style={{fontSize:11,padding:"5px 12px",borderColor:"var(--accent)",color:"var(--accent)"}} onClick={()=>setPage("history")}>View All in History →</button>
+      </div>
+
+      {/* ── Date & Time + Quick Actions row ── */}
+      <div style={{display:"flex",gap:16,flexWrap:"wrap",marginBottom:16}}>
+        <div style={{flex:1,minWidth:240,background:"var(--card)",border:"1px solid var(--border)",borderRadius:12,padding:"16px 20px",boxShadow:"var(--shadow-sm)"}}>
+          <div style={{fontSize:10,fontWeight:700,color:"var(--muted)",textTransform:"uppercase",letterSpacing:".6px",marginBottom:8}}>Date &amp; Time</div>
+          <div style={{display:"flex",alignItems:"baseline",justifyContent:"space-between",flexWrap:"wrap",gap:8}}>
+            <div style={{fontSize:24,fontWeight:800,fontFamily:"'Plus Jakarta Sans',sans-serif"}}>{now.toLocaleTimeString("en-US",{hour:"numeric",minute:"2-digit"})}</div>
+            <div style={{fontSize:13,fontWeight:700,color:"var(--muted)"}}>{now.toLocaleDateString("en-US",{month:"long",day:"numeric",year:"numeric"}).toUpperCase()}</div>
+          </div>
         </div>
-      </>)}
-      {savedCases.length===0&&(<div style={{textAlign:"center",color:"var(--muted)",padding:"40px 0",fontSize:14}}><div style={{marginBottom:16}}><Icon name="empty" size={52} color="var(--muted)"/></div>No cases saved yet. Start by creating a Post-Live Amend!</div>)}
+        <div style={{flex:1,minWidth:240,background:"var(--card)",border:"1px solid var(--border)",borderRadius:12,padding:"16px 20px",boxShadow:"var(--shadow-sm)"}}>
+          <div style={{fontSize:10,fontWeight:700,color:"var(--muted)",textTransform:"uppercase",letterSpacing:".6px",marginBottom:8}}>Quick Actions (Post-Live)</div>
+          <div style={{display:"flex",gap:8,flexWrap:"wrap"}}>
+            <button className="btn btn-ghost btn-noicon" onClick={()=>setPage("postlive")}>Site Comment</button>
+            <button className="btn btn-ghost btn-noicon" onClick={()=>setPage("postlive")}>Inbound</button>
+            <button className="btn btn-ghost btn-noicon" onClick={()=>setPage("postlive")}>Bundle</button>
+          </div>
+        </div>
+      </div>
+
+      {/* ── Pre-Live / Post-Live stats + Amendments donut ── */}
+      <div style={{display:"flex",gap:16,flexWrap:"wrap",marginBottom:16,alignItems:"stretch"}}>
+        <div style={{flex:2,minWidth:320,display:"flex",flexDirection:"column",gap:12}}>
+          <div>
+            <div style={{fontSize:10,fontWeight:700,color:"var(--muted)",textTransform:"uppercase",letterSpacing:".6px",marginBottom:8}}>Pre-Live</div>
+            <div style={{display:"flex",gap:12,flexWrap:"wrap"}}>
+              {[["Total Site Comments",0],["Archived Case",0],["Total Cases Finished",0]].map(([l,v])=>(
+                <div key={l} style={{flex:1,minWidth:120,background:"var(--card)",border:"1px solid var(--border)",borderRadius:10,padding:"12px 14px",textAlign:"center",boxShadow:"var(--shadow-sm)"}}>
+                  <div style={{fontSize:20,fontWeight:800,fontFamily:"'Plus Jakarta Sans',sans-serif"}}>{v}</div>
+                  <div style={{fontSize:10,color:"var(--muted)",marginTop:2}}>{l}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+          <div>
+            <div style={{fontSize:10,fontWeight:700,color:"var(--muted)",textTransform:"uppercase",letterSpacing:".6px",marginBottom:8}}>Post-Live</div>
+            <div style={{display:"flex",gap:12,flexWrap:"wrap"}}>
+              {[["Total Site Comments",scCount],["Total Inbound Email",ibCount],["Total Cases Finished",total]].map(([l,v])=>(
+                <div key={l} style={{flex:1,minWidth:120,background:"var(--card)",border:"1px solid var(--border)",borderRadius:10,padding:"12px 14px",textAlign:"center",boxShadow:"var(--shadow-sm)"}}>
+                  <div style={{fontSize:20,fontWeight:800,fontFamily:"'Plus Jakarta Sans',sans-serif"}}>{v}</div>
+                  <div style={{fontSize:10,color:"var(--muted)",marginTop:2}}>{l}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+          <div style={{background:"var(--card)",border:"1px solid var(--border)",borderRadius:12,padding:"14px 18px",boxShadow:"var(--shadow-sm)",flex:1}}>
+            <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:8}}>
+              <div style={{fontSize:10,fontWeight:700,color:"var(--muted)",textTransform:"uppercase",letterSpacing:".6px"}}>Announcement</div>
+              <a href="#" onClick={e=>{e.preventDefault();setPage("announcements");}} style={{fontSize:11,fontWeight:700,color:"var(--accent)"}}>See All Announcement →</a>
+            </div>
+            {latestAnnouncement ? (
+              <div>
+                <div style={{fontSize:14,fontWeight:800,marginBottom:4}}>{latestAnnouncement.title}</div>
+                <div style={{fontSize:12,color:"var(--muted)",overflow:"hidden",display:"-webkit-box",WebkitLineClamp:2,WebkitBoxOrient:"vertical"}}>{latestAnnouncement.body}</div>
+              </div>
+            ) : <div style={{fontSize:12,color:"var(--muted)"}}>No announcements yet.</div>}
+          </div>
+        </div>
+
+        <div style={{flex:1,minWidth:260,display:"flex",flexDirection:"column",gap:12}}>
+          <div style={{background:"var(--card)",border:"1px solid var(--border)",borderRadius:12,padding:"14px 18px",boxShadow:"var(--shadow-sm)"}}>
+            <div style={{fontSize:10,fontWeight:700,color:"var(--muted)",textTransform:"uppercase",letterSpacing:".6px",marginBottom:8}}>Amendments</div>
+            {total>0?<DonutChart data={[{label:"Site Comment",val:scCount},{label:"Inbound Email",val:ibCount}]}/>:<div className="empty-analytics">No data yet</div>}
+          </div>
+          <div style={{background:"var(--card)",border:"1px solid var(--border)",borderRadius:12,padding:"14px 18px",boxShadow:"var(--shadow-sm)"}}>
+            <div style={{fontSize:10,fontWeight:700,color:"var(--muted)",textTransform:"uppercase",letterSpacing:".6px",marginBottom:8}}>Quota Graph</div>
+            {total>0?<SparkLine data={last14} width={220} height={60} color="#40513b"/>:<div className="empty-analytics">No data yet</div>}
+          </div>
+          <div style={{background:"var(--card)",border:"1px solid var(--border)",borderRadius:12,padding:"14px 18px",boxShadow:"var(--shadow-sm)"}}>
+            <div style={{fontSize:10,fontWeight:700,color:"var(--muted)",textTransform:"uppercase",letterSpacing:".6px",marginBottom:8}}>Amendments</div>
+            {total>0?<BarChart data={dayData} colorClass={["blue","blue","blue","blue","blue","purple","amber"]}/>:<div className="empty-analytics">No data yet</div>}
+          </div>
+        </div>
+      </div>
+
+      {/* ── Latest Case Processed ── */}
+      <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:10}}>
+        <div style={{fontSize:10,fontWeight:700,color:"var(--muted)",textTransform:"uppercase",letterSpacing:".6px"}}>Latest Case Processed</div>
+        <a href="#" onClick={e=>{e.preventDefault();setPage("history");}} style={{fontSize:11,fontWeight:700,color:"var(--accent)"}}>See All Cases →</a>
+      </div>
+      {savedCases.length>0 ? [...savedCases].slice(0,3).map((c,i)=>(
+        <div key={i} style={{display:"flex",alignItems:"center",justifyContent:"space-between",gap:12,background:"var(--card)",border:"1px solid var(--border)",borderRadius:10,padding:"12px 16px",marginBottom:8,cursor:"pointer",boxShadow:"var(--shadow-sm)"}} onClick={()=>setPage("history")}>
+          <div>
+            <div style={{fontWeight:700,fontSize:13}}>{c.caseNum} - {c.accountNum}</div>
+            <div style={{fontSize:11,color:"var(--muted)"}}>{c.amendType}</div>
+          </div>
+          <span className={cls("ann-badge",c._mode==="siteComment"?"info":"update")} style={{flexShrink:0}}>{c._mode==="siteComment"?"Site Comment - Minor":"Inbound Email - Minor"}</span>
+        </div>
+      )) : <div style={{textAlign:"center",color:"var(--muted)",padding:"30px 0",fontSize:13}}>No cases saved yet.</div>}
+
       <Toast msg={toast.msg} type={toast.type}/>
     </div>
   );
@@ -4366,7 +4430,7 @@ function PostLivePage({ onSaveCase, onUpdateCase, onUpdateDraft, onFormActive, o
 
         <div className="page-header pl-dark-header" style={{padding:"16px 32px",flexShrink:0,margin:0,display:"flex",alignItems:"center",gap:16,justifyContent:"space-between"}}>
           <div style={{display:"flex",alignItems:"center",gap:14,minWidth:0}}>
-            <button onClick={()=>onMinimise&&onMinimise()} title="Minimize" style={{width:34,height:34,borderRadius:"50%",border:"1.5px solid rgba(255,255,255,.35)",background:"rgba(255,255,255,.08)",color:"#fff",cursor:"pointer",display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0,fontSize:16}}>←</button>
+            <button onClick={()=>onMinimise&&onMinimise()} title="Minimize" style={{width:34,height:34,borderRadius:20,border:"1.5px solid rgba(255,255,255,.35)",background:"rgba(255,255,255,.08)",color:"#fff",cursor:"pointer",display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0,fontSize:16}}>←</button>
             <div style={{minWidth:0}}>
               {(()=>{
                 const activeTabMode=(activeLiveTabs.find(t=>t.id===activeFormTabId)||activeLiveTabs[0])?.mode||mode;
@@ -4858,7 +4922,7 @@ function PostLivePage({ onSaveCase, onUpdateCase, onUpdateDraft, onFormActive, o
               <label style={{display:"block",marginBottom:6}}>Tracker reminder after</label>
               <div style={{display:"flex",gap:8,flexWrap:"wrap"}}>
                 {[15,30,45,60,90,120].map(m=>(
-                  <button key={m} onClick={()=>setProlongedMins(m)} style={{padding:"4px 12px",borderRadius:8,border:prolongedMins===m?"2px solid #f59e0b":"1px solid var(--border)",background:prolongedMins===m?"rgba(245,158,11,.12)":"var(--glass-bg)",color:prolongedMins===m?"#f59e0b":"var(--muted)",fontWeight:prolongedMins===m?700:400,cursor:"pointer",fontSize:12,fontFamily:"'Poppins',sans-serif"}}>{m}m</button>
+                  <button key={m} onClick={()=>setProlongedMins(m)} style={{padding:"4px 12px",borderRadius:20,border:prolongedMins===m?"2px solid #f59e0b":"1px solid var(--border)",background:prolongedMins===m?"rgba(245,158,11,.12)":"var(--glass-bg)",color:prolongedMins===m?"#f59e0b":"var(--muted)",fontWeight:prolongedMins===m?700:400,cursor:"pointer",fontSize:12,fontFamily:"'Poppins',sans-serif"}}>{m}m</button>
                 ))}
                 <input type="number" min={1} max={480} value={prolongedMins} onChange={e=>setProlongedMins(Math.max(1,Number(e.target.value)))} className="inp" style={{width:64,textAlign:"center"}}/>
               </div>
@@ -5239,7 +5303,7 @@ function PostLivePage({ onSaveCase, onUpdateCase, onUpdateDraft, onFormActive, o
       </div>}
       {isMinimised&&!breakActive&&<div style={{fontSize:12,color:"var(--amber)",marginTop:-16,marginBottom:24,fontFamily:"'Poppins',sans-serif",padding:"10px 14px",background:"rgba(245,158,11,.08)",border:"1px solid rgba(245,158,11,.35)",borderRadius:8,display:"flex",alignItems:"center",justifyContent:"space-between",gap:8,flexWrap:"wrap"}}>
         <span style={{display:"flex",alignItems:"center",gap:8}}><span style={{fontSize:16}}>🗕</span> A form is currently <strong style={{color:"var(--amber)"}}>minimised</strong> — resume or cancel it before starting a new one.</span>
-        <button className="btn btn-ghost" style={{fontSize:11,padding:"5px 12px",borderRadius:6,color:"var(--amber)",borderColor:"rgba(245,158,11,.4)"}} onClick={()=>{const m=minimisedFormData?._mode||(typeof window!=="undefined"?localStorage.getItem("ch_active_form_mode"):null);if(m==="siteComment"||m==="inbound"){setMode(m);setIsMinimised(false);onFormActive&&onFormActive(true);onFormInFields&&onFormInFields(true);}}}> Resume</button>
+        <button className="btn btn-ghost" style={{fontSize:11,padding:"5px 12px",borderRadius:20,color:"var(--amber)",borderColor:"rgba(245,158,11,.4)"}} onClick={()=>{const m=minimisedFormData?._mode||(typeof window!=="undefined"?localStorage.getItem("ch_active_form_mode"):null);if(m==="siteComment"||m==="inbound"){setMode(m);setIsMinimised(false);onFormActive&&onFormActive(true);onFormInFields&&onFormInFields(true);}}}> Resume</button>
       </div>}
 
       {/* Session Time Log */}
@@ -5309,7 +5373,7 @@ function PostLivePage({ onSaveCase, onUpdateCase, onUpdateDraft, onFormActive, o
               <span style={{fontSize:10,padding:"2px 8px",background:"rgba(64,81,59,.12)",color:"var(--accent)",borderRadius:20,fontWeight:700,fontFamily:"'Poppins',sans-serif"}}>{new Set(sessionLog.filter(e=>e.caseNum).map(e=>e.caseNum)).size} cases</span>
             </div>
             <div style={{display:"flex",gap:8}}>
-              <button className="btn btn-ghost" style={{fontSize:11,padding:"5px 12px",borderRadius:7}} onClick={()=>setShowLog(s=>!s)}>{showLog?"▲ Hide":"▼ Show"} Log</button>
+              <button className="btn btn-ghost" style={{fontSize:11,padding:"5px 12px",borderRadius:20}} onClick={()=>setShowLog(s=>!s)}>{showLog?"▲ Hide":"▼ Show"} Log</button>
               
             </div>
           </div>
@@ -6395,7 +6459,7 @@ function AnnouncementsPage({ announcements, addAnnouncement, updateAnnouncement,
     return value ? (
       <div style={{position:"relative",width:"fit-content"}}>
         <img src={value} alt="Attached" style={{maxWidth:"100%",maxHeight:180,borderRadius:10,border:"1px solid var(--border)",display:"block"}}/>
-        <button type="button" onClick={()=>onChange(null)} title="Remove image" style={{position:"absolute",top:6,right:6,width:22,height:22,borderRadius:"50%",border:"none",background:"rgba(44,36,24,.65)",color:"#fff",cursor:"pointer",fontSize:12,display:"flex",alignItems:"center",justifyContent:"center"}}>✕</button>
+        <button type="button" onClick={()=>onChange(null)} title="Remove image" style={{position:"absolute",top:6,right:6,width:22,height:22,borderRadius:20,border:"none",background:"rgba(44,36,24,.65)",color:"#fff",cursor:"pointer",fontSize:12,display:"flex",alignItems:"center",justifyContent:"center"}}>✕</button>
       </div>
     ) : (
       <div
@@ -6590,7 +6654,7 @@ function LinksPage({ links, setLinks, addLink, updateLink, removeLink }) {
   const iconPicker=(val,onChange)=>(
     <div style={{display:"flex",flexWrap:"wrap",gap:7,marginTop:4}}>
       {ICONS.map(ic=>(
-        <button key={ic} style={{width:36,height:36,borderRadius:8,background:val===ic?"var(--entry-accent-bg)":"var(--card2)",border:val===ic?"1.5px solid var(--accent)":"1.5px solid var(--border)",fontSize:18,cursor:"pointer",transition:".15s"}} onClick={()=>onChange(ic)}>{ic}</button>
+        <button key={ic} style={{width:36,height:36,borderRadius:20,background:val===ic?"var(--entry-accent-bg)":"var(--card2)",border:val===ic?"1.5px solid var(--accent)":"1.5px solid var(--border)",fontSize:18,cursor:"pointer",transition:".15s"}} onClick={()=>onChange(ic)}>{ic}</button>
       ))}
     </div>
   );
@@ -7167,7 +7231,7 @@ function SignupPage({ onSignup, goLogin }) {
         <div className="auth-title">Create account</div>
         <div className="auth-sub">Join your CaseHub workspace</div>
         {err&&<div style={{background:"var(--btn-cancel-bg)",border:"1px solid var(--btn-cancel-border)",color:"var(--btn-cancel-text)",borderRadius:8,padding:"10px 14px",fontSize:13,marginBottom:16,textAlign:"center"}}>{err}</div>}
-        {form._confirmed&&<div style={{background:"rgba(16,185,129,.1)",border:"1px solid var(--green)",color:"var(--green)",borderRadius:8,padding:"14px",fontSize:13,marginBottom:16,textAlign:"center",lineHeight:1.6}}>Account created!<br/><span style={{opacity:.8,fontSize:12}}>{form._msg}</span><br/><button className="auth-link" style={{marginTop:8,display:"block",textAlign:"center"}} onClick={goLogin}>← Back to Sign In</button></div>}
+        {form._confirmed&&<div style={{background:"rgba(16,185,129,.1)",border:"1px solid var(--green)",color:"var(--green)",borderRadius:20,padding:"14px",fontSize:13,marginBottom:16,textAlign:"center",lineHeight:1.6}}>Account created!<br/><span style={{opacity:.8,fontSize:12}}>{form._msg}</span><br/><button className="auth-link" style={{marginTop:8,display:"block",textAlign:"center"}} onClick={goLogin}>← Back to Sign In</button></div>}
         {!form._confirmed&&<><div className="field"><label>Full Name</label><input className="inp" placeholder="Your name" value={form.name} onChange={e=>setForm(f=>({...f,name:e.target.value}))} disabled={loading}/></div>
         <div className="field"><label>Email</label><input className="inp" type="email" placeholder="you@email.com" value={form.email} onChange={e=>setForm(f=>({...f,email:e.target.value}))} disabled={loading}/></div>
         <div className="field"><label>Password</label><input className="inp" type="password" placeholder="Min. 6 characters" value={form.password} onChange={e=>setForm(f=>({...f,password:e.target.value}))} disabled={loading}/></div>
@@ -8379,7 +8443,7 @@ function App() {
             </div>
             <div className="profile-text"><div className="profile-name">{user.name}</div><div className="profile-role">{user.role||"User"}</div></div>
           </div>
-          <button className="sidebar-logout-btn" onClick={()=>logout()} style={{display:"flex",alignItems:"center",gap:8,width:"100%",background:"none",border:"1.5px solid rgba(197,68,70,.4)",padding:"10px 12px",borderRadius:8,cursor:"pointer",color:"var(--red)",fontSize:13,fontWeight:600,fontFamily:"'Poppins',sans-serif",transition:".18s",marginTop:0}} onMouseOver={e=>{e.currentTarget.style.background="rgba(197,68,70,.1)";e.currentTarget.style.borderColor="rgba(197,68,70,.7)";}} onMouseOut={e=>{e.currentTarget.style.background="none";e.currentTarget.style.borderColor="rgba(197,68,70,.4)";}}>
+          <button className="sidebar-logout-btn" onClick={()=>logout()} style={{display:"flex",alignItems:"center",gap:8,width:"100%",background:"none",border:"1.5px solid rgba(197,68,70,.4)",padding:"10px 12px",borderRadius:20,cursor:"pointer",color:"var(--red)",fontSize:13,fontWeight:600,fontFamily:"'Poppins',sans-serif",transition:".18s",marginTop:0}} onMouseOver={e=>{e.currentTarget.style.background="rgba(197,68,70,.1)";e.currentTarget.style.borderColor="rgba(197,68,70,.7)";}} onMouseOut={e=>{e.currentTarget.style.background="none";e.currentTarget.style.borderColor="rgba(197,68,70,.4)";}}>
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" style={{flexShrink:0}}><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
             <span className="nav-label">Sign Out</span>
           </button>
@@ -8406,7 +8470,7 @@ function App() {
         <main className={cls("main-area", formInFields&&page==="postlive"&&"form-mode")} style={{paddingBottom: formInFields&&page==="postlive" ? 0 : (breakTimer?80:32)}}>
           {dataLoading&&<div style={{display:"flex",alignItems:"center",justifyContent:"center",height:"80vh",flexDirection:"column",gap:16}}><div style={{animation:"float 1.5s ease-in-out infinite"}}><Icon name="loading" size={48} color="var(--accent)"/></div><div style={{color:"var(--muted)",fontSize:13,fontFamily:"Poppins,sans-serif"}}>Loading your workspace...</div></div>}
 
-          {!dataLoading&&page==="dashboard"&&<Dashboard savedCases={allCases} setPage={setPage} specialRequestors={specialRequestors} addRequestor={addRequestor} removeRequestor={removeRequestor} user={user}/>}
+          {!dataLoading&&page==="dashboard"&&<Dashboard savedCases={allCases} setPage={setPage} specialRequestors={specialRequestors} addRequestor={addRequestor} removeRequestor={removeRequestor} user={user} announcements={announcements} onStartBreak={startBreak} onStartOpenHour={startOpenHour} onLogout={logout} timerLimit={timerLimit}/>}
           {!dataLoading&&page==="build"&&<div className="soon-wrap"><div className="soon-badge"><Icon name="casebox" size={80} color="var(--muted)"/></div><div className="soon-title">Build</div><div className="soon-sub">Coming soon — hang tight!</div></div>}
           {!dataLoading&&page==="prelive"&&<div className="soon-wrap"><div className="soon-badge"><Icon name="prelive" size={80} color="var(--muted)"/></div><div className="soon-title">Pre-Live Amends</div><div className="soon-sub">Coming soon — hang tight!</div></div>}
           {!dataLoading&&<div style={{display:page==="postlive"?"block":"none"}}>
@@ -8527,7 +8591,7 @@ function App() {
             <div style={{fontSize:13,fontWeight:700,color:"#fff"}}>Open Hour Active</div>
             <div style={{fontSize:11,color:"rgba(255,255,255,.75)"}}>Helping a customer outside normal amends</div>
           </div>
-          <button onClick={()=>setCancelOpenHourConfirm(true)} style={{padding:"8px 18px",background:"rgba(255,255,255,.15)",border:"1px solid rgba(255,255,255,.3)",borderRadius:8,color:"#fff",fontWeight:700,fontSize:12,cursor:"pointer",fontFamily:"'Poppins',sans-serif",backdropFilter:"blur(4px)"}}>End Open Hour</button>
+          <button onClick={()=>setCancelOpenHourConfirm(true)} style={{padding:"8px 18px",background:"rgba(255,255,255,.15)",border:"1px solid rgba(255,255,255,.3)",borderRadius:20,color:"#fff",fontWeight:700,fontSize:12,cursor:"pointer",fontFamily:"'Poppins',sans-serif",backdropFilter:"blur(4px)"}}>End Open Hour</button>
         </div>
       )}
 
@@ -8658,7 +8722,7 @@ function SessionLogPage({ user, refreshKey=0 }) {
               <div style={{display:"flex",gap:8,alignItems:"center"}}>
                 {cases.length>0 && <span style={{fontSize:10,padding:"3px 10px",background:"var(--entry-accent-bg)",border:"1px solid rgba(64,81,59,.25)",color:"var(--accent)",fontWeight:700,borderRadius:20}}>{cases.length} case{cases.length!==1?"s":""}</span>}
                 {breaks.length>0 && <span style={{fontSize:10,padding:"3px 10px",background:"var(--entry-bg)",border:"1px solid var(--border)",color:"var(--amber)",fontWeight:700,borderRadius:20}}>{breaks.length} break{breaks.length!==1?"s":""}</span>}
-                <button onClick={e=>{e.stopPropagation();setDeleteId(s.id);}} style={{background:"rgba(197,68,70,.1)",border:"1px solid rgba(197,68,70,.3)",color:"var(--red)",borderRadius:6,padding:"3px 10px",fontSize:11,fontWeight:700,cursor:"pointer",transition:".15s",flexShrink:0}} title="Delete session">Delete</button>
+                <button onClick={e=>{e.stopPropagation();setDeleteId(s.id);}} style={{background:"rgba(197,68,70,.1)",border:"1px solid rgba(197,68,70,.3)",color:"var(--red)",borderRadius:20,padding:"3px 10px",fontSize:11,fontWeight:700,cursor:"pointer",transition:".15s",flexShrink:0}} title="Delete session">Delete</button>
                 <span style={{color:"var(--muted)",fontSize:12,transform:isOpen?"rotate(180deg)":"none",display:"inline-block",transition:".2s"}}>▼</span>
               </div>
             </div>
@@ -8732,7 +8796,7 @@ function FngPageDropzone({ imgUrl, onFile }){
     return (
       <div style={{position:'relative',border:'1px solid var(--border)',borderRadius:8,overflow:'hidden'}}>
         <img src={imgUrl} alt="" style={{width:'100%',maxHeight:140,objectFit:'cover',display:'block'}}/>
-        <button type="button" onClick={()=>onFile(null)} title="Remove" style={{position:'absolute',top:6,right:6,width:22,height:22,borderRadius:'50%',border:'none',background:'rgba(44,36,24,.65)',color:'#fff',cursor:'pointer',fontSize:12}}>✕</button>
+        <button type="button" onClick={()=>onFile(null)} title="Remove" style={{position:'absolute',top:6,right:6,width:22,height:22,borderRadius:20,border:'none',background:'rgba(44,36,24,.65)',color:'#fff',cursor:'pointer',fontSize:12}}>✕</button>
       </div>
     );
   }
@@ -8840,7 +8904,7 @@ function FngSection({title,vals,sk,children}){
     <div style={{marginBottom:20}}>
       <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:8,borderBottom:'1px solid var(--border)',paddingBottom:6}}>
         <div style={{fontSize:10,fontWeight:700,textTransform:'uppercase',letterSpacing:'1px',color:'var(--muted)',fontFamily:"'Poppins',sans-serif"}}>{title}</div>
-        {(vals||[]).filter(Boolean).length>0&&<button onClick={()=>copyAll(vals,sk)} style={{padding:'3px 10px',fontSize:10,background:copiedAll===sk?'var(--green)':'var(--card2)',color:copiedAll===sk?'#fff':'var(--muted)',border:'1px solid var(--border)',cursor:'pointer',fontWeight:700,borderRadius:6,transition:'.15s',flexShrink:0}}>{copiedAll===sk?'Copied All':'Copy All'}</button>}
+        {(vals||[]).filter(Boolean).length>0&&<button onClick={()=>copyAll(vals,sk)} style={{padding:'3px 10px',fontSize:10,background:copiedAll===sk?'var(--green)':'var(--card2)',color:copiedAll===sk?'#fff':'var(--muted)',border:'1px solid var(--border)',cursor:'pointer',fontWeight:700,borderRadius:20,transition:'.15s',flexShrink:0}}>{copiedAll===sk?'Copied All':'Copy All'}</button>}
       </div>
       {children}
     </div>
@@ -8854,10 +8918,10 @@ function DynList({field,placeholder}){
       {form[field].map((val,i)=>(
         <div key={i} style={{display:'flex',gap:6,marginBottom:6,alignItems:'center'}}>
           <input className="inp" style={{fontSize:12,flex:1}} placeholder={`${placeholder} ${i+1}`} value={val} onChange={e=>setItem(field,i,e.target.value)}/>
-          <button onClick={()=>removeItem(field,i)} style={{background:'var(--btn-cancel-bg)',border:'1px solid var(--btn-cancel-border)',color:'var(--btn-cancel-text)',borderRadius:6,padding:'5px 9px',fontSize:12,cursor:'pointer',flexShrink:0}} title="Remove">✕</button>
+          <button onClick={()=>removeItem(field,i)} style={{background:'var(--btn-cancel-bg)',border:'1px solid var(--btn-cancel-border)',color:'var(--btn-cancel-text)',borderRadius:20,padding:'5px 9px',fontSize:12,cursor:'pointer',flexShrink:0}} title="Remove">✕</button>
         </div>
       ))}
-      <button onClick={()=>addItem(field)} style={{background:'none',border:'2px dashed var(--border)',borderRadius:7,color:'var(--muted)',padding:'7px 14px',fontSize:12,fontWeight:600,cursor:'pointer',width:'100%',transition:'.15s',fontFamily:"'Poppins',sans-serif"}} onMouseOver={e=>{e.currentTarget.style.borderColor='var(--accent)';e.currentTarget.style.color='var(--accent)';}} onMouseOut={e=>{e.currentTarget.style.borderColor='var(--border)';e.currentTarget.style.color='var(--muted)';}}>+ Add {placeholder}</button>
+      <button onClick={()=>addItem(field)} style={{background:'none',border:'2px dashed var(--border)',borderRadius:20,color:'var(--muted)',padding:'7px 14px',fontSize:12,fontWeight:600,cursor:'pointer',width:'100%',transition:'.15s',fontFamily:"'Poppins',sans-serif"}} onMouseOver={e=>{e.currentTarget.style.borderColor='var(--accent)';e.currentTarget.style.color='var(--accent)';}} onMouseOut={e=>{e.currentTarget.style.borderColor='var(--border)';e.currentTarget.style.color='var(--muted)';}}>+ Add {placeholder}</button>
     </div>
   );
 }
@@ -9390,7 +9454,7 @@ function FileNameGeneratorPage({ onFill=null, activeTabData=null }) {
               </div>
               );
             })}
-            <button onClick={()=>addItem(listCfg.field)} style={{background:'none',border:'2px dashed var(--border)',borderRadius:8,color:'var(--muted)',padding:'10px 14px',fontSize:12,fontWeight:700,cursor:'pointer',width:'100%',fontFamily:"'Poppins',sans-serif",marginBottom:18,display:'flex',alignItems:'center',justifyContent:'center',gap:6}}>Add More {listCfg.field==='pages'?'Page':listCfg.placeholder} <Icon name="add" size={14} color="var(--muted)"/></button>
+            <button onClick={()=>addItem(listCfg.field)} style={{background:'none',border:'2px dashed var(--border)',borderRadius:20,color:'var(--muted)',padding:'10px 14px',fontSize:12,fontWeight:700,cursor:'pointer',width:'100%',fontFamily:"'Poppins',sans-serif",marginBottom:18,display:'flex',alignItems:'center',justifyContent:'center',gap:6}}>Add More {listCfg.field==='pages'?'Page':listCfg.placeholder} <Icon name="add" size={14} color="var(--muted)"/></button>
           </div>
         ) : tab==='gallery' ? (
           <div style={{marginBottom:18}}>
