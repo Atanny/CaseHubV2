@@ -1584,6 +1584,24 @@ body.light .sidebar-divider{background:rgba(180,90,40,.1);}
 .fng-slot-actions{display:flex;align-items:center;gap:4px;flex-shrink:0;}
 .fng-slot-actions button{background:none;border:none;cursor:pointer;padding:3px;display:flex;align-items:center;color:var(--muted);font-size:11px;border-radius:4px;}
 .fng-slot-actions button:hover{background:var(--border);color:var(--text);}
+/* ── Auth screens (Figma Log in / Sign Up): cream card, dark-green outline, uppercase labels ── */
+.auth-card{background:var(--surface) !important;border:2px solid var(--accent) !important;border-radius:20px !important;padding:44px 50px !important;box-shadow:2px 5px 10px rgba(64,81,59,.12) !important;backdrop-filter:none !important;-webkit-backdrop-filter:none !important;}
+.auth-logo{margin-bottom:14px !important;}
+.auth-logo-text{font-family:'Plus Jakarta Sans',sans-serif;font-size:32px !important;font-weight:800;letter-spacing:0 !important;color:var(--accent);}
+.auth-tagline{text-align:center;font-size:13px;color:var(--accent);margin-bottom:14px;font-family:'Poppins',sans-serif;}
+.auth-rule{height:2px;background:var(--border);margin:14px 0 18px;border-radius:2px;}
+.auth-label{font-size:11px !important;font-weight:700 !important;text-transform:uppercase;color:var(--accent) !important;letter-spacing:.3px;margin-bottom:8px !important;}
+.auth-card .inp{background:#fff;border:1px solid var(--border);border-radius:20px;padding:15px 20px;font-size:13px;}
+.auth-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.auth-check{display:flex;align-items:center;gap:10px;font-size:13px;color:var(--accent);cursor:pointer;user-select:none;margin-top:2px;font-family:'Poppins',sans-serif;}
+.auth-check-box{width:20px;height:20px;border:2px solid var(--accent);border-radius:4px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.auth-foot{text-align:center;font-size:13px;color:var(--accent);margin-top:14px;font-family:'Poppins',sans-serif;}
+.auth-link{color:#4760ff !important;text-decoration:underline;}
+.auth-msg{border-radius:12px;padding:10px 14px;font-size:13px;margin-bottom:14px;text-align:center;}
+.auth-msg.err{background:#fdf1f1;border:1px solid var(--red);color:#a53338;}
+.auth-msg.ok{background:rgba(76,138,86,.1);border:1px solid var(--green);color:var(--green);}
+@media (max-width:560px){.auth-card{padding:30px 22px !important;}.auth-row{grid-template-columns:1fr;gap:0;}}
+
 `;
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -2496,6 +2514,10 @@ function Icon({ name, size=16, color="currentColor", style={} }) {
     download:     <svg viewBox="0 0 16 16" fill="none" style={s}><path d="M8 1v9M4.5 6.5L8 10l3.5-3.5" stroke={color} strokeWidth="1.5" strokeLinecap="square"/><path d="M2 13h12" stroke={color} strokeWidth="1.5" strokeLinecap="square"/></svg>,
     add:          <svg viewBox="0 0 16 16" fill="none" style={s}><path d="M8 2v12M2 8h12" stroke={color} strokeWidth="1.6" strokeLinecap="square"/></svg>,
     upload:       <svg viewBox="0 0 16 16" fill="none" style={s}><path d="M8 11V2M4.5 5.5L8 2l3.5 3.5" stroke={color} strokeWidth="1.5" strokeLinecap="square"/><path d="M2 13h12" stroke={color} strokeWidth="1.5" strokeLinecap="square"/></svg>,
+    eye:          <svg viewBox="0 0 16 16" fill="none" style={s}><path d="M1 8s2.5-4.5 7-4.5S15 8 15 8s-2.5 4.5-7 4.5S1 8 1 8z" stroke={color} strokeWidth="1.4"/><circle cx="8" cy="8" r="2" stroke={color} strokeWidth="1.4"/></svg>,
+    eyeOff:       <svg viewBox="0 0 16 16" fill="none" style={s}><path d="M1 8s2.5-4.5 7-4.5S15 8 15 8s-2.5 4.5-7 4.5S1 8 1 8z" stroke={color} strokeWidth="1.4"/><circle cx="8" cy="8" r="2" stroke={color} strokeWidth="1.4"/><path d="M2 14L14 2" stroke={color} strokeWidth="1.4" strokeLinecap="round"/></svg>,
+    login:        <svg viewBox="0 0 16 16" fill="none" style={s}><path d="M6 8h8M11 5l3 3-3 3" stroke={color} strokeWidth="1.5" strokeLinecap="square"/><path d="M6 2H3v12h3" stroke={color} strokeWidth="1.5" strokeLinecap="square"/></svg>,
+    search:       <svg viewBox="0 0 16 16" fill="none" style={s}><circle cx="7" cy="7" r="5" stroke={color} strokeWidth="1.5"/><path d="M11 11l3.5 3.5" stroke={color} strokeWidth="1.5" strokeLinecap="round"/></svg>,
     play:         <svg viewBox="0 0 16 16" fill="none" style={s}><path d="M4 2l10 6-10 6V2z" fill={color}/></svg>,
     loading:      <svg viewBox="0 0 16 16" fill="none" style={s}><circle cx="8" cy="8" r="6" stroke={color} strokeWidth="1.5" opacity=".25"/><path d="M8 2a6 6 0 016 6" stroke={color} strokeWidth="1.5" strokeLinecap="square"/></svg>,
     empty:        <svg viewBox="0 0 16 16" fill="none" style={s}><rect x="2" y="2" width="12" height="12" stroke={color} strokeWidth="1.5" opacity=".4"/><path d="M6 6h4M6 10h2" stroke={color} strokeWidth="1.4" strokeLinecap="square" opacity=".4"/></svg>,
@@ -6344,7 +6366,7 @@ function EditableCaseCard({ c, onUpdate, onRequestDelete, onLightbox, openId, se
   );
 }
 
-function CaseHistory({ cases, onUpdate, onDelete }) {
+function CaseHistory({ cases, onUpdate, onDelete, onStartBreak, onStartOpenHour, onLogout }) {
   const [lightboxImg,setLightboxImg]=useState(null);
   const [search,setSearch]=useState("");
   const [filterMode,setFilterMode]=useState("all");
@@ -6355,26 +6377,32 @@ function CaseHistory({ cases, onUpdate, onDelete }) {
   const filtered = [...cases].filter(c=>{
     const q=search.toLowerCase();
     const matchQ=!q||c.caseNum?.toLowerCase().includes(q)||c.accountNum?.toLowerCase().includes(q)||c.amendType?.toLowerCase().includes(q)||c.entries?.some(e=>e.note?.toLowerCase().includes(q)||e.clarification?.toLowerCase().includes(q));
-    const matchMode=filterMode==="all"||(filterMode==="site"&&c._mode==="siteComment")||(filterMode==="inbound"&&c._mode==="inbound");
+    const matchMode=filterMode==="all"||(filterMode==="site"&&c._mode==="siteComment")||(filterMode==="inbound"&&c._mode==="inbound")||(filterMode==="bundle"&&!!c._bundledWith);
     const matchDate=!filterDate||c.savedAt?.includes(filterDate);
     return matchQ&&matchMode&&matchDate;
   });
 
   return (
     <div>
-      <div className="page-header">
-        <div className="page-title">Case History</div>
-        <div className="page-sub">{cases.length} case{cases.length!==1?"s":""} saved — click ✏️ Edit to modify any field</div>
-      </div>
+      <PageHeader title="Case History" subtitle="Where the cases stored" onStartBreak={onStartBreak} onStartOpenHour={onStartOpenHour} onLogout={onLogout}/>
 
-      <div className="search-wrap">
-        <span className="search-icon">🔍</span>
-        <input className="search-inp" placeholder="Search by case #, account, amend type, notes..." value={search} onChange={e=>setSearch(e.target.value)}/>
+      <div style={{display:"flex",gap:12,marginBottom:14,flexWrap:"wrap"}}>
+        <div className="search-wrap" style={{flex:1,minWidth:260,marginBottom:0}}>
+          <span className="search-icon"><Icon name="search" size={14} color="var(--muted)"/></span>
+          <input className="search-inp" placeholder="E.g Case #/Assumption/Email/Account #/ NOB" value={search} onChange={e=>setSearch(e.target.value)}/>
+        </div>
+        <input type="date" className="inp" style={{width:180,padding:"10px 14px",fontSize:12}} value={filterDate} onChange={e=>setFilterDate(e.target.value)} title="Filter by date"/>
       </div>
-      <div className="filter-row">
-        {[["all","All"],["site","Site Comment"],["inbound","Inbound Email"]].map(([v,l])=>(<button key={v} className={cls("filter-btn",filterMode===v&&"active")} onClick={()=>setFilterMode(v)}>{l}</button>))}
-        <input type="date" className="inp" style={{width:"auto",padding:"7px 12px",fontSize:12,marginLeft:"auto"}} value={filterDate} onChange={e=>setFilterDate(e.target.value)} title="Filter by date"/>
-        {(search||filterDate||filterMode!=="all")&&<button className="filter-btn" onClick={()=>{setSearch("");setFilterDate("");setFilterMode("all");}}>Clear</button>}
+      <div style={{display:"flex",gap:10,marginBottom:18,flexWrap:"wrap"}}>
+        {[["all","All"],["site","Site Comment"],["inbound","Inbound Email"],["bundle","Bundle Cases"]].map(([v,l])=>(
+          <label key={v} onClick={()=>setFilterMode(v)} style={{display:"flex",alignItems:"center",gap:7,padding:"8px 16px",borderRadius:20,border:`1.5px solid ${filterMode===v?"var(--accent)":"var(--border)"}`,background:"#fff",cursor:"pointer",fontSize:12,fontWeight:600,color:filterMode===v?"var(--accent)":"var(--text)"}}>
+            <span style={{width:14,height:14,borderRadius:"50%",border:`1.5px solid ${filterMode===v?"var(--accent)":"var(--border)"}`,display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0}}>
+              {filterMode===v&&<span style={{width:7,height:7,borderRadius:"50%",background:"var(--accent)"}}/>}
+            </span>
+            {l}
+          </label>
+        ))}
+        {(search||filterDate||filterMode!=="all")&&<button className="btn btn-ghost btn-noicon" onClick={()=>{setSearch("");setFilterDate("");setFilterMode("all");}}>Clear</button>}
       </div>
 
       {filtered.length===0?(
@@ -6414,7 +6442,7 @@ function CaseHistory({ cases, onUpdate, onDelete }) {
 // ─────────────────────────────────────────────────────────────────────────────
 // ANNOUNCEMENTS
 // ─────────────────────────────────────────────────────────────────────────────
-function AnnouncementsPage({ announcements, addAnnouncement, updateAnnouncement, removeAnnouncement, user }) {
+function AnnouncementsPage({ announcements, addAnnouncement, updateAnnouncement, removeAnnouncement, user, onStartBreak, onStartOpenHour, onLogout }) {
   const [adding,setAdding]=useState(false);
   const [confirming,setConfirming]=useState(false);
   const [saving,setSaving]=useState(false);
@@ -6535,9 +6563,16 @@ function AnnouncementsPage({ announcements, addAnnouncement, updateAnnouncement,
 
   return (
     <div>
-      <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:24}}>
-        <div><div className="page-title"> Announcements</div><div className="page-sub">Team updates and notices</div></div>
-        <button className="btn btn-primary" onClick={()=>{setAdding(true);setConfirming(false);}}>＋ New Announcement</button>
+      <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:10,flexWrap:"wrap",gap:12}}>
+        <div><div className="page-title">Announcements</div><div className="page-sub">Team updates and notices</div></div>
+        <div style={{display:"flex",gap:8,flexWrap:"wrap",alignItems:"center"}}>
+          {onStartBreak&&[{label:"15 min",mins:15,icon:"coffee",short:"15 MIN"},{label:"30 min",mins:30,icon:"meditate",short:"30 MIN"},{label:"1 hour",mins:60,icon:"lunch",short:"1 HOUR"}].map(({label,mins,icon,short})=>(
+            <button key={mins} className="btn btn-ghost btn-noicon" style={{gap:7}} onClick={()=>{onStartBreak(label+" break",mins);}}><Icon name={icon} size={14} color="var(--accent)"/>{short}</button>
+          ))}
+          {onStartOpenHour&&<button className="btn btn-ghost btn-noicon" style={{gap:7}} onClick={onStartOpenHour}><Icon name="calendar" size={14} color="var(--accent)"/>MEETING</button>}
+          {onLogout&&<button className="btn btn-alert" onClick={onLogout}>Log Out</button>}
+          <button className="btn btn-primary" onClick={()=>{setAdding(true);setConfirming(false);}}>New Announcement</button>
+        </div>
       </div>
 
       {/* ── Write form ── */}
@@ -6624,7 +6659,7 @@ function AnnouncementsPage({ announcements, addAnnouncement, updateAnnouncement,
 // ─────────────────────────────────────────────────────────────────────────────
 // LINKS PAGE
 // ─────────────────────────────────────────────────────────────────────────────
-function LinksPage({ links, setLinks, addLink, updateLink, removeLink }) {
+function LinksPage({ links, setLinks, addLink, updateLink, removeLink, onStartBreak, onStartOpenHour, onLogout }) {
   const dragLinkRef=useRef(null);
   const [dragLinkActive,setDragLinkActive]=useState(null);
   const [dragLinkOver,setDragLinkOver]=useState(null);
@@ -6661,9 +6696,16 @@ function LinksPage({ links, setLinks, addLink, updateLink, removeLink }) {
 
   return (
     <div>
-      <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:24}}>
+      <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:10,flexWrap:"wrap",gap:12}}>
         <div><div className="page-title">Quick Links</div><div className="page-sub">Custom links shown in the sidebar</div></div>
-        <button className="btn btn-primary" onClick={()=>setAdding(true)}>＋ Add Link</button>
+        <div style={{display:"flex",gap:8,flexWrap:"wrap",alignItems:"center"}}>
+          {onStartBreak&&[{label:"15 min",mins:15,icon:"coffee",short:"15 MIN"},{label:"30 min",mins:30,icon:"meditate",short:"30 MIN"},{label:"1 hour",mins:60,icon:"lunch",short:"1 HOUR"}].map(({label,mins,icon,short})=>(
+            <button key={mins} className="btn btn-ghost btn-noicon" style={{gap:7}} onClick={()=>{onStartBreak(label+" break",mins);}}><Icon name={icon} size={14} color="var(--accent)"/>{short}</button>
+          ))}
+          {onStartOpenHour&&<button className="btn btn-ghost btn-noicon" style={{gap:7}} onClick={onStartOpenHour}><Icon name="calendar" size={14} color="var(--accent)"/>MEETING</button>}
+          {onLogout&&<button className="btn btn-alert" onClick={onLogout}>Log Out</button>}
+          <button className="btn btn-primary" onClick={()=>setAdding(true)}>Add Link</button>
+        </div>
       </div>
 
       {/* Add modal */}
@@ -6726,7 +6768,7 @@ function LinksPage({ links, setLinks, addLink, updateLink, removeLink }) {
 // ─────────────────────────────────────────────────────────────────────────────
 // PROFILE PAGE
 // ─────────────────────────────────────────────────────────────────────────────
-function ProfilePage({ user, setUser, onLogout, timerLimit, saveTimerLimit, qaLimit=10, saveQaLimit, shiftStartTime="", saveShiftStartTime, shiftStartWarnMins=10, saveShiftStartWarnMins, shiftEndTime="", saveShiftEndTime, shiftWarnMins=10, saveShiftWarnMins, specialRequestors=[], addRequestor, removeRequestor }) {
+function ProfilePage({ user, setUser, onLogout, timerLimit, saveTimerLimit, qaLimit=10, saveQaLimit, shiftStartTime="", saveShiftStartTime, shiftStartWarnMins=10, saveShiftStartWarnMins, shiftEndTime="", saveShiftEndTime, shiftWarnMins=10, saveShiftWarnMins, specialRequestors=[], addRequestor, removeRequestor, onStartBreak, onStartOpenHour }) {
   const [editing,setEditing]=useState(false);
   const [loading,setLoading]=useState(true);
   const [saving,setSaving]=useState(false);
@@ -6871,7 +6913,7 @@ function ProfilePage({ user, setUser, onLogout, timerLimit, saveTimerLimit, qaLi
 
   return (
     <div>
-      <div className="page-header"><div className="page-title">Profile & Settings</div><div className="page-sub">Manage your account, requestors, and preferences</div></div>
+      <PageHeader title="Profile & Settings" subtitle="Manage your profile" onStartBreak={onStartBreak} onStartOpenHour={onStartOpenHour} onLogout={onLogout}/>
       {loading&&<div style={{textAlign:"center",padding:"40px 0",color:"var(--muted)"}}>Loading profile…</div>}
       {!loading&&<>
 
@@ -7148,23 +7190,48 @@ function ProfilePage({ user, setUser, onLogout, timerLimit, saveTimerLimit, qaLi
 // ─────────────────────────────────────────────────────────────────────────────
 function AuthLogo() {
   return (
-    <div className="auth-logo">
-      <div className="auth-logo-icon">
-        <svg width="40" height="40" viewBox="0 0 30 30" fill="none">
-          <rect x="2" y="2" width="11" height="11" fill="var(--accent)" opacity=".9"/>
-          <rect x="17" y="2" width="11" height="11" fill="var(--accent)" opacity=".5"/>
-          <rect x="2" y="17" width="11" height="11" fill="var(--accent)" opacity=".5"/>
-          <rect x="17" y="17" width="11" height="11" fill="var(--accent)" opacity=".2"/>
+    <>
+      <div className="auth-logo">
+        <svg width="44" height="44" viewBox="0 0 32 32" fill="none">
+          <path d="M6 24a11 11 0 1 1 20 0" stroke="var(--accent)" strokeWidth="2.6" strokeLinecap="round"/>
+          <path d="M16 19l6-8" stroke="var(--accent)" strokeWidth="2.6" strokeLinecap="round"/>
+          <circle cx="16" cy="19" r="2.4" fill="var(--accent)"/>
         </svg>
+        <div className="auth-logo-text">CASEHUB</div>
       </div>
-      <div className="auth-logo-text">Case<span>Hub</span></div>
+      <div className="auth-tagline">Make Your Work Faster And Efficient</div>
+    </>
+  );
+}
+
+// Password input with show/hide eye toggle (Figma auth screens)
+function PasswordField({ value, onChange, onKeyDown, disabled, placeholder }) {
+  const [show,setShow]=useState(false);
+  return (
+    <div style={{position:"relative"}}>
+      <input className="inp" type={show?"text":"password"} placeholder={placeholder} value={value} onChange={onChange} onKeyDown={onKeyDown} disabled={disabled} style={{paddingRight:44}}/>
+      <button type="button" onClick={()=>setShow(v=>!v)} aria-label={show?"Hide password":"Show password"} style={{position:"absolute",right:14,top:"50%",transform:"translateY(-50%)",background:"none",border:"none",cursor:"pointer",display:"flex",padding:0}}>
+        <Icon name={show?"eyeOff":"eye"} size={16} color="var(--accent)"/>
+      </button>
     </div>
   );
 }
 
+function AuthCheck({ checked, onChange, children }) {
+  return (
+    <label className="auth-check" onClick={e=>{e.preventDefault();onChange(!checked);}}>
+      <span className="auth-check-box" style={{background:checked?"var(--accent)":"#fff"}}>{checked&&<span style={{color:"#fff",fontSize:12,lineHeight:1}}>✓</span>}</span>
+      <span>{children}</span>
+    </label>
+  );
+}
+
 function LoginPage({ onLogin, goSignup }) {
-  const [form,setForm]=useState({email:"",password:""});
+  const [form,setForm]=useState(()=>({email:(typeof window!=="undefined"&&localStorage.getItem("ch_remember_email"))||"",password:""}));
+  const [remember,setRemember]=useState(()=>typeof window!=="undefined"&&!!localStorage.getItem("ch_remember_email"));
+  const [mode,setMode]=useState("login"); // login | reset
   const [err,setErr]=useState("");
+  const [info,setInfo]=useState("");
   const [loading,setLoading]=useState(false);
   const submit=async()=>{
     if(!form.email||!form.password){setErr("Please fill all fields");return;}
@@ -7173,7 +7240,7 @@ function LoginPage({ onLogin, goSignup }) {
       const res=await fetch("/api/auth/signin",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(form)});
       const data=await res.json();
       if(!res.ok){setErr(data.error||"Sign in failed");return;}
-      // Persist session to localStorage
+      if(remember) localStorage.setItem("ch_remember_email",form.email); else localStorage.removeItem("ch_remember_email");
       localStorage.setItem("ch_token",data.access_token);
       localStorage.setItem("ch_refresh",data.refresh_token);
       localStorage.setItem("ch_user",JSON.stringify(data.user));
@@ -7181,42 +7248,61 @@ function LoginPage({ onLogin, goSignup }) {
     }catch(e){setErr("Network error — please try again");}
     finally{setLoading(false);}
   };
+  const sendReset=async()=>{
+    if(!form.email){setErr("Enter your email address");return;}
+    setLoading(true);setErr("");setInfo("");
+    try{
+      const res=await fetch("/api/auth/reset",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({email:form.email})});
+      const data=await res.json();
+      if(!res.ok){setErr(data.error||"Could not send reset link");return;}
+      setInfo(data.message);
+    }catch(e){setErr("Network error — please try again");}
+    finally{setLoading(false);}
+  };
   return (
     <div className="auth-page">
-      <div className="auth-card">
+      <div className="auth-card" style={{maxWidth:470}}>
         <AuthLogo/>
-        <div className="auth-title">Welcome back</div>
-        <div className="auth-sub">Sign in to your CaseHub workspace</div>
-        {err&&<div style={{background:"var(--btn-cancel-bg)",border:"1px solid var(--btn-cancel-border)",color:"var(--btn-cancel-text)",borderRadius:8,padding:"10px 14px",fontSize:13,marginBottom:16,textAlign:"center"}}>{err}</div>}
-        <div className="field"><label>Email</label><input className="inp" type="email" placeholder="you@email.com" value={form.email} onChange={e=>setForm(f=>({...f,email:e.target.value}))} onKeyDown={e=>e.key==="Enter"&&submit()} disabled={loading}/></div>
-        <div className="field"><label>Password</label><input className="inp" type="password" placeholder="••••••••" value={form.password} onChange={e=>setForm(f=>({...f,password:e.target.value}))} onKeyDown={e=>e.key==="Enter"&&submit()} disabled={loading}/></div>
-        <button className="btn btn-save" style={{width:"100%",justifyContent:"center",marginTop:4}} onClick={submit} disabled={loading}>{loading?"Signing in...":"Sign In →"}</button>
-        <div className="auth-divider">or</div>
-        <div style={{textAlign:"center",fontSize:13,color:"var(--muted)"}}>Don't have an account? <button className="auth-link" onClick={goSignup}>Sign up</button></div>
+        <div className="auth-rule"/>
+        {err&&<div className="auth-msg err">{err}</div>}
+        {info&&<div className="auth-msg ok">{info}</div>}
+        <div className="field"><label className="auth-label">Email Address</label><input className="inp" type="email" placeholder="John.Doe@Gmail.Com" value={form.email} onChange={e=>setForm(f=>({...f,email:e.target.value}))} onKeyDown={e=>e.key==="Enter"&&(mode==="login"?submit():sendReset())} disabled={loading}/></div>
+        {mode==="login"?(<>
+          <div className="field"><label className="auth-label">Password</label><PasswordField placeholder="" value={form.password} onChange={e=>setForm(f=>({...f,password:e.target.value}))} onKeyDown={e=>e.key==="Enter"&&submit()} disabled={loading}/></div>
+          <AuthCheck checked={remember} onChange={setRemember}>Remember Me</AuthCheck>
+          <div className="auth-rule"/>
+          <button className="btn btn-primary btn-noicon" style={{width:"100%",justifyContent:"center",padding:"14px 20px"}} onClick={submit} disabled={loading}>{loading?"Signing in...":"Login"}<Icon name="login" size={16} color="#fff"/></button>
+          <div className="auth-foot">Forget Password? <button className="auth-link" onClick={()=>{setMode("reset");setErr("");setInfo("");}}>Reset Your Password Now</button></div>
+          <div className="auth-foot">Dont Have An Account Yet? <button className="auth-link" onClick={goSignup}>Sign Up Now</button></div>
+        </>):(<>
+          <div className="auth-rule"/>
+          <button className="btn btn-primary btn-noicon" style={{width:"100%",justifyContent:"center",padding:"14px 20px"}} onClick={sendReset} disabled={loading}>{loading?"Sending...":"Send Reset Link"}</button>
+          <div className="auth-foot"><button className="auth-link" onClick={()=>{setMode("login");setErr("");setInfo("");}}>Back To Login</button></div>
+        </>)}
       </div>
     </div>
   );
 }
 
 function SignupPage({ onSignup, goLogin }) {
-  const [form,setForm]=useState({name:"",email:"",password:"",confirm:""});
+  const [form,setForm]=useState({first:"",last:"",email:"",password:"",confirm:""});
+  const [agree,setAgree]=useState(false);
   const [err,setErr]=useState("");
+  const [done,setDone]=useState(null);
   const [loading,setLoading]=useState(false);
+  const set=k=>e=>setForm(f=>({...f,[k]:e.target.value}));
   const submit=async()=>{
-    if(!form.name||!form.email||!form.password){setErr("Please fill all fields");return;}
+    const name=`${form.first.trim()} ${form.last.trim()}`.trim();
+    if(!form.first.trim()||!form.email||!form.password){setErr("Please fill all fields");return;}
     if(form.password.length<6){setErr("Password must be at least 6 characters");return;}
     if(form.password!==form.confirm){setErr("Passwords do not match");return;}
+    if(!agree){setErr("Please agree to the Terms And Conditions");return;}
     setLoading(true);setErr("");
     try{
-      const res=await fetch("/api/auth/signup",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(form)});
+      const res=await fetch("/api/auth/signup",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({name,email:form.email,password:form.password,confirm:form.confirm})});
       const data=await res.json();
       if(!res.ok){setErr(data.error||"Sign up failed");return;}
-      // Email confirmation required (Supabase default)
-      if(data.needsConfirmation){
-        setErr(""); 
-        setForm(f=>({...f,_confirmed:true,_msg:data.message}));
-        return;
-      }
+      if(data.needsConfirmation){setDone(data.message);return;}
       localStorage.setItem("ch_token",data.access_token);
       localStorage.setItem("ch_refresh",data.refresh_token);
       localStorage.setItem("ch_user",JSON.stringify(data.user));
@@ -7226,19 +7312,27 @@ function SignupPage({ onSignup, goLogin }) {
   };
   return (
     <div className="auth-page">
-      <div className="auth-card">
+      <div className="auth-card" style={{maxWidth:580}}>
         <AuthLogo/>
-        <div className="auth-title">Create account</div>
-        <div className="auth-sub">Join your CaseHub workspace</div>
-        {err&&<div style={{background:"var(--btn-cancel-bg)",border:"1px solid var(--btn-cancel-border)",color:"var(--btn-cancel-text)",borderRadius:8,padding:"10px 14px",fontSize:13,marginBottom:16,textAlign:"center"}}>{err}</div>}
-        {form._confirmed&&<div style={{background:"rgba(16,185,129,.1)",border:"1px solid var(--green)",color:"var(--green)",borderRadius:20,padding:"14px",fontSize:13,marginBottom:16,textAlign:"center",lineHeight:1.6}}>Account created!<br/><span style={{opacity:.8,fontSize:12}}>{form._msg}</span><br/><button className="auth-link" style={{marginTop:8,display:"block",textAlign:"center"}} onClick={goLogin}>← Back to Sign In</button></div>}
-        {!form._confirmed&&<><div className="field"><label>Full Name</label><input className="inp" placeholder="Your name" value={form.name} onChange={e=>setForm(f=>({...f,name:e.target.value}))} disabled={loading}/></div>
-        <div className="field"><label>Email</label><input className="inp" type="email" placeholder="you@email.com" value={form.email} onChange={e=>setForm(f=>({...f,email:e.target.value}))} disabled={loading}/></div>
-        <div className="field"><label>Password</label><input className="inp" type="password" placeholder="Min. 6 characters" value={form.password} onChange={e=>setForm(f=>({...f,password:e.target.value}))} disabled={loading}/></div>
-        <div className="field"><label>Confirm Password</label><input className="inp" type="password" placeholder="••••••••" value={form.confirm} onChange={e=>setForm(f=>({...f,confirm:e.target.value}))} onKeyDown={e=>e.key==="Enter"&&submit()} disabled={loading}/></div></>}
-        {!form._confirmed&&<button className="btn btn-save" style={{width:"100%",justifyContent:"center",marginTop:4}} onClick={submit} disabled={loading}>{loading?"Creating account...":"Create Account →"}</button>}
-        {!form._confirmed&&<><div className="auth-divider">or</div>
-        <div style={{textAlign:"center",fontSize:13,color:"var(--muted)"}}>Already have an account? <button className="auth-link" onClick={goLogin}>Sign in</button></div></>}
+        <div className="auth-rule"/>
+        {err&&<div className="auth-msg err">{err}</div>}
+        {done?(
+          <div className="auth-msg ok" style={{lineHeight:1.6}}>Account created!<br/><span style={{opacity:.85,fontSize:12}}>{done}</span><br/><button className="auth-link" style={{marginTop:8}} onClick={goLogin}>Back To Login</button></div>
+        ):(<>
+          <div className="auth-row">
+            <div className="field"><label className="auth-label">First Name</label><input className="inp" placeholder="John" value={form.first} onChange={set("first")} disabled={loading}/></div>
+            <div className="field"><label className="auth-label">Last Name</label><input className="inp" placeholder="Doe" value={form.last} onChange={set("last")} disabled={loading}/></div>
+          </div>
+          <div className="field"><label className="auth-label">Email Address</label><input className="inp" type="email" placeholder="John.Doe@Gmail.Com" value={form.email} onChange={set("email")} disabled={loading}/></div>
+          <div className="auth-row">
+            <div className="field"><label className="auth-label">Password</label><PasswordField placeholder="" value={form.password} onChange={set("password")} disabled={loading}/></div>
+            <div className="field"><label className="auth-label">Confirm Password</label><PasswordField placeholder="" value={form.confirm} onChange={set("confirm")} onKeyDown={e=>e.key==="Enter"&&submit()} disabled={loading}/></div>
+          </div>
+          <AuthCheck checked={agree} onChange={setAgree}>By Checking This, You Are Agreeing With Our Terms And Conditions.</AuthCheck>
+          <div className="auth-rule"/>
+          <button className="btn btn-primary btn-noicon" style={{width:"100%",justifyContent:"center",padding:"14px 20px"}} onClick={submit} disabled={loading}>{loading?"Creating account...":"Sign Up Now"}<Icon name="login" size={16} color="#fff"/></button>
+          <div className="auth-foot">Already Have An Account? <button className="auth-link" onClick={goLogin}>Log In Now</button></div>
+        </>)}
       </div>
     </div>
   );
@@ -8476,12 +8570,12 @@ function App() {
           {!dataLoading&&<div style={{display:page==="postlive"?"block":"none"}}>
             <PostLivePage onSaveCase={addCase} onUpdateCase={updateCase} onUpdateDraft={updateDraft} onFormActive={setFormActivePersist} onFormInFields={setFormInFields} onMinimise={()=>{setPage("postlive"); if(typeof window!=="undefined") localStorage.setItem("ch_page","postlive");}} allSavedCases={allCases} dbDrafts={drafts} onSaveDraft={saveDraft} onDeleteDraft={deleteDraft} onArchiveDraft={archiveDraft} user={user} onTimerEnd={playEndAlarm} specialRequestors={specialRequestors} alarmMins={alarmMins} qaAlarmMins={qaLimit} globalTimeIn={globalTimeIn} timedIn={timedIn} breakActive={!!breakTimer||openHourActive} breakTimer={breakTimer||null} openHourActive={openHourActive} onTimeIn={doTimeIn} onTimeOut={doTimeOut} onTimerReset={doTimerReset} sessionDbId={sessionDbId} sessionLog={sessionLog} addSessionLog={addSessionLog} setSessionLog={setSessionLog} closeWithOutcome={closeWithOutcome} closeSessionLog={closeSessionLog} clearSessionLog={clearSessionLog} onStartBreak={startBreak} onStartBreakFull={(label,mins)=>startBreak(label,mins,true)} onStopBreak={()=>setCancelBreakConfirm(true)} onStartOpenHour={startOpenHour} onStopOpenHour={()=>setCancelOpenHourConfirm(true)} resumeTick={resumeFormTick}/>
           </div>}
-          {!dataLoading&&page==="history"&&<CaseHistory cases={allCases} onUpdate={updateCase} onDelete={deleteCase}/>}
-          {!dataLoading&&page==="announcements"&&<AnnouncementsPage announcements={announcements} addAnnouncement={addAnnouncement} updateAnnouncement={updateAnnouncement} removeAnnouncement={removeAnnouncement} user={user}/>}
-          {!dataLoading&&page==="links"&&<LinksPage links={links} setLinks={setLinks} addLink={addLink} updateLink={updateLink} removeLink={removeLink}/>}
-          {!dataLoading&&page==="profile"&&<ProfilePage user={user} setUser={setUser} onLogout={logout} timerLimit={timerLimit} saveTimerLimit={saveTimerLimit} qaLimit={qaLimit} saveQaLimit={saveQaLimit} shiftStartTime={shiftStartTime} saveShiftStartTime={saveShiftStartTime} shiftStartWarnMins={shiftStartWarnMins} saveShiftStartWarnMins={saveShiftStartWarnMins} shiftEndTime={shiftEndTime} saveShiftEndTime={saveShiftEndTime} shiftWarnMins={shiftWarnMins} saveShiftWarnMins={saveShiftWarnMins} specialRequestors={specialRequestors} addRequestor={addRequestor} removeRequestor={removeRequestor}/>}
-          {!dataLoading&&page==="sessions"&&<SessionLogPage user={user} refreshKey={sessionRefreshKey}/>}
-          {!dataLoading&&page==="archives"&&<ArchivePage archivedDrafts={archivedDrafts} onDelete={async(id)=>{try{await fetch(`/api/archived-drafts/${id}`,{method:"DELETE"});setArchivedDrafts(a=>a.filter(x=>x._id!==id));}catch(e){console.error(e);}}}/>}
+          {!dataLoading&&page==="history"&&<CaseHistory cases={allCases} onUpdate={updateCase} onDelete={deleteCase} onStartBreak={startBreak} onStartOpenHour={startOpenHour} onLogout={logout}/>}
+          {!dataLoading&&page==="announcements"&&<AnnouncementsPage announcements={announcements} addAnnouncement={addAnnouncement} updateAnnouncement={updateAnnouncement} removeAnnouncement={removeAnnouncement} user={user} onStartBreak={startBreak} onStartOpenHour={startOpenHour} onLogout={logout}/>}
+          {!dataLoading&&page==="links"&&<LinksPage links={links} setLinks={setLinks} addLink={addLink} updateLink={updateLink} removeLink={removeLink} onStartBreak={startBreak} onStartOpenHour={startOpenHour} onLogout={logout}/>}
+          {!dataLoading&&page==="profile"&&<ProfilePage user={user} setUser={setUser} onLogout={logout} timerLimit={timerLimit} saveTimerLimit={saveTimerLimit} qaLimit={qaLimit} saveQaLimit={saveQaLimit} shiftStartTime={shiftStartTime} saveShiftStartTime={saveShiftStartTime} shiftStartWarnMins={shiftStartWarnMins} saveShiftStartWarnMins={saveShiftStartWarnMins} shiftEndTime={shiftEndTime} saveShiftEndTime={saveShiftEndTime} shiftWarnMins={shiftWarnMins} saveShiftWarnMins={saveShiftWarnMins} specialRequestors={specialRequestors} addRequestor={addRequestor} removeRequestor={removeRequestor} onStartBreak={startBreak} onStartOpenHour={startOpenHour}/>}
+          {!dataLoading&&page==="sessions"&&<SessionLogPage user={user} refreshKey={sessionRefreshKey} onStartBreak={startBreak} onStartOpenHour={startOpenHour} onLogout={logout}/>}
+          {!dataLoading&&page==="archives"&&<ArchivePage archivedDrafts={archivedDrafts} onDelete={async(id)=>{try{await fetch(`/api/archived-drafts/${id}`,{method:"DELETE"});setArchivedDrafts(a=>a.filter(x=>x._id!==id));}catch(e){console.error(e);}}} onStartBreak={startBreak} onStartOpenHour={startOpenHour} onLogout={logout}/>}
           {!dataLoading&&page==="filenames"&&<FileNameGeneratorPage/>}
         </main>
       </div>
@@ -8618,7 +8712,7 @@ function App() {
 // ─────────────────────────────────────────────────────────────────────────────
 // SESSION LOG PAGE
 // ─────────────────────────────────────────────────────────────────────────────
-function SessionLogPage({ user, refreshKey=0 }) {
+function SessionLogPage({ user, refreshKey=0, onStartBreak, onStartOpenHour, onLogout }) {
   const [sessions, setSessions] = useState([]);
   const [loading, setLoading] = useState(true);
   const [date, setDate] = useState("");
@@ -8672,12 +8766,7 @@ function SessionLogPage({ user, refreshKey=0 }) {
 
   return (
     <div>
-      <div style={{marginBottom:24}}>
-        <div className="page-title" style={{display:"flex",alignItems:"center",gap:10}}>
-          <span style={{fontSize:22}}>📊</span> Session Log
-        </div>
-        <div className="page-sub">Time in/out records and case activity by day.</div>
-      </div>
+      <PageHeader title="Session Logs" subtitle="Check your time history" onStartBreak={onStartBreak} onStartOpenHour={onStartOpenHour} onLogout={onLogout}/>
 
       {/* Date picker + summary */}
       <div style={{background:"var(--glass-bg)",border:"1px solid var(--glass-border)",backdropFilter:"var(--glass-blur)",WebkitBackdropFilter:"var(--glass-blur)",borderRadius:12,padding:"16px 20px",marginBottom:24,display:"flex",alignItems:"center",gap:20,flexWrap:"wrap",boxShadow:"var(--glass-shadow)"}}>
@@ -8722,7 +8811,7 @@ function SessionLogPage({ user, refreshKey=0 }) {
               <div style={{display:"flex",gap:8,alignItems:"center"}}>
                 {cases.length>0 && <span style={{fontSize:10,padding:"3px 10px",background:"var(--entry-accent-bg)",border:"1px solid rgba(64,81,59,.25)",color:"var(--accent)",fontWeight:700,borderRadius:20}}>{cases.length} case{cases.length!==1?"s":""}</span>}
                 {breaks.length>0 && <span style={{fontSize:10,padding:"3px 10px",background:"var(--entry-bg)",border:"1px solid var(--border)",color:"var(--amber)",fontWeight:700,borderRadius:20}}>{breaks.length} break{breaks.length!==1?"s":""}</span>}
-                <button onClick={e=>{e.stopPropagation();setDeleteId(s.id);}} style={{background:"rgba(197,68,70,.1)",border:"1px solid rgba(197,68,70,.3)",color:"var(--red)",borderRadius:20,padding:"3px 10px",fontSize:11,fontWeight:700,cursor:"pointer",transition:".15s",flexShrink:0}} title="Delete session">Delete</button>
+                <button onClick={e=>{e.stopPropagation();setDeleteId(s.id);}} className="btn btn-danger" style={{padding:"5px 14px",fontSize:11}} title="Delete session">Delete Session</button>
                 <span style={{color:"var(--muted)",fontSize:12,transform:isOpen?"rotate(180deg)":"none",display:"inline-block",transition:".2s"}}>▼</span>
               </div>
             </div>
@@ -8730,20 +8819,29 @@ function SessionLogPage({ user, refreshKey=0 }) {
             {isOpen && (
               <div style={{borderTop:"1px solid var(--border)",padding:"14px 18px",background:"var(--entry-bg)"}}>
                 {cases.length > 0 && (
-                  <div style={{marginBottom:14}}>
-                    <div style={{fontSize:10,fontWeight:700,textTransform:"uppercase",letterSpacing:".8px",color:"var(--muted)",marginBottom:8,fontFamily:"'Poppins',sans-serif",display:"flex",alignItems:"center",gap:6}}>Cases</div>
-                    {cases.map((c,i)=>(
-                      <div key={c.id||i} style={{display:"flex",alignItems:"center",gap:12,padding:"9px 12px",background:"var(--card)",border:"1px solid var(--border)",marginBottom:6,borderRadius:8}}>
-                        <div style={{width:8,height:8,borderRadius:"50%",background:c.case_type==="siteComment"?"var(--accent)":"#7c3aed",flexShrink:0}}/>
-                        <div style={{flex:1}}>
-                          <span style={{fontWeight:700,fontSize:13}}>Case #{c.case_num||"—"}</span>
-                          <span style={{fontSize:11,color:"var(--muted)",marginLeft:8}}>{c.case_type==="siteComment"?"Site Comment":"Inbound Email"}</span>
-                          {c.note && <span style={{fontSize:11,color:"var(--muted)",marginLeft:8}}>· {c.note}</span>}
-                        </div>
-                        <span style={{fontSize:11,color:"var(--muted)",fontFamily:"monospace"}}>{fmtTime(c.started_at)} → {fmtTime(c.ended_at)}</span>
-                        <span style={{fontSize:11,fontWeight:700,color:"var(--accent)",background:"var(--entry-accent-bg)",padding:"2px 8px",borderRadius:20}}>{fmtDur(c.started_at,c.ended_at)}</span>
-                      </div>
-                    ))}
+                  <div style={{marginBottom:14,overflowX:"auto"}}>
+                    <div style={{fontSize:10,fontWeight:700,textTransform:"uppercase",letterSpacing:".8px",color:"var(--muted)",marginBottom:8,fontFamily:"'Poppins',sans-serif"}}>Cases</div>
+                    <table style={{width:"100%",borderCollapse:"collapse",minWidth:640}}>
+                      <thead>
+                        <tr>
+                          {["Case Type","Case Number","Combine Tracker","QA Checklist","Status","Action"].map(h=>(
+                            <th key={h} style={{textAlign:"left",fontSize:9,fontWeight:700,textTransform:"uppercase",letterSpacing:".6px",color:"var(--muted)",padding:"0 10px 8px",fontFamily:"'Poppins',sans-serif"}}>{h}</th>
+                          ))}
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {cases.map((c,i)=>(
+                          <tr key={c.id||i} style={{background:"var(--card)"}}>
+                            <td style={{padding:"9px 10px",borderRadius:"8px 0 0 8px"}}><span style={{fontSize:10,fontWeight:700,padding:"3px 10px",borderRadius:20,background:c.case_type==="siteComment"?"var(--h-badge-site-bg)":"var(--h-badge-email-bg)",color:c.case_type==="siteComment"?"#4760ff":"#7c5cff"}}>{c.case_type==="siteComment"?"Site Comment":"Inbound Email"}</span></td>
+                            <td style={{padding:"9px 10px",fontSize:12,fontWeight:700}}>{c.case_num||"—"}</td>
+                            <td style={{padding:"9px 10px",fontSize:12,color:"var(--muted)"}}>{fmtDur(c.started_at,c.ended_at)}</td>
+                            <td style={{padding:"9px 10px",fontSize:12,color:"var(--muted)"}}>—</td>
+                            <td style={{padding:"9px 10px"}}><span style={{fontSize:11,fontWeight:700,color:c.ended_at?"var(--green)":"var(--amber)"}}>{c.ended_at?"Completed":"In Progress"}</span></td>
+                            <td style={{padding:"9px 10px",borderRadius:"0 8px 8px 0"}}><button className="btn btn-ghost btn-noicon" style={{padding:"4px 12px",fontSize:11}} onClick={()=>showToast(`Case #${c.case_num||"—"}`,"info")}>View Case</button></td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
                   </div>
                 )}
                 {breaks.length > 0 && (
@@ -8979,15 +9077,14 @@ function SidebarShiftTimer({globalTimeIn, shiftEndTime}){
 // ─────────────────────────────────────────────────────────────────────────────
 // ArchivePage — view and permanently delete archived suspended cases
 // ─────────────────────────────────────────────────────────────────────────────
-function ArchivePage({ archivedDrafts=[], onDelete }) {
+function ArchivePage({ archivedDrafts=[], onDelete, onStartBreak, onStartOpenHour, onLogout }) {
   const [expandedId,setExpandedId]=useState(null);
   const [confirmDelete,setConfirmDelete]=useState(null);
 
   if(archivedDrafts.length===0){
     return (
       <div className="page-wrap">
-        <div className="page-title">Archived Cases</div>
-        <div className="page-sub">Suspended cases you've archived are stored here.</div>
+        <PageHeader title="Archived Cases" subtitle="Manage archived cases" onStartBreak={onStartBreak} onStartOpenHour={onStartOpenHour} onLogout={onLogout}/>
         <div style={{textAlign:"center",color:"var(--muted)",padding:"60px 0",fontSize:14}}>
           <div style={{marginBottom:16}}><Icon name="archive" size={52} color="var(--muted)"/></div>
           <div>No archived cases yet.</div>
@@ -8999,8 +9096,7 @@ function ArchivePage({ archivedDrafts=[], onDelete }) {
 
   return (
     <div className="page-wrap">
-      <div className="page-title">Archived Cases</div>
-      <div className="page-sub">{archivedDrafts.length} archived case{archivedDrafts.length!==1?"s":""} — view-only</div>
+      <PageHeader title="Archived Cases" subtitle="Manage archived cases" onStartBreak={onStartBreak} onStartOpenHour={onStartOpenHour} onLogout={onLogout}/>
 
       {confirmDelete&&(
         <div className="modal-bg"><div className="modal">

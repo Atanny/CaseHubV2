@@ -57,6 +57,14 @@ export default async function handler(req, res) {
       })
     }
 
+    // ── RESET PASSWORD (sends Supabase recovery email; always 200 to avoid revealing which emails exist) ──
+    if (action === 'reset' && req.method === 'POST') {
+      const { email } = req.body
+      if (!email) return res.status(400).json({ error: 'Email required' })
+      await supabase.auth.resetPasswordForEmail(email).catch(() => {})
+      return res.status(200).json({ message: 'If that email is registered, a reset link has been sent.' })
+    }
+
     // ── REFRESH ──
     if (action === 'refresh' && req.method === 'POST') {
       const { refresh_token } = req.body
