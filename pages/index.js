@@ -2143,7 +2143,7 @@ function EntryCard({ entry, label, index, onChange, onDelete, showNumber, onDrag
         <span className="entry-label" style={{flex:1}}>{showNumber?`${label} #${entry.number||(index+1)}`:label}</span>
         {saved
           ? <button className="h-btn" style={{fontSize:11,padding:"3px 10px",borderColor:"var(--accent)",color:"var(--accent)"}} onClick={handleEdit}><Icon name="edit" size={11} style={{marginRight:4}}/>Edit</button>
-          : <button className="btn btn-primary" style={{fontSize:11,padding:"4px 12px"}} onClick={handleSave}><Icon name="save" size={11} style={{marginRight:4}}/>Save</button>
+          : <button className="btn btn-primary" style={{fontSize:11,padding:"4px 12px"}} onClick={handleSave}>Save</button>
         }
         {(showNumber||(index>0))&&<button className="entry-del" onClick={onDelete}><Icon name="trash" size={13} color="var(--red)"/></button>}
       </div>
@@ -3727,7 +3727,7 @@ function SavedCaseCard({ c, openId, setOpenId, idx=0, onEdit }) {
         </div>
         <span className="saved-type">{isSC?"Site Comment":"Inbound Email"}</span>
         {(()=>{const b=c._bundledWith;if(!b)return null;const nums=(Array.isArray(b)?b:[b]).filter(Boolean);if(!nums.length)return null;const isMulti=nums.length>1;const col=isMulti?"#f59e0b":"#10b981";const bg=isMulti?"rgba(245,158,11,.14)":"rgba(16,185,129,.14)";const bdr=isMulti?"1px solid rgba(245,158,11,.35)":"1px solid rgba(16,185,129,.35)";return <span style={{fontSize:10,padding:"2px 8px",borderRadius:20,background:bg,border:bdr,color:col,fontWeight:700,flexShrink:0,fontFamily:"'Poppins',sans-serif"}}>w/ #{nums.join(", #")}</span>;})()}
-        {onEdit&&<button className="btn btn-ghost" style={{fontSize:10,padding:"3px 10px",marginLeft:4}} onClick={e=>{e.stopPropagation();onEdit(c);}}><Icon name="edit" size={11} style={{marginRight:3}}/>Edit</button>}
+        {onEdit&&<button className="btn btn-ghost" style={{fontSize:10,padding:"3px 10px",marginLeft:4}} onClick={e=>{e.stopPropagation();onEdit(c);}}>Edit</button>}
         <span style={{color:"var(--muted)",fontSize:12,transition:".25s",display:"inline-block",transform:open?"rotate(180deg)":"none"}}>▼</span>
       </div>
       {open&&(
@@ -4849,7 +4849,6 @@ function PostLivePage({ onSaveCase, onUpdateCase, onUpdateDraft, onFormActive, o
 
               {/* RIGHT: button */}
               <button className="btn btn-danger timeout-btn" style={{ fontSize: 12, padding: "9px 16px" }} onClick={()=>onTimeOut&&onTimeOut()}>
-                <Icon name="stop" size={12} style={{ marginRight: 5 }} />
                 Time Out
               </button>
 
@@ -4883,7 +4882,6 @@ function PostLivePage({ onSaveCase, onUpdateCase, onUpdateDraft, onFormActive, o
                     gap: "6px"
                   }}
                 >
-                  <Icon name="play" size={14} />
                   Clock In
                 </button>
               </div>
@@ -6594,7 +6592,7 @@ function AnnouncementsPage({ announcements, addAnnouncement, updateAnnouncement,
         {form.body&&<p style={{color:"var(--muted)",fontSize:12,marginBottom:4,maxHeight:80,overflow:"hidden"}}>{form.body}</p>}
         <p style={{fontSize:12,color:"var(--muted)",marginBottom:16}}>Visible to your whole team.</p>
         <div className="modal-btns">
-          <button className="btn btn-ghost" onClick={()=>setConfirming(false)} disabled={saving}>← Go Back</button>
+          <button className="btn btn-ghost" onClick={()=>setConfirming(false)} disabled={saving}>Go Back</button>
           <button className="btn btn-primary" onClick={confirmPost} disabled={saving}>{saving?"Saving…":"Confirm & Post"}</button>
         </div>
       </div></div>)}
@@ -7008,7 +7006,7 @@ function ProfilePage({ user, setUser, onLogout, timerLimit, saveTimerLimit, qaLi
       <div className="profile-card">
         <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:12}}>
           <h3 style={{fontSize:16,fontWeight:700,margin:0}}>Special Requestors</h3>
-          <button className="btn btn-primary" style={{fontSize:11,padding:"5px 12px"}} onClick={()=>setAddingReq(true)}>＋ Add Requestor</button>
+          <button className="btn btn-primary" style={{fontSize:11,padding:"5px 12px"}} onClick={()=>setAddingReq(true)}>Add Requestor</button>
         </div>
         <p style={{fontSize:12,color:"var(--muted)",marginBottom:14}}>Names shown in the Live Summary panel as a reminder during active cases.</p>
         <div className="requestor-grid">
