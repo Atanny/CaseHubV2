@@ -1602,6 +1602,10 @@ body.light .sidebar-divider{background:rgba(180,90,40,.1);}
 .auth-msg.ok{background:rgba(76,138,86,.1);border:1px solid var(--green);color:var(--green);}
 @media (max-width:560px){.auth-card{padding:30px 22px !important;}.auth-row{grid-template-columns:1fr;gap:0;}}
 
+.pl-break-banner{display:flex;align-items:center;gap:16px;flex-shrink:0;padding:10px 20px;background:linear-gradient(135deg,#dcc196,#c9a876);color:#fff;border-radius:0;}
+.pl-break-track{flex:1;height:6px;background:rgba(255,255,255,.35);border-radius:6px;overflow:hidden;}
+.pl-break-track>div{height:100%;background:#fff;border-radius:6px;transition:width 1s linear;}
+
 `;
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -4475,40 +4479,27 @@ function PostLivePage({ onSaveCase, onUpdateCase, onUpdateDraft, onFormActive, o
 
 
 
-        {/* Break timer banner — same design as global break-bar */}
+        {/* Break / Meeting banner — amber bar under the header (Figma), no emoji */}
         {breakActive&&breakTimer&&(()=>{
           const pct=breakTimer.ended?100:Math.round((1-(breakTimer.secsLeft/(breakTimer.mins*60)))*100);
-          const st=breakTimer.ended?"ended":breakTimer.warned?"warn":"";
           const mm=Math.floor((breakTimer.secsLeft||0)/60);
           const ss=String((breakTimer.secsLeft||0)%60).padStart(2,"0");
           return (
-            <div className={cls("break-bar",st)} style={{position:"relative",flexShrink:0}}>
-              <span style={{fontSize:18}}>{breakTimer.label.split(" ")[0]}</span>
-              <div>
-                <div className="break-label">{breakTimer.label.split(" ").slice(1).join(" ")}</div>
-                <div style={{fontSize:10,color:"var(--muted)"}}>
-                  {breakTimer.ended?"Break over!":breakTimer.warned?"⚠️ 5 min warning!":"On break"}
-                </div>
+            <div className="pl-break-banner">
+              <div style={{fontWeight:700,fontSize:12,textTransform:"uppercase",letterSpacing:".4px"}}>
+                {breakTimer.ended?"Break over":breakTimer.warned?"Break ending soon":"You are on break"} · {breakTimer.label}
               </div>
-              <div className="break-time">{breakTimer.ended?"Done!":mm+":"+ss}</div>
-              <div className="break-progress" style={{flex:1}}>
-                <div className="break-progress-fill" style={{width:pct+"%"}}/>
-              </div>
-              <button className="break-stop" onClick={onStopBreak}>End</button>
+              <div style={{fontFamily:"'Plus Jakarta Sans',sans-serif",fontWeight:800,fontSize:18}}>{breakTimer.ended?"Done":mm+":"+ss}</div>
+              <div className="pl-break-track"><div style={{width:pct+"%"}}/></div>
+              <button className="btn btn-primary" onClick={onStopBreak}>End Break</button>
             </div>
           );
         })()}
-
-        {/* Open Hour / Meeting banner — same design as the break bar */}
         {openHourActive&&(
-          <div className="break-bar" style={{position:"relative",flexShrink:0}}>
-            <span style={{fontSize:18}}>🏢</span>
-            <div>
-              <div className="break-label">Open Hour / Meeting</div>
-              <div style={{fontSize:10,color:"var(--muted)"}}>Active — session timer paused</div>
-            </div>
-            <div className="break-progress" style={{flex:1}}/>
-            <button className="break-stop" onClick={onStopOpenHour}>End</button>
+          <div className="pl-break-banner">
+            <div style={{fontWeight:700,fontSize:12,textTransform:"uppercase",letterSpacing:".4px"}}>Meeting · session timer paused</div>
+            <div className="pl-break-track" style={{opacity:0}}><div/></div>
+            <button className="btn btn-primary" onClick={onStopOpenHour}>End Meeting</button>
           </div>
         )}
 
@@ -8559,13 +8550,34 @@ function App() {
         </aside>
         </div>
 
-        <main className={cls("main-area", formInFields&&page==="postlive"&&"form-mode")} style={{paddingBottom: formInFields&&page==="postlive" ? 0 : (breakTimer?80:32)}}>
+        <main className={cls("main-area", formInFields&&page==="postlive"&&"form-mode")} style={{paddingBottom: formInFields&&page==="postlive" ? 0 : 32}}>
+          {/* Break / Meeting timer lives at the TOP of the page (never a footer). Inside the Post-Live form the form shows its own banner. */}
+          {!dataLoading&&!(formInFields&&page==="postlive")&&breakTimer&&(()=>{
+            const pct=breakTimer.ended?100:Math.round((1-(breakTimer.secsLeft/(breakTimer.mins*60)))*100);
+            const mm=Math.floor((breakTimer.secsLeft||0)/60);
+            const ss=String((breakTimer.secsLeft||0)%60).padStart(2,"0");
+            return (
+              <div className="pl-break-banner" style={{position:"sticky",top:-32,zIndex:20,margin:"-32px -32px 24px",padding:"10px 32px"}}>
+                <div style={{fontWeight:700,fontSize:12,textTransform:"uppercase",letterSpacing:".4px"}}>{breakTimer.ended?"Break over":breakTimer.warned?"Break ending soon":"You are on break"} · {breakTimer.label}</div>
+                <div style={{fontFamily:"'Plus Jakarta Sans',sans-serif",fontWeight:800,fontSize:18}}>{breakTimer.ended?"Done":mm+":"+ss}</div>
+                <div className="pl-break-track"><div style={{width:pct+"%"}}/></div>
+                <button className="btn btn-primary" onClick={()=>setCancelBreakConfirm(true)}>End Break</button>
+              </div>
+            );
+          })()}
+          {!dataLoading&&!(formInFields&&page==="postlive")&&openHourActive&&!breakTimer&&(
+            <div className="pl-break-banner" style={{position:"sticky",top:-32,zIndex:20,margin:"-32px -32px 24px",padding:"10px 32px"}}>
+              <div style={{fontWeight:700,fontSize:12,textTransform:"uppercase",letterSpacing:".4px"}}>Meeting · session timer paused</div>
+              <div style={{flex:1}}/>
+              <button className="btn btn-primary" onClick={()=>setCancelOpenHourConfirm(true)}>End Meeting</button>
+            </div>
+          )}
           {dataLoading&&<div style={{display:"flex",alignItems:"center",justifyContent:"center",height:"80vh",flexDirection:"column",gap:16}}><div style={{animation:"float 1.5s ease-in-out infinite"}}><Icon name="loading" size={48} color="var(--accent)"/></div><div style={{color:"var(--muted)",fontSize:13,fontFamily:"Poppins,sans-serif"}}>Loading your workspace...</div></div>}
 
           {!dataLoading&&page==="dashboard"&&<Dashboard savedCases={allCases} setPage={setPage} specialRequestors={specialRequestors} addRequestor={addRequestor} removeRequestor={removeRequestor} user={user} announcements={announcements} onStartBreak={startBreak} onStartOpenHour={startOpenHour} onLogout={logout} timerLimit={timerLimit}/>}
           {!dataLoading&&page==="build"&&<div className="soon-wrap"><div className="soon-badge"><Icon name="casebox" size={80} color="var(--muted)"/></div><div className="soon-title">Build</div><div className="soon-sub">Coming soon — hang tight!</div></div>}
           {!dataLoading&&page==="prelive"&&<div className="soon-wrap"><div className="soon-badge"><Icon name="prelive" size={80} color="var(--muted)"/></div><div className="soon-title">Pre-Live Amends</div><div className="soon-sub">Coming soon — hang tight!</div></div>}
-          {!dataLoading&&<div style={{display:page==="postlive"?"block":"none"}}>
+          {!dataLoading&&<div style={{display:page==="postlive"?(formInFields?"flex":"block"):"none",flexDirection:"column"}}>
             <PostLivePage onSaveCase={addCase} onUpdateCase={updateCase} onUpdateDraft={updateDraft} onFormActive={setFormActivePersist} onFormInFields={setFormInFields} onMinimise={()=>{setPage("postlive"); if(typeof window!=="undefined") localStorage.setItem("ch_page","postlive");}} allSavedCases={allCases} dbDrafts={drafts} onSaveDraft={saveDraft} onDeleteDraft={deleteDraft} onArchiveDraft={archiveDraft} user={user} onTimerEnd={playEndAlarm} specialRequestors={specialRequestors} alarmMins={alarmMins} qaAlarmMins={qaLimit} globalTimeIn={globalTimeIn} timedIn={timedIn} breakActive={!!breakTimer||openHourActive} breakTimer={breakTimer||null} openHourActive={openHourActive} onTimeIn={doTimeIn} onTimeOut={doTimeOut} onTimerReset={doTimerReset} sessionDbId={sessionDbId} sessionLog={sessionLog} addSessionLog={addSessionLog} setSessionLog={setSessionLog} closeWithOutcome={closeWithOutcome} closeSessionLog={closeSessionLog} clearSessionLog={clearSessionLog} onStartBreak={startBreak} onStartBreakFull={(label,mins)=>startBreak(label,mins,true)} onStopBreak={()=>setCancelBreakConfirm(true)} onStartOpenHour={startOpenHour} onStopOpenHour={()=>setCancelOpenHourConfirm(true)} resumeTick={resumeFormTick}/>
           </div>}
           {!dataLoading&&page==="history"&&<CaseHistory cases={allCases} onUpdate={updateCase} onDelete={deleteCase} onStartBreak={startBreak} onStartOpenHour={startOpenHour} onLogout={logout}/>}
@@ -8577,30 +8589,6 @@ function App() {
           {!dataLoading&&page==="filenames"&&<FileNameGeneratorPage/>}
         </main>
       </div>
-
-      {/* ── Break Timer Bar — hidden when user is inside a form (TimerBar above already shows it) ── */}
-      {breakTimer&&!formInFields&&(()=>{
-        const pct=breakTimer.ended?100:Math.round((1-(breakTimer.secsLeft/(breakTimer.mins*60)))*100);
-        const st=breakTimer.ended?"ended":breakTimer.warned?"warn":"";
-        const mm=Math.floor((breakTimer.secsLeft||0)/60);
-        const ss=String((breakTimer.secsLeft||0)%60).padStart(2,"0");
-        return (
-          <div className={cls("break-bar",st)}>
-            <span style={{fontSize:18}}>{breakTimer.label.split(" ")[0]}</span>
-            <div>
-              <div className="break-label">{breakTimer.label.split(" ").slice(1).join(" ")}</div>
-              <div style={{fontSize:10,color:"var(--muted)"}}>
-                {breakTimer.ended?"Break over!":breakTimer.warned?"⚠️ 5 min warning!":"On break"}
-              </div>
-            </div>
-            <div className="break-time">{breakTimer.ended?"Done!":mm+":"+ss}</div>
-            <div className="break-progress" style={{flex:1}}>
-              <div className="break-progress-fill" style={{width:pct+"%"}}/>
-            </div>
-            <button className="break-stop" onClick={()=>setCancelBreakConfirm(true)}>End</button>
-          </div>
-        );
-      })()}
 
       {/* ── Break Modals (at root level so they overlay the full screen) ── */}
       {breakPending&&(<div className="modal-bg"><div className="modal">
