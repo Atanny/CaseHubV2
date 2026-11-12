@@ -1,0 +1,30 @@
+/*
+ * Application stylesheet manifest.
+ *
+ * ORDER MATTERS. These files are an in-order partition of the original single
+ * stylesheet, and later files intentionally override earlier ones (see the two
+ * "refinements" layers). Do not reorder imports without visually re-checking
+ * every screen.
+ *
+ * Fonts are loaded via <link> in pages/_document.js, not @import, so they are
+ * not render-blocking behind this file.
+ */
+@import './reset.css';
+@import './tokens.css';
+@import './base.css';
+@import './layout-shell.css';
+@import './rail.css';
+@import './page-header.css';
+@import './dashboard.css';
+@import './ui-core.css';
+@import './forms.css';
+@import './modals-lists.css';
+@import './pages.css';
+@import './widgets.css';
+@import './refinements-chrome.css';
+@import './session-log.css';
+@import './refinements-ui.css';
+@import './wizard.css';
+@import './file-name-generator.css';
+@import './auth.css';
+@import './break-banner.css';

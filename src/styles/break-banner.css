@@ -1,0 +1,5 @@
+/* Break banner */
+.pl-break-banner{display:flex;align-items:center;gap:16px;flex-shrink:0;padding:10px 20px;background:linear-gradient(135deg,#dcc196,#c9a876);color:#fff;border-radius:0;}
+.pl-break-track{flex:1;height:6px;background:rgba(255,255,255,.35);border-radius:6px;overflow:hidden;}
+.pl-break-track>div{height:100%;background:#fff;border-radius:6px;transition:width 1s linear;}
+

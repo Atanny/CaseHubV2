@@ -1,0 +1,25 @@
+/* Element defaults: body, headings, form controls, scrollbars */
+
+body{
+  font-family:'Poppins',sans-serif;
+  background:var(--bg);color:var(--text);
+  min-height:100vh;transition:background .3s,color .3s;
+  -webkit-font-smoothing:antialiased;
+}
+body.light{background:#e8dfca !important;}
+h1,h2,h3,h4,.logo,.page-title,.step-title,.section-title,.stat-val,.choice-btn-title,.quick-title,.analytics-title,.modal h3,.case-num-badge,.entry-label,.auth-title,.soon-title,.ann-title,.case-entry-num{
+  font-family:'Plus Jakarta Sans',sans-serif;
+}
+button{cursor:pointer;font-family:'Poppins',sans-serif;}
+input,textarea,select{font-family:'Poppins',sans-serif;}
+a{color:var(--accent);text-decoration:none;}
+
+/* ── Fancy scrollbars ── */
+::-webkit-scrollbar{width:4px;height:4px;}
+::-webkit-scrollbar-track{background:transparent;}
+::-webkit-scrollbar-thumb{background:rgba(64,81,59,.25);border-radius:99px;}
+::-webkit-scrollbar-thumb:hover{background:rgba(64,81,59,.5);}
+body.light ::-webkit-scrollbar-thumb{background:rgba(64,81,59,.25);}
+body.light ::-webkit-scrollbar-thumb:hover{background:rgba(64,81,59,.5);}
+*{scrollbar-width:thin;scrollbar-color:rgba(64,81,59,.25) transparent;}
+body.light *{scrollbar-color:rgba(64,81,59,.25) transparent;}

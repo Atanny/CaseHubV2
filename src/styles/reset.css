@@ -1,0 +1,4 @@
+/* Box-sizing reset and shared keyframes */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+@keyframes pulse-dot{0%,100%{opacity:1;transform:scale(1);}50%{opacity:.4;transform:scale(1.4);}}
+

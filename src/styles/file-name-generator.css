@@ -1,0 +1,15 @@
+/* File Name Generator upload slots */
+/* ── File Name Generator upload slots (Figma: filename + paste/upload + select + download) ── */
+.fng-slot{display:flex;align-items:center;gap:8px;padding:6px 10px 6px 6px;margin-bottom:4px;min-height:34px;border-radius:7px;background:var(--entry-bg);border:1px solid var(--border);position:relative;transition:border .15s,background .15s;}
+.fng-slot.drag{border-color:var(--accent);background:var(--card2);}
+.fng-slot.has-img{border-color:var(--green);}
+.fng-slot-check{display:flex;align-items:center;flex-shrink:0;cursor:pointer;}
+.fng-slot-thumb{width:26px;height:26px;border-radius:5px;border:1px dashed var(--border);flex-shrink:0;display:flex;align-items:center;justify-content:center;cursor:pointer;overflow:hidden;background:var(--card);transition:border-color .15s;}
+.fng-slot-thumb:hover{border-color:var(--accent);}
+.fng-slot-img{width:100%;height:100%;object-fit:cover;}
+.fng-slot-body{flex:1;min-width:0;display:flex;align-items:center;justify-content:space-between;gap:8px;cursor:pointer;}
+.fng-slot-name{font-size:12px;font-family:monospace;color:var(--text);word-break:break-all;}
+.fng-slot-copy{font-size:10px;font-weight:700;flex-shrink:0;color:var(--muted);opacity:.6;}
+.fng-slot-actions{display:flex;align-items:center;gap:4px;flex-shrink:0;}
+.fng-slot-actions button{background:none;border:none;cursor:pointer;padding:3px;display:flex;align-items:center;color:var(--muted);font-size:11px;border-radius:4px;}
+.fng-slot-actions button:hover{background:var(--border);color:var(--text);}
